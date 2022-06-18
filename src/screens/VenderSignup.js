@@ -5,11 +5,11 @@ import {
   ToastAndroid,
   StatusBar,
   View,
+  Dimensions,
   Image,
   ActivityIndicator,
   ImageBackground,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -24,11 +24,12 @@ import MyStatusBar from '../components/MyStatusBar';
 
 const { width, height } = Dimensions.get('window');
 
-export default function Login() {
+export default function VenderSignup() {
+  const [name, setName] = useState('');
+  const [surename, setSurename] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-
   const navigation = useNavigation();
   const dispatch = useDispatch()
 
@@ -41,7 +42,7 @@ export default function Login() {
     navigation.navigate("Login")
 
     return
-    if (email && password) {
+    if (email && password && name && surename) {
       if (!validateEmail(email)) {
         Snackbar.show({
           text: 'Please enter valid email',
@@ -70,24 +71,33 @@ export default function Login() {
       <ScrollView>
 
         <ImageBackground source={images.vender} style={{ height: 200 }} resizeMode='stretch' >
-          <Text style={{ fontSize: 28, fontFamily: style.fontFamily.bold, color: '#fff', marginTop: 140, marginLeft: 25 }}>Login</Text>
+          <TouchableOpacity onPress={() => {navigation.goBack()}}>
+          <Image source={images.back}  style={{width: 30, height: 30,tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 28, fontFamily: style.fontFamily.bold, color: '#fff', marginTop: 100, marginLeft: 25 }}>Vendor Sign Up</Text>
         </ImageBackground>
 
         <View style={{ marginHorizontal: 25 }}>
-          <Text style={{ fontSize: 16, fontFamily: style.fontFamily.medium, color: '#000', marginTop: 40 }}>Email</Text>
-          <TextInputs style={{ marginTop: 17 }} labelText={'Enter Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
-          <Text style={{ fontSize: 16, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>Password</Text>
-          <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
-          <Text style={{ fontSize: 13, marginTop: 50, textAlign: 'center', color: '#000', fontFamily: style.fontFamily.regular }}>Don’t have a profile?  <Text onPress={() => navigation.navigate('Signup')} style={{ fontSize: 13, textDecorationLine: 'underline', color: '#403FFC', fontFamily: style.fontFamily.regular }}>Sign Up</Text></Text>
+          <Text style={{ fontSize: 15, fontFamily: style.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your vendor name?</Text>
+          <TextInputs style={{ marginTop: 17,  }} labelText={'Mary’s Textbooks'} state={email} setState={setEmail} />
+          <Text style={{ fontSize: 15, fontFamily: style.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
+         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 
-          <View style={{ marginTop: (height - 650) }}>
+          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={email} setState={setEmail}  />
+          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surename'} state={email} setState={setEmail} />
+         </View>
+          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>What is your registered university email?</Text>
+          <TextInputs style={{ marginTop: 17,  }} labelText={'Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
+          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>What is your registered university password?</Text>
+          <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
+
+          <View style={{ marginTop: 100 }}>
             <Button onClick={() => {
               handleLogin
-            }} text={`Login`} />
+            }} text={`Create Account`} />
           </View>
         </View>
       </ScrollView>
-
     </View>
   );
 }

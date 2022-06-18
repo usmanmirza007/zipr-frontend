@@ -29,11 +29,9 @@ const TextInputs = ({
     <View
       style={[
         {
-          // backgroundColor: focuse
-          //   ? 'rgba(36, 169, 223, 0.1)'
-          //   : 'rgba(4, 45, 84, 0.05)',
-          borderWidth: focuse ? 1 : 1,
-          borderColor: focuse ? '#048bf8' : 'rgba(0, 0, 0, 0.12)',
+          backgroundColor: '#F7F5F5',
+          // borderWidth: focuse ? 1 : 1,
+          // borderColor: focuse ? '#048bf8' : 'rgba(0, 0, 0, 0.12)',
           borderRadius: 5,
           height: multiline ? 100 : 50,
           width: '100%',
@@ -79,7 +77,7 @@ const TextInputs = ({
           placeholderTextColor={'#757575'}
           style={{
             // marginTop: multiline ? -10 : -11,
-            marginLeft: 30,
+            marginLeft: 15,
             color: '#000' ,
             fontSize: 14,
             width: '100%',
@@ -90,16 +88,16 @@ const TextInputs = ({
           }}
         />
 
-        {/* {image && (
+        {image && (
           <TouchableOpacity
             onPress={() =>
               UseContext.setModalVisibilityDynamic('ChangePassword')
             }
             style={{
               position: 'absolute',
-              right: 0,
+              right: 5,
               zIndex: 1,
-              bottom: 20,
+              bottom: 15,
             }}>
             <Image
               resizeMode="contain"
@@ -107,7 +105,7 @@ const TextInputs = ({
               style={{ width: 20, height: 20, marginRight: 12 }}
             />
           </TouchableOpacity>
-        )} */}
+        )}
       </View>
     </View>
   )

@@ -3,6 +3,8 @@ import { Text, StatusBar, View, Image, TouchableOpacity } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../constants/colors';
+import images from '../constants/images';
+import MyStatusBar from './MyStatusBar';
 
 const HomeHeader = ({ title }) => {
   var navigation = useNavigation();
@@ -10,34 +12,51 @@ const HomeHeader = ({ title }) => {
   return (
     <View
       style={{
-        marginTop: StatusBar.currentHeight + getStatusBarHeight(true),
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginHorizontal: 20,
-        alignItems: 'center',
-        height: 60,
+        // marginTop: StatusBar.currentHeight + getStatusBarHeight(true),
       }}>
-      <StatusBar translucent barStyle={"dark-content"} backgroundColor={"#fff"} />
+      <MyStatusBar
+        translucent
+        barStyle="light-content"
+        backgroundColor="#403FFC"
+      />
 
-      <View>
-        <Text
-          style={{ color: '#000', fontFamily: 'Montserrat-Bold', fontSize: 18 }}
-        >
-          {title}
-        </Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'row', marginLeft: 25, marginTop: 20 }}>
+          <TouchableOpacity style={{ marginRight: 20 }} onPress={() => navigation.toggleDrawer()}>
+            <Image
+              source={images.menu}
+              resizeMode={'contain'}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#000',
+                alignSelf: 'center'
+              }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{ color: '#000', fontFamily: 'Montserrat-Bold', fontSize: 18 }}
+          >
+            {title}
+          </Text>
+        </View>
+        <TouchableOpacity style={{ marginTop: 15, marginRight: 25, backgroundColor: '#fff', width: 50, height: 50, borderRadius: 50 / 2,  alignItems: 'center', justifyContent: 'center' }} 
+        onPress={() => { }}>
+
+          <Image
+            source={images.frame}
+            resizeMode={'contain'}
+            style={{
+              width: 110,
+              height: 110,
+              tintColor: '#403FFC',
+              alignSelf: 'center',
+              marginTop: 42,
+              marginRight: 18
+            }}
+          />
+        </TouchableOpacity>
       </View>
-      {/* <TouchableOpacity style={{ position: 'absolute', right: 0 }} onPress={() => navigation.toggleDrawer()}>
-        <Image
-          source={image}
-          resizeMode={'contain'}
-          style={{
-            width: 30,
-            height: 30,
-            tintColor: theme ? '#000' : '#fff',
-            alignSelf: 'center'
-          }}
-        />
-      </TouchableOpacity> */}
     </View>
   )
 }

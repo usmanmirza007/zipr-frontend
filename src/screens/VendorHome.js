@@ -16,10 +16,8 @@ import HomeScreenView from '../components/HomeScreenView';
 import images from '../constants/images';
 import HomeHeader from '../components/HomeHeader';
 
-const HomeScreen = () => {
+const VendorHome = () => {
   const navigation = useNavigation();
-
- 
 
   const twoColumnViewDummyData = [
     {text: 'Films', icon: images.film},
@@ -36,7 +34,7 @@ const HomeScreen = () => {
 
   return (
     <View style={{flex: 1}}>
-      <HomeHeader title={'Home'} />
+      <HomeHeader title={'Welcome, Chris.'} />
       <ScrollView overScrollMode={'never'} showsVerticalScrollIndicator={false}>
        
         <View style={{marginVertical: 20, paddingHorizontal: 25}}>
@@ -102,4 +100,4 @@ const drakStyle = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default VendorHome;

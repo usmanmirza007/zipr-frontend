@@ -11,7 +11,7 @@ export default function ({ text, onClick, style, disable, textStyle }) {
         style,
         shadowStyle.shadow
       ]}>
-      <Text style={[{ color: 'white', fontSize: 14, textAlign: 'center', fontFamily: shadowStyle.fontFamily.medium }, textStyle]}>{typeof text == "string" ? text.toUpperCase() : text }</Text>
+      <Text style={[{ color: 'white', fontSize: 14, textAlign: 'center', fontFamily: shadowStyle.fontFamily.medium }, textStyle]}>{ text }</Text>
     </TouchableOpacity>
   );
 }
