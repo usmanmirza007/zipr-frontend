@@ -5,6 +5,16 @@ const images = {
   bookmark: require('../assets/images/bookmark.png'),
   down: require('../assets/images/down.png'),
   cross: require('../assets/images/cross.png'),
-  back: require('../assets/images/back.png'),
+  back: require('../assets/images/backArrow.png'),
+  cross: require('../assets/images/cross.png'),
+  camera: require('../assets/images/camera.png'),
+  chat: require('../assets/images/chat.png'),
+  customer: require('../assets/images/customer.png'),
+  filter: require('../assets/images/filter.png'),
+  frame: require('../assets/images/frame.png'),
+  location: require('../assets/images/location.png'),
+  menu: require('../assets/images/menu.png'),
+  vender: require('../assets/images/vender.png'),
+  welcome: require('../assets/images/welcome.png'),
 };
 export default images;

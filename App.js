@@ -4,31 +4,27 @@ import { Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-// import { applyMiddleware, compose } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
 import { store, persistor } from './src/store/store';
 
 // onboarding 
 import Login from './src/screens/Login';
+import Welcome from './src/screens/welcome';
+
 // home 
 import Home from './src/screens/Home';
 import Profile from './src/screens/Profile';
 import CustomDrawerContent from './src/navigation/SideMenu';
-// import Reactotron from './ReactotronConfig';
 import { Provider, useSelector } from 'react-redux';
-import * as RootNavigation from './RootNavigation';
 import { navigationRef } from './RootNavigation';
+
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const { width } = Dimensions.get('screen');
 
 export default () => {
 
-  const navigation = useRef(null);
-  const [user, setUser] = useState(null);
 
   function AppStack() {
     return (
@@ -70,26 +66,38 @@ export default () => {
     );
   }
 
-  function HomeStack() {
+
+  function CustomerStack() {
     return (
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="Home" component={AppStack}
-          options={{
-            animationEnabled: false
-          }} />
+        <Stack.Screen name="Home" component={AppStack} options={{manimationEnabled: false}} />
       </Stack.Navigator>
     )
   }
 
+  function VenderStack() {
+    return (
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="Home" component={AppStack} options={{animationEnabled: false }} />
+      </Stack.Navigator>
+    )
+  }
+
+  function HomeStack() {
+
+    const userType = useSelector(state => state.user.userType)
+    if (userType == 'CUSTOMER') {
+      return <CustomerStack />
+    } else if(userType == 'VENDER') {
+      return <VenderStack />
+    } 
+  }
+
   function OnboardingStack() {
     return (
-      <Stack.Navigator headerMode="none" initialRouteName="Login" >
-     
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ animationEnabled: false, headerShown: false }}
-        />
+      <Stack.Navigator headerMode="none" initialRouteName="Welcome" >
+        <Stack.Screen name="Welcome" component={Welcome} options={{ animationEnabled: false, headerShown: false }}/>
+        <Stack.Screen name="Login" component={Login} options={{ animationEnabled: false, headerShown: false }}/>
       </Stack.Navigator>
     )
   }
@@ -97,13 +105,14 @@ export default () => {
   const MainStack = () => {
 
     const loggedIn = useSelector(state => state.user.isLoggedIn)
-      if (loggedIn) {
-        return <HomeStack />
-      } else {
-        return <OnboardingStack />
-      }
+    if (loggedIn) {
+      return <HomeStack />
+    } else {
+      return <OnboardingStack />
+    }
 
   }
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

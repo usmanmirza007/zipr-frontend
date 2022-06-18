@@ -12,6 +12,7 @@ const persistConfig = {
 
 const initialState = {
     isLoggedIn: false,
+    userType: '',
     program: {},
     userPrograms:[],
     userDetail: {}
@@ -22,8 +23,9 @@ export const mainSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        loggedIn: (state) => {
+        loggedIn: (state, data) => {
             state.isLoggedIn = true
+            state.userType = data.payload
         },
         saveProgram : (state, data) => {
             state.program = data.payload
