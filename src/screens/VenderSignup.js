@@ -21,6 +21,7 @@ import style from '../constants/style';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
+import { useSignupVendorMutation } from '../store/slice/api';
 
 const { width, height } = Dimensions.get('window');
 
@@ -29,6 +30,7 @@ export default function VenderSignup() {
   const [surename, setSurename] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [vendorName, setVendorName] = useState('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch()
@@ -37,12 +39,11 @@ export default function VenderSignup() {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
+  const [vendorSignup] = useSignupVendorMutation();
 
-  const handleLogin = () => {
-    navigation.navigate("Login")
-
-    return
-    if (email && password && name && surename) {
+  const handleSignup = () => {
+    
+    if (email && password && name && surename && vendorName) {
       if (!validateEmail(email)) {
         Snackbar.show({
           text: 'Please enter valid email',
@@ -50,7 +51,30 @@ export default function VenderSignup() {
           backgroundColor: '#24A9DF',
         });
       } else {
-        navigation.navigate("Login")
+        const signupData = {
+          firstName: name,
+          lastName: surename,
+          email: email,
+          password: password,
+          vendorName: vendorName,
+          type: "VENDOR"
+        }
+        vendorSignup(signupData).unwrap()
+          .then((data) => {
+            if (data.success) {
+              Snackbar.show({
+                text: "Vendor has been signup succssfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+              });
+              navigation.navigate("Login")
+            }
+          })
+          .catch((error) => {
+            console.log('yoyo', error);
+            Snackbar.show({
+              text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            });
+            console.log(error, 'error');
+          });
       }
     } else {
       Snackbar.show({
@@ -79,12 +103,12 @@ export default function VenderSignup() {
 
         <View style={{ marginHorizontal: 25 }}>
           <Text style={{ fontSize: 15, fontFamily: style.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your vendor name?</Text>
-          <TextInputs style={{ marginTop: 17,  }} labelText={'Mary’s Textbooks'} state={email} setState={setEmail} />
+          <TextInputs style={{ marginTop: 17,  }} labelText={'Mary’s Textbooks'} state={vendorName} setState={setVendorName} />
           <Text style={{ fontSize: 15, fontFamily: style.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 
-          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={email} setState={setEmail}  />
-          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surename'} state={email} setState={setEmail} />
+          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={name} setState={setName}  />
+          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surename'} state={surename} setState={setSurename} />
          </View>
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>What is your registered university email?</Text>
           <TextInputs style={{ marginTop: 17,  }} labelText={'Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
@@ -93,7 +117,7 @@ export default function VenderSignup() {
 
           <View style={{ marginTop: 100 }}>
             <Button onClick={() => {
-              handleLogin
+              handleSignup()
             }} text={`Create Account`} />
           </View>
         </View>

@@ -21,6 +21,7 @@ import style from '../constants/style';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
+import { useSignupCustomerMutation } from '../store/slice/api';
 
 const { width, height } = Dimensions.get('window');
 
@@ -32,25 +33,43 @@ export default function CustomerSignup() {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch()
+  const [customerSignup] = useSignupCustomerMutation();
 
   function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
 
-  const handleLogin = () => {
-    navigation.navigate("Login")
+  const handleSignup = () => {
 
-    return
     if (email && password && name && surename) {
       if (!validateEmail(email)) {
         Snackbar.show({
-          text: 'Please enter valid email',
-          duration: Snackbar.LENGTH_SHORT,
-          backgroundColor: '#24A9DF',
+          text: 'Please enter valid email', duration: Snackbar.LENGTH_SHORT, backgroundColor: '#24A9DF',
         });
       } else {
-        navigation.navigate("Login")
+        const signupData = {
+          firstName: name,
+          lastName: surename,
+          email: email,
+          password: password,
+          type: "CUSTOMER"
+        }
+        customerSignup(signupData).unwrap()
+          .then((data) => {
+            if (data.success) {
+              Snackbar.show({
+                text: "Customer has been signup succssfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+              });
+              navigation.navigate("Login")
+            }
+          })
+          .catch((error) => {
+            Snackbar.show({
+              text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            });
+            console.log(error, 'error');
+          });
       }
     } else {
       Snackbar.show({
@@ -71,27 +90,27 @@ export default function CustomerSignup() {
       <ScrollView>
 
         <ImageBackground source={images.customer} style={{ height: 200 }} resizeMode='stretch' >
-          <TouchableOpacity onPress={() => {navigation.goBack()}}>
-          <Image source={images.back}  style={{width: 30, height: 30,tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
+          <TouchableOpacity onPress={() => { navigation.goBack() }}>
+            <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
           </TouchableOpacity>
           <Text style={{ fontSize: 28, fontFamily: style.fontFamily.bold, color: '#fff', marginTop: 100, marginLeft: 25 }}>Sign Up</Text>
         </ImageBackground>
 
         <View style={{ marginHorizontal: 25 }}>
           <Text style={{ fontSize: 15, fontFamily: style.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
-         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={email} setState={setEmail} keyBoardType={'email-address'} />
-          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surename'} state={email} setState={setEmail} keyBoardType={'email-address'} />
-         </View>
+            <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={name} setState={setName} />
+            <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surename'} state={surename} setState={setSurename} />
+          </View>
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>What is your registered university email?</Text>
-          <TextInputs style={{ marginTop: 17,  }} labelText={'Surename'} state={email} setState={setEmail} keyBoardType={'email-address'} />
+          <TextInputs style={{ marginTop: 17, }} labelText={'Surename'} state={email} setState={setEmail} keyBoardType={'email-address'} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>What is your registered university password?</Text>
           <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
 
           <View style={{ marginTop: 100 }}>
             <Button onClick={() => {
-              handleLogin
+              handleSignup()
             }} text={`Create Account`} />
           </View>
         </View>

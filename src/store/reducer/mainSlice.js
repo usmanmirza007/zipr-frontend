@@ -11,8 +11,7 @@ const persistConfig = {
 }
 
 const initialState = {
-    isLoggedIn: false,
-    userType: '',
+    isLoggedIn: null,
     program: {},
     userPrograms:[],
     userDetail: {}
@@ -24,24 +23,17 @@ export const mainSlice = createSlice({
     initialState,
     reducers: {
         loggedIn: (state, data) => {
-            state.isLoggedIn = true
-            state.userType = data.payload
+            state.isLoggedIn = {
+                token: data.payload.token,
+                userType: data.payload.type
+            }
         },
-        saveProgram : (state, data) => {
-            state.program = data.payload
+        logout : (state) => {
+            state.isLoggedIn = null
         },
-        logout : (state, data) => {
-            state.isLoggedIn = false
-        },
-        userPrograms : (state, data) => {
-            state.userPrograms = data
-        },
-        userDetails : (state, data) => {
-            state.userDetail = data.payload
-        }
     },
 })
 
-export const { loggedIn, logout, programSession, saveProgram, userPrograms, userDetails } = mainSlice.actions
+export const { loggedIn, logout } = mainSlice.actions
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer)

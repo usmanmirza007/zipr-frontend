@@ -92,12 +92,11 @@ export default () => {
   }
 
   function HomeStack() {
-
-    // const userType = useSelector(state => state.user.userType)
-    const userType = 'VENDER'
-    if (userType == 'CUSTOMER') {
+    const userType = useSelector(state => state.user.isLoggedIn)
+    
+    if (userType && userType.type == 'CUSTOMER') {
       return <CustomerStack />
-    } else if(userType == 'VENDER') {
+    } else {
       return <VenderStack />
     } 
   }
@@ -116,9 +115,9 @@ export default () => {
 
   const MainStack = () => {
 
-    // const loggedIn = useSelector(state => state.user.isLoggedIn)
-const test = true
-    if (test) {
+    const loggedIn = useSelector(state => state.user.isLoggedIn)
+
+    if (loggedIn && loggedIn.token) {
       return <HomeStack />
     } else {
       return <OnboardingStack />

@@ -21,6 +21,9 @@ import style from '../constants/style';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
+import { useLoginMutation } from '../store/slice/api';
+import { loggedIn } from '../store/reducer/mainSlice';
+import { store } from '../store/store';
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,6 +34,8 @@ export default function Login() {
 
   const navigation = useNavigation();
   const dispatch = useDispatch()
+  
+  const [login] = useLoginMutation();
 
   function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -38,23 +43,39 @@ export default function Login() {
   }
 
   const handleLogin = () => {
-    navigation.navigate("Login")
 
-    return
     if (email && password) {
       if (!validateEmail(email)) {
         Snackbar.show({
-          text: 'Please enter valid email',
-          duration: Snackbar.LENGTH_SHORT,
-          backgroundColor: '#24A9DF',
+          text: 'Please enter valid email',duration: Snackbar.LENGTH_SHORT,textColor: '#fff', backgroundColor: '#24A9DF',
         });
       } else {
-        navigation.navigate("Login")
+        const loginData = {
+          email: email,
+          password: password,
+        }
+        login(loginData).unwrap()
+          .then((data) => {
+            if (data) {
+              Snackbar.show({
+                text: `${data.type.toLowerCase()} has been login succssfuly`, duration: Snackbar.LENGTH_SHORT,textColor: '#fff',  backgroundColor: '#24A9DF',
+              });
+              dispatch(loggedIn({
+                token: data.token,
+                type: data.type
+              }))
+            }
+          })
+          .catch((error) => {
+            Snackbar.show({
+              text: error.data.message, duration: Snackbar.LENGTH_SHORT,textColor: '#fff', backgroundColor: '#24A9DF',
+            });
+          });
       }
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_SHORT,textColor: '#fff', 
         backgroundColor: '#24A9DF',
       });
     }
@@ -82,7 +103,7 @@ export default function Login() {
 
           <View style={{ marginTop: (height - 650) }}>
             <Button onClick={() => {
-              handleLogin
+              handleLogin()
             }} text={`Login`} />
           </View>
         </View>

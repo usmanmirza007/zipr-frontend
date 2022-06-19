@@ -21,28 +21,46 @@ import style from '../constants/style';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
+import { useEditUserMutation, useGetUserQuery } from '../store/slice/api';
 
 const { width, height } = Dimensions.get('window');
 
 export default function EditProfile() {
+  const { data: user, isLoading, isError, isFetching } = useGetUserQuery()
+  const users = user ?? {}
+
   const [name, setName] = useState('');
   const [surename, setSurename] = useState('');
-  const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [vendorName, setVendorName] = useState('');
+  const [bio, setBio] = useState('');
+  const [location, setLocation] = useState('');
+
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const dispatch = useDispatch()
+  const [editUser] = useEditUserMutation();
 
+  useEffect(() => {
+    if (users.userType == "VENDOR") {
+      setEmail(users?.email)
+      setVendorName(users?.vendorName)
+      setBio(users?.bio)
+      setLocation(users?.location)
+    } else {
+      setEmail(users?.email)
+      setName(users?.firstName)
+      setSurename(users?.lastName)
+    }
+  }, [users]);
   function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
 
-  const handleLogin = () => {
-    navigation.navigate("Login")
+  const handleEditProfile = () => {
 
-    return
-    if (email && password && name && surename) {
+    if (location && vendorName && bio) {
       if (!validateEmail(email)) {
         Snackbar.show({
           text: 'Please enter valid email',
@@ -50,7 +68,29 @@ export default function EditProfile() {
           backgroundColor: '#24A9DF',
         });
       } else {
-        navigation.navigate("Login")
+        const editUserData = {
+          firstName: name,
+          lastName: surename,
+          vendorName: vendorName,
+          bio: bio,
+          location: location,
+        }
+        editUser(editUserData).unwrap()
+          .then((data) => {
+            if (data.success) {
+              Snackbar.show({
+                text: "User profile has been updated", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+              });
+              navigation.navigate("LogVendorHomein")
+            }
+          })
+          .catch((error) => {
+            console.log('yoyo', error);
+            Snackbar.show({
+              text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            });
+            console.log(error, 'error');
+          });
       }
     } else {
       Snackbar.show({
@@ -59,8 +99,8 @@ export default function EditProfile() {
         backgroundColor: '#24A9DF',
       });
     }
-
   }
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <MyStatusBar
@@ -85,18 +125,18 @@ export default function EditProfile() {
 
         <View style={{ marginHorizontal: 25 }}>
           <Text style={{ fontSize: 15, fontFamily: style.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor name</Text>
-          <TextInputs style={{ marginTop: 17, }} labelText={'Name'} state={email} setState={setEmail} />
+          <TextInputs style={{ marginTop: 17, }} labelText={'Name'} state={vendorName} setState={setVendorName} />
           <Text style={{ fontSize: 15, fontFamily: style.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor Bio</Text>
 
-            <TextInputs style={{ marginTop: 17 }} multiline={true} labelText={'Bio'} state={email} setState={setEmail} />
+          <TextInputs style={{ marginTop: 17 }} multiline={true} labelText={'Bio'} state={bio} setState={setBio} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>Location</Text>
-          <TextInputs style={{ marginTop: 17 }} labelText={'Location'} state={password} setState={setPassword} image={images.location}/>
+          <TextInputs style={{ marginTop: 17 }} labelText={'Location'} state={location} setState={setLocation} image={images.location} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>Email</Text>
-          <TextInputs style={{ marginTop: 17, }} labelText={'Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
+          <TextInputs style={{ marginTop: 17, }} labelText={'Email'} disable={false} state={email} setState={setEmail} keyBoardType={'email-address'} />
 
           <View style={{ marginTop: 100 }}>
             <Button onClick={() => {
-              handleLogin
+              handleEditProfile()
             }} text={`Continue`} />
           </View>
         </View>
