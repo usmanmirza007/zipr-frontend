@@ -13,7 +13,7 @@ import Login from './src/screens/Login';
 import Welcome from './src/screens/welcome';
 
 // home 
-import VendorHome from './src/screens/VendorHome';
+import Home from './src/screens/Home';
 import CustomDrawerContent from './src/navigation/SideMenu';
 import { Provider, useSelector } from 'react-redux';
 import { navigationRef } from './RootNavigation';
@@ -21,6 +21,7 @@ import Signup from './src/screens/Signup';
 import CustomerSignup from './src/screens/CustomerSignup';
 import VenderSignup from './src/screens/VenderSignup';
 import EditProfile from './src/screens/EditProfile';
+import OrderDetails from './src/screens/OrderDetails';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -61,11 +62,13 @@ export default () => {
               fontWeight: 'normal',
             },
           }}
-          initialRouteName="VendorHome"
+          initialRouteName="Home"
           
         >
-          <Drawer.Screen name="VendorHome" component={VendorHome}  options={{ headerShown: false }} />
+          <Drawer.Screen name="Home" component={Home}  options={{ headerShown: false }} />
           <Drawer.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+        <Stack.Screen name="OrderDetails" component={OrderDetails} options={{manimationEnabled: false, headerShown: false}} />
+
         </Drawer.Navigator>
 
       </>
@@ -76,7 +79,8 @@ export default () => {
   function CustomerStack() {
     return (
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="VendorHome" component={AppStack} options={{manimationEnabled: false}} />
+        <Stack.Screen name="Homes" component={AppStack} options={{manimationEnabled: false}} />
+        <Stack.Screen name="OrderDetails" component={OrderDetails} options={{manimationEnabled: false}} />
       </Stack.Navigator>
     )
   }
@@ -84,8 +88,7 @@ export default () => {
   function VenderStack() {
     return (
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="VendorHome" component={AppStack} options={{animationEnabled: false }} />
-        {/* <Drawer.Screen name="VendorHome" component={VendorHome} /> */}
+        <Stack.Screen name="Homes" component={AppStack} options={{animationEnabled: false }} />
 
       </Stack.Navigator>
     )

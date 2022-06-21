@@ -17,7 +17,7 @@ const Header = ({ title, image }) => {
         alignItems: 'center',
         height: 60,
       }}>
-      <StatusBar translucent barStyle={"light-content"} backgroundColor={ '#000'} />
+      <StatusBar translucent barStyle={"light-content"} backgroundColor={ '#403FFC'} />
 
 
       <TouchableOpacity style={{ position: 'absolute', left: 0 }} onPress={() => navigation.goBack()}>

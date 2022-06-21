@@ -16,5 +16,11 @@ const images = {
   menu: require('../assets/images/menu.png'),
   vender: require('../assets/images/vender.png'),
   welcome: require('../assets/images/welcome.png'),
+  option: require('../assets/images/option.png'),
+  plus: require('../assets/images/plus.png'),
+  bike: require('../assets/images/bike.png'),
+  minus: require('../assets/images/minus.png'),
+  rating: require('../assets/images/rating.png'),
+  heart: require('../assets/images/heart.png'),
 };
 export default images;
