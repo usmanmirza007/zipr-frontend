@@ -5,15 +5,14 @@ import {
   StyleSheet,
   View,
   Image,
-  TextInput,
-  ImageBackground,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import style from '../constants/style';
+import commonStyle from '../constants/commonStyle';
 import HomeHeader from './HomeHeader';
 import images from '../constants/images';
 import TextInputs from './TextInputs';
+import { useGetAllOrderQuery } from '../store/slice/api';
 
 
 const CustomerHome = () => {
@@ -21,6 +20,9 @@ const CustomerHome = () => {
   const [selectTab, setSelectTab] = useState('follow');
   const [selectedTabButton, setSelectedTabButton] = useState('all');
   const navigation = useNavigation();
+
+  const { data: orderData, isLoading, isError } = useGetAllOrderQuery()
+  const orders = orderData ?? []
 
   var selectedTabButtonStyle = {
     backgroundColor: '#403FFC',
@@ -39,17 +41,7 @@ const CustomerHome = () => {
   //   //   return <PickOrders style={style} navigation={navigation} />;
   //   // }
   // };
-
-  const twoColumnViewDummyData = [
-    { text: 'Item', name: 'vender name', price: 'Rs 12.25', itemImage: images.vender },
-    { text: 'Item', name: 'vender name', price: 'Rs 12.25', itemImage: images.vender },
-    { text: 'Item', name: 'vender name', price: 'Rs 12.25', itemImage: images.vender },
-    { text: 'Item', name: 'vender name', price: 'Rs 12.25', itemImage: images.vender },
-    { text: 'Item', name: 'vender name', price: 'Rs 12.25', itemImage: images.vender },
-    { text: 'Item', name: 'vender name', price: 'Rs 12.25', itemImage: images.vender },
-    { text: 'Item', name: 'vender name', price: 'Rs 12.25', itemImage: images.vender },
-    { text: 'Item', name: 'vender name', price: 'Rs 12.25', itemImage: images.vender },
-  ];
+  
   return (
     <View style={{ height: '100%' }}>
       <HomeHeader title={'Welcome, Chris.'} image={images.frame} />
@@ -90,7 +82,7 @@ const CustomerHome = () => {
             <Text
               style={[
                 selectedTabButton === 'all' ? selectedTabButtonStyle : unSelectedTabStyle,
-                { fontFamily: style.fontFamily.regular, fontSize: 14, },
+                { fontFamily: commonStyle.fontFamily.regular, fontSize: 14, },
               ]}>
               All
             </Text>
@@ -118,7 +110,7 @@ const CustomerHome = () => {
             <Text
               style={[
                 selectedTabButton === 'tech' ? selectedTabButtonStyle : unSelectedTabStyle,
-                { fontFamily: style.fontFamily.regular, fontSize: 14 },
+                { fontFamily: commonStyle.fontFamily.regular, fontSize: 14 },
               ]}>
               Tech
             </Text>
@@ -146,7 +138,7 @@ const CustomerHome = () => {
             <Text
               style={[
                 selectedTabButton === 'textbooks' ? selectedTabButtonStyle : unSelectedTabStyle,
-                { fontFamily: style.fontFamily.regular, fontSize: 14 },
+                { fontFamily: commonStyle.fontFamily.regular, fontSize: 14 },
               ]}>
               Textbooks
             </Text>
@@ -174,7 +166,7 @@ const CustomerHome = () => {
             <Text
               style={[
                 selectedTabButton === 'AcademicServices' ? selectedTabButtonStyle : unSelectedTabStyle,
-                { fontFamily: style.fontFamily.regular, fontSize: 14 },
+                { fontFamily: commonStyle.fontFamily.regular, fontSize: 14 },
               ]}>
               Academic Services
             </Text>
@@ -187,27 +179,27 @@ const CustomerHome = () => {
           onPress={() => {
             setSelectTab('follow')
           }}>
-          <Text style={{ fontSize: 16, fontFamily: style.fontFamily.medium, color: '#000', }}>Following</Text>
+          <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Following</Text>
           {selectTab === 'follow' && <View style={{ borderColor: '#403FFC', borderWidth: 2, marginTop: 5, borderRadius: 2 }} />}
         </TouchableOpacity>
         <TouchableOpacity style={{ marginLeft: 20 }}
           onPress={() => {
             setSelectTab('popular')
           }}>
-          <Text style={{ fontSize: 16, fontFamily: style.fontFamily.medium, color: '#000', }}>Popular</Text>
+          <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Popular</Text>
           {selectTab === 'popular' && <View style={{ borderColor: '#403FFC', borderWidth: 2, marginTop: 5, borderRadius: 2 }} />}
         </TouchableOpacity>
         <TouchableOpacity style={{ marginLeft: 20 }}
           onPress={() => {
             setSelectTab('favorite')
           }}>
-          <Text style={{ fontSize: 16, fontFamily: style.fontFamily.medium, color: '#000', }}>Favourites</Text>
+          <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Favourites</Text>
           {selectTab === 'favorite' && <View style={{ borderColor: '#403FFC', borderWidth: 2, marginTop: 5, borderRadius: 2 }} />}
         </TouchableOpacity>
       </View>
 
       {
-        twoColumnViewDummyData.map((value, index) => {
+        Array.isArray(orders) && orders.length ? orders.map((order, index) => {
           return (
 
             <TouchableOpacity
@@ -222,31 +214,39 @@ const CustomerHome = () => {
                 height: 250,
                 marginTop: 20,
               }}>
-              <Image resizeMode='contain' style={{ height: 150, width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={value.itemImage} />
+              <Image resizeMode='contain' style={{ height: 150, width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={{uri: order.picture}} />
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: '100%' }}>
                 <View style={{ marginLeft: 10 }}>
                   <Text
                     style={styles.boxText}>
-                    {value.text}
+                    {order.name}
                   </Text>
                   <Text
                     style={styles.boxText}>
-                    {value.name}
+                    {order.description}
                   </Text>
                   <Text
                     style={styles.price}>
-                    {value.price}
+                    {order.price}
                   </Text>
                 </View>
               </View>
             </TouchableOpacity>
           )
         })
+        : 
+          <View style={{ alignItems: 'center',marginTop: 200, justifyContent: 'center'}}>
+            <Text style={{
+              fontSize: 18,
+              color: '#000',
+              fontFamily: commonStyle.fontFamily.bold,
+            }}
+            >No order yet!</Text>
+          </View>
       }
     </View>
   )
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -257,13 +257,13 @@ const styles = StyleSheet.create({
   boxText: {
     fontSize: 14,
     color: '#000',
-    fontFamily: style.fontFamily.medium,
+    fontFamily: commonStyle.fontFamily.medium,
   },
   price: {
     fontSize: 10,
     color: '#403FFC',
-    fontFamily: style.fontFamily.medium,
+    fontFamily: commonStyle.fontFamily.medium,
   },
 });
-
 export default CustomerHome;
+

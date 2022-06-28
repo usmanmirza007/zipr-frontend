@@ -1,19 +1,16 @@
 import React from 'react';
-import { Text, StatusBar, View, Image, TouchableOpacity } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { useNavigation } from '@react-navigation/native';
 import images from '../constants/images';
 import MyStatusBar from './MyStatusBar';
-import style from '../constants/style';
+import commonStyle from '../constants/commonStyle';
 
-const HomeHeader = ({ title, image }) => {
+const HomeHeader = ({ title, image, navigateText }) => {
   var navigation = useNavigation();
 
   return (
-    <View
-      style={{
-        // marginTop: StatusBar.currentHeight + getStatusBarHeight(true),
-      }}>
+    <View>
       <MyStatusBar
         translucent
         barStyle="light-content"
@@ -40,8 +37,8 @@ const HomeHeader = ({ title, image }) => {
             {title}
           </Text>
         </View>
-        <TouchableOpacity style={[{ marginTop: 15, marginRight: 25, backgroundColor: '#fff', width: 50, elevation: 3, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }, style.shadow]} 
-        onPress={() => { }}>
+        <TouchableOpacity style={[{ marginTop: 15, marginRight: 25, backgroundColor: '#fff', width: 50, elevation: 3, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }, commonStyle.shadow]} 
+        onPress={() => { navigation.navigate(navigateText) }}>
 
           <Image
             source={image}

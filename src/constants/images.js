@@ -22,5 +22,6 @@ const images = {
   minus: require('../assets/images/minus.png'),
   rating: require('../assets/images/rating.png'),
   heart: require('../assets/images/heart.png'),
+  edit: require('../assets/images/edit.png'),
 };
 export default images;

@@ -12,9 +12,6 @@ const persistConfig = {
 
 const initialState = {
     isLoggedIn: null,
-    program: {},
-    userPrograms:[],
-    userDetail: {}
 }
 
 

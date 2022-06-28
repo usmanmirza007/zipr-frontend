@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Text, StatusBar, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import images from '../constants/images';
+import { View, Image, TextInput, TouchableOpacity } from 'react-native';
 
 const TextInputs = ({
   labelText,
@@ -30,8 +29,6 @@ const TextInputs = ({
       style={[
         {
           backgroundColor: '#F7F5F5',
-          // borderWidth: focuse ? 1 : 1,
-          // borderColor: focuse ? '#048bf8' : 'rgba(0, 0, 0, 0.12)',
           borderRadius: 5,
           height: multiline ? 100 : 50,
           width: '100%',
@@ -90,9 +87,7 @@ const TextInputs = ({
 
         {image && (
           <TouchableOpacity
-            onPress={() =>
-              UseContext.setModalVisibilityDynamic('ChangePassword')
-            }
+            onPress={() => {}}
             style={{
               position: 'absolute',
               right: 5,

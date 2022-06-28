@@ -10,7 +10,7 @@ export default {
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
   },
- fontFamily : {
+  fontFamily: {
     light: 'Poppins-Light',
     regular: 'Poppins-Regular',
     medium: 'Poppins-Medium',

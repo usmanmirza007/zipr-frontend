@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
-  ToastAndroid,
-  StatusBar,
   View,
-  Image,
-  ActivityIndicator,
   Dimensions,
   ImageBackground,
-  TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import images from '../constants/images';
 
-import style from '../constants/style';
+import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import MyStatusBar from '../components/MyStatusBar';
 import RadioButton from 'react-native-simple-radio-button';
@@ -29,11 +24,6 @@ export default function Signup() {
   const [second, setSecond] = useState(false);
 
   const navigation = useNavigation();
-
-  function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  }
 
   const handleSingup = () => {
     if (first) {
@@ -53,7 +43,7 @@ export default function Signup() {
 
         <ImageBackground source={images.vender} style={{ height: 200 }} resizeMode='stretch' >
         </ImageBackground>
-        <Text style={{ fontSize: 28, fontFamily: style.fontFamily.bold, color: '#000', marginTop: 30, marginLeft: 25 }}>Sign Up</Text>
+        <Text style={{ fontSize: 28, fontFamily: commonStyle.fontFamily.bold, color: '#000', marginTop: 30, marginLeft: 25 }}>Sign Up</Text>
 
         <View style={{ marginHorizontal: 25 }}>
           <View style={{}}>
@@ -64,7 +54,7 @@ export default function Signup() {
               selectedButtonColor='#403FFC'
               buttonOuterSize={30}
               buttonSize={20}
-              labelStyle={{ fontSize: 16, marginLeft: 20, marginTop: -8, color: '#000', padding: 15, fontFamily: style.fontFamily.medium, }}
+              labelStyle={{ fontSize: 16, marginLeft: 20, marginTop: -8, color: '#000', padding: 15, fontFamily: commonStyle.fontFamily.medium, }}
               radio_props={radio_props}
               initial={0}
               onPress={(value) => {
@@ -79,9 +69,9 @@ export default function Signup() {
               }}
             />
           </View>
-          <Text style={{ fontSize: 13, marginTop: 0, textAlign: 'center', color: '#000', fontFamily: style.fontFamily.regular }}>Already have a profile? <Text onPress={() => navigation.navigate('Login')} style={{ fontSize: 13, textDecorationLine: 'underline', color: '#403FFC', fontFamily: style.fontFamily.regular }}>Login</Text></Text>
+          <Text style={{ fontSize: 13, marginTop: 0, textAlign: 'center', color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Already have a profile? <Text onPress={() => navigation.navigate('Login')} style={{ fontSize: 13, textDecorationLine: 'underline', color: '#403FFC', fontFamily: commonStyle.fontFamily.regular }}>Login</Text></Text>
 
-          <View style={{ marginTop: (height - 650) }}>
+          <View style={{ marginTop: 310 }}>
             <Button onClick={() => {
               handleSingup()
             }} text={`Let's Continue`} />

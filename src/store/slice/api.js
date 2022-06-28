@@ -9,17 +9,6 @@ export const api = emptySplitApi.injectEndpoints({
 
     signupCustomer: builder.mutation({
       query: (args) => {
-        const formData = new FormData()
-        formData.append('firstName', args.firstName)
-        formData.append('lastName', args.lastName)
-        formData.append('email', args.email)
-        formData.append('password', args.password)
-        formData.append('type', args.type)
-        // formData.append('picture', {
-          //   uri: data.picture.uri,
-          //   name: data.picture.filename,
-          //   type: data.picture.type,
-          // })
         return {
           url: '/auth/customerSignUp',
           method: 'POST',
@@ -36,18 +25,6 @@ export const api = emptySplitApi.injectEndpoints({
 
     signupVendor: builder.mutation({
       query: (args) => {
-        const formData = new FormData()
-        formData.append('firstName', args.firstName)
-        formData.append('lastName', args.lastName)
-        formData.append('vendorName', args.vendorName)
-        formData.append('email', args.email)
-        formData.append('password', args.password)
-        formData.append('type', args.type)
-        // formData.append('picture', {
-          //   uri: data.picture.uri,
-          //   name: data.picture.filename,
-          //   type: data.picture.type,
-          // })
         return {
           url: '/auth/vendorSignUp',
           method: 'POST',
@@ -65,7 +42,7 @@ export const api = emptySplitApi.injectEndpoints({
 
     login: builder.mutation({
       query: (args) => {
-        
+
         return {
           url: '/auth/login',
           method: 'POST',
@@ -76,6 +53,7 @@ export const api = emptySplitApi.injectEndpoints({
         }
       },
     }),
+
     getUser: builder.query({
       query: () => {
         return {
@@ -83,7 +61,7 @@ export const api = emptySplitApi.injectEndpoints({
           method: 'GET',
         }
       },
-      // providesTags: (result, error, id) => [{ type: 'programs', id }],
+      providesTags: ['User'],
     }),
 
     editUser: builder.mutation({
@@ -98,259 +76,78 @@ export const api = emptySplitApi.injectEndpoints({
             bio: args.bio,
             location: args.location,
             type: args.type,
+            picture: args.picture
+          }
+        }
+      },
+      invalidatesTags: ['User']
+    }),
+
+    addOrder: builder.mutation({
+      query: (args) => {
+        return {
+          url: '/users/order',
+          method: 'POST',
+          body: {
+            name: args.name,
+            description: args.description,
+            price: args.price,
+            location: args.location,
+            picture: args.picture,
+            tags: args.tags
           }
         }
       },
     }),
 
-  //   signup: builder.mutation({
-  //     query: ({ data }) => ({
-  //       url: '/signup',
-  //       method: 'POST',
-  //       body: data
-  //     })
-  //   }),
-  //   createProgram: builder.mutation({
-  //     query: ({ data }) => {
-  //       const formData = new FormData();
-  //       formData.append('name', data.name);
-  //       // formData.append('description', data.description);
-  //       // formData.append('scope', data.scope);
-  //       // formData.append('isActive', data.isActive);
-  //       // formData.append('numberOfSessions', data.numberOfSessions);
-  //       // formData.append('picture', {
-  //       //     uri: data.picture.uri,
-  //       //     name: data.picture.fileName,
-  //       //     type: data.picture.type,
-  //       // });
-  //       return {
-  //         url: '/user/program',
-  //         method: 'POST',
-  //         body: formData
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'allExercises']
-  //   }),
-  //   deleteProgram: builder.mutation({
-  //     query: ({ data }) => {
-  //       return {
-  //         url: '/user/program',
-  //         method: 'DELETE',
-  //         body: data
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'currentPrograms', 'singleProgram', 'allExercises']
-  //   }),
-  //   createExercise: builder.mutation({
-  //     query: ({ data }) => {
-  //       const formData = new FormData()
-  //       formData.append('programId', data.programId)
-  //       formData.append('dayNumber', data.dayNumber)
-  //       formData.append('name', data.name)
-  //       formData.append('description', data.description)
-  //       formData.append('defaultNumberOfSets', data.defaultNumberOfSets)
-  //       formData.append('defaultNumberOfReps', data.defaultNumberOfReps)
-  //       formData.append('weight', data.weight)
-  //       formData.append('isActive', 'true')
-  //       if (data.video) {
-  //         formData.append('videoinstruction', {
-  //           uri: data.video.uri,
-  //           name: data.video.filename,
-  //           type: data.video.type,
-  //         })
-  //       }
-  //       return {
-  //         url: '/user/programexercise',
-  //         method: 'POST',
-  //         body: formData
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'currentPrograms', 'singleProgram', 'allExercises']
-  //   }),
-  //   uploadProgramImage: builder.mutation({
-  //     query: ({ data }) => {
-  //       const formData = new FormData()
-  //       formData.append('programId', data.programId)
-  //       formData.append('picture', {
-  //         uri: data.picture.uri,
-  //         name: data.picture.filename,
-  //         type: data.picture.type,
-  //       })
-  //       return {
-  //         url: '/user/program',
-  //         method: 'PATCH',
-  //         body: formData
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'currentPrograms', 'singleProgram']
-  //   }),
-  //   editProfileImage: builder.mutation({
-  //     query: ({ data }) => {
-  //       const formData = new FormData()
-  //       formData.append('picture', {
-  //         uri: data.picture.uri,
-  //         name: data.picture.filename,
-  //         type: data.picture.type,
-  //       })
-  //       return {
-  //         url: '/user/editProfile',
-  //         method: 'PATCH',
-  //         body: formData
-  //       }
-  //     },
-  //     invalidatesTags: ['userDetail']
-  //   }),
-  //   uploadExerciseVideo: builder.mutation({
-  //     query: ({ data }) => {
-  //       const formData = new FormData()
-  //       // formData.append('programId', data.programId)
-  //       formData.append('exerciseId', data.exerciseId)
-  //       formData.append('videoinstruction', {
-  //         uri: data.video.uri,
-  //         name: data.video.filename,
-  //         type: data.video.type,
-  //       })
-  //       return {
-  //         url: '/user/exercise',
-  //         method: 'PATCH',
-  //         body: formData
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'currentPrograms', 'singleProgram', 'allExercises']
-  //   }),
-  //   updateProgramSession: builder.mutation({
-  //     query: ({ data }) => {
-  //       return {
-  //         url: '/user/programsession',
-  //         method: 'PATCH',
-  //         body: data
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'currentPrograms', 'singleProgram', 'allExercises']
-  //   }),
-  //   getUserPrograms: builder.query({
-  //     query: () => {
-  //       return {
-  //         url: '/user/programs',
-  //         method: 'GET',
-  //       }
-  //     },
-  //     providesTags: (result, error, id) => [{ type: 'programs', id }],
-  //     //no need of this right now
-  //     // onQueryStarted: async (id ,{ dispatch, queryFulfilled }) => {
-  //     //     try {
-  //     //         const { data } = await queryFulfilled;
-  //     //     } catch (err) {
-  //     //         console.log("error... ", err);
-  //     //     }
-  //     // }
-  //   }),
-  //   getSingleUserProgram: builder.query({
-  //     query: () => {
-  //       return {
-  //           url: '/user/programs',
-  //           method: 'GET',
-  //       }
-  //     },
-  //     transformResponse: (response, meta, arg) => {
+    getOrders: builder.query({
+      query: () => {
+        return {
+          url: '/users/order',
+          method: 'GET',
+        }
+      },
+      providesTags: ['Order'],
+    }),
 
-  //       const singleUserProgram = response.filter((value) => value.id == arg);
-  //       if (singleUserProgram.length) {
+    getSingleOrder: builder.query({
+      query: (orderId) => {
+        return {
+          url: `/users/order/${orderId}`,
+          method: 'GET',
+        }
+      },
+      providesTags: ['SingleOrder']
+    }),
 
-  //         return singleUserProgram[0].programSessions;
-  //       } else {
+    editOrder: builder.mutation({
+      query: (args) => {
+        return {
+          url: `/users/order`,
+          method: 'PATCH',
+          body: {
+            name: args.name,
+            description: args.description,
+            price: args.price,
+            location: args.location,
+            picture: args.picture,
+            tags: args.tags,
+            orderId: args.orderId
+          }
+        }
+      },
+      invalidatesTags: ['Order', 'SingleOrder']
+    }),
 
-  //           return []
-  //         }
-  //       },
-  //       providesTags: (result, error, id) => [{ type: 'singleProgram', id }],
-  //   }),
-  //   duplicateDay: builder.mutation({
-  //     query: ({ data }) => {
-  //         return{
-  //             url: '/user/duplicateDay',
-  //             method: 'POST',
-  //             body: data
-  //         }
-  //     },
-  //     invalidatesTags: ['programs', 'currentPrograms', 'singleProgram'],
-  //   }),
-  //   performWorkout: builder.mutation({
-  //     query: ({ data }) => {
-  //       return {
-  //         url: '/user/activeProgram',
-  //         method: 'POST',
-  //         body: data
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'currentPrograms', 'singleProgram']
-  //   }),
-  //   stopWorkout: builder.mutation({
-  //     query: ({ data }) => {
-  //       return {
-  //         url: '/user/inActiveProgram',
-  //         method: 'POST',
-  //         body: data
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'currentPrograms', 'singleProgram']
-  //   }),
-  //   deletedDay: builder.mutation({
-  //     query: ({ data }) => {
-  //       return {
-  //         url: '/user/program/deleteDay',
-  //         method: 'DELETE',
-  //         body: data
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'currentPrograms', 'singleProgram']
-  //   }),
-  //   addWorkout: builder.mutation({
-  //     query: ({ data }) => {
-  //       return {
-  //         url: '/user/addWorkout',
-  //         method: 'POST',
-  //         body: data
-  //       }
-  //     },
-  //     invalidatesTags: ['programs', 'finishedPrograms', 'currentPrograms']
-  //   }),
-  //   currentPrograms: builder.query({
-  //     query: () => {
-  //       return {
-  //         url: '/user/currentPrograms',
-  //         method: 'GET'
-  //       }
-  //     },
-  //     providesTags: (result, error, id) => [{ type: 'currentPrograms', id }],
-  //   }),
-  //   getFinishedPrograms: builder.query({
-  //     query: () => {
-  //       return {
-  //           url: '/user/finishedPrograms',
-  //           method: 'GET',
-  //       }
-  //     },
-  //       providesTags: (result, error, id) => [{ type: 'finishedPrograms', id }],
-  //   }),
-  //   getUserDetail: builder.query({
-  //     query: () => {
-  //       return {
-  //           url: '/user/userDetail',
-  //           method: 'GET',
-  //       }
-  //     },
-  //       providesTags: (result, error, id) => [{ type: 'userDetail', id }],
-  //   }),
-  //   getAllExercises: builder.query({
-  //     query: () => {
-  //       return {
-  //           url: '/user/allExercises',
-  //           method: 'GET',
-  //       }
-  //     },
-  //       providesTags: (result, error, id) => [{ type: 'allExercises', id }],
-  //   }),
+    getAllOrder: builder.query({
+      query: () => {
+        return {
+          url: `/users/allOrder`,
+          method: 'GET',
+        }
+      },
+    }),
+    
   }),
   overrideExisting: true,
 })
@@ -360,5 +157,10 @@ export const {
   useSignupVendorMutation,
   useLoginMutation,
   useEditUserMutation,
-  useGetUserQuery
- } = api
+  useAddOrderMutation,
+  useGetUserQuery,
+  useGetOrdersQuery,
+  useGetSingleOrderQuery,
+  useGetAllOrderQuery,
+  useEditOrderMutation,
+} = api

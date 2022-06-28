@@ -2,19 +2,17 @@ import React from 'react';
 import { Text, View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import style from '../constants/style';
-
+import commonStyle from '../constants/commonStyle';
+import images from '../constants/images';
 
 const MapImageView = ({ data }) => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-
-
   return (
     <TouchableOpacity
-      onPress={() => { }}
+      onPress={() => { navigation.navigate('EditOrder', {orderId: data.id}) }}
       style={{
         elevation: 8,
         shadowColor: 'rgba(45, 45, 45,)',
@@ -26,19 +24,19 @@ const MapImageView = ({ data }) => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Image resizeMode='contain' style={{ height: 80, width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={data.itemImage} />
+      <Image resizeMode='contain' style={{ height: 80, width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={{uri: data.picture}} />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: '100%' }}>
-        <View style={{ marginLeft: 10 }}>
+        <View style={{ marginLeft: 10, marginBottom: 20 }}>
           <Text
             style={lightStyle.boxText}>
-            {data.text}
+            {data.name}
           </Text>
           <Text
             style={lightStyle.price}>
             {data.price}
           </Text>
         </View>
-        <Image resizeMode='contain' style={{ marginRight: 10, width: 30, height: 30 }} source={data.icon} />
+        <Image resizeMode='contain' style={{ marginRight: 10, width: 30, height: 30 }} source={images.option} />
       </View>
     </TouchableOpacity>
 
@@ -55,12 +53,12 @@ const lightStyle = StyleSheet.create({
   boxText: {
     fontSize: 14,
     color: '#000',
-    fontFamily: style.fontFamily.medium,
+    fontFamily: commonStyle.fontFamily.medium,
   },
   price: {
     fontSize: 10,
     color: '#403FFC',
-    fontFamily: style.fontFamily.medium,
+    fontFamily: commonStyle.fontFamily.medium,
   },
 });
 

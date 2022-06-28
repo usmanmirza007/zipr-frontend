@@ -16,8 +16,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import images from '../constants/images';
 
 import TextInputs from '../components/TextInputs';
-import { useSelector, useDispatch } from 'react-redux';
-import style from '../constants/style';
+import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
@@ -30,10 +29,8 @@ export default function CustomerSignup() {
   const [surename, setSurename] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
-  const dispatch = useDispatch()
-  const [customerSignup] = useSignupCustomerMutation();
+  const [customerSignup, { isLoading }] = useSignupCustomerMutation();
 
   function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -93,26 +90,26 @@ export default function CustomerSignup() {
           <TouchableOpacity onPress={() => { navigation.goBack() }}>
             <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
           </TouchableOpacity>
-          <Text style={{ fontSize: 28, fontFamily: style.fontFamily.bold, color: '#fff', marginTop: 100, marginLeft: 25 }}>Sign Up</Text>
+          <Text style={{ fontSize: 28, fontFamily: commonStyle.fontFamily.bold, color: '#fff', marginTop: 100, marginLeft: 25 }}>Sign Up</Text>
         </ImageBackground>
 
         <View style={{ marginHorizontal: 25 }}>
-          <Text style={{ fontSize: 15, fontFamily: style.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
+          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
             <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={name} setState={setName} />
             <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surename'} state={surename} setState={setSurename} />
           </View>
-          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>What is your registered university email?</Text>
+          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university email?</Text>
           <TextInputs style={{ marginTop: 17, }} labelText={'Surename'} state={email} setState={setEmail} keyBoardType={'email-address'} />
-          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: style.fontFamily.medium }}>What is your registered university password?</Text>
+          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university password?</Text>
           <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
 
-          <View style={{ marginTop: 100 }}>
+          {!isLoading ? <View style={{ marginTop: 170, marginBottom: 30 }}>
             <Button onClick={() => {
               handleSignup()
             }} text={`Create Account`} />
-          </View>
+          </View> :<ActivityIndicator style={{marginVertical: 30, marginTop: 170}} size={'large'} color={'green'} />}
         </View>
       </ScrollView>
     </View>

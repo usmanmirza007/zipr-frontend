@@ -22,6 +22,8 @@ import CustomerSignup from './src/screens/CustomerSignup';
 import VenderSignup from './src/screens/VenderSignup';
 import EditProfile from './src/screens/EditProfile';
 import OrderDetails from './src/screens/OrderDetails';
+import AddOrder from './src/screens/AddOrder';
+import EditOrder from './src/screens/EditOrder';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -67,7 +69,9 @@ export default () => {
         >
           <Drawer.Screen name="Home" component={Home}  options={{ headerShown: false }} />
           <Drawer.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
-        <Stack.Screen name="OrderDetails" component={OrderDetails} options={{manimationEnabled: false, headerShown: false}} />
+          <Stack.Screen name="OrderDetails" component={OrderDetails} options={{manimationEnabled: false, headerShown: false}} />
+          <Stack.Screen name="AddOrder" component={AddOrder} options={{manimationEnabled: false, headerShown: false}} />
+          <Stack.Screen name="EditOrder" component={EditOrder} options={{manimationEnabled: false, headerShown: false}} />
 
         </Drawer.Navigator>
 
@@ -80,7 +84,6 @@ export default () => {
     return (
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="Homes" component={AppStack} options={{manimationEnabled: false}} />
-        <Stack.Screen name="OrderDetails" component={OrderDetails} options={{manimationEnabled: false}} />
       </Stack.Navigator>
     )
   }

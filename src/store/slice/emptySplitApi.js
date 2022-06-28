@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { logout } from '../reducer/mainSlice';
 import { store } from '../store'
 import { BASE_URL } from './baseurl'
 console.log('url', BASE_URL);
@@ -14,6 +15,7 @@ export const emptySplitApi = createApi({
         if (token) {
           headers.set('authorization', `Bearer ${token.token}`)
         } else {
+          store.dispatch(logout())
           headers.set('authorization', '')
         }
       } catch(err) {
@@ -24,5 +26,8 @@ export const emptySplitApi = createApi({
    }),
   endpoints: () => ({}),
   tagTypes: [
+    'Order',
+    'SingleOrder',
+    'User'
   ],
 })

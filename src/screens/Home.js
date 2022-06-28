@@ -8,19 +8,20 @@ import { useNavigation } from '@react-navigation/native';
 import { useGetUserQuery } from '../store/slice/api';
 import VendorHome from '../components/VendorHome';
 import CustomerHome from '../components/CustomerHome';
+import { store } from '../store/store';
 
 const Home = () => {
   const navigation = useNavigation();
-  const { data: userData, isLoading, isError, isFetching } = useGetUserQuery()
+  const { data: userData, isLoading, isError } = useGetUserQuery()
   const user = userData ?? {}
-console.log('ususu', user);
+  const token = store.getState().user.isLoggedIn
   return (
-    <View style={{  backgroundColor: '#fff' }}>
+    <View style={{flex: 1,  backgroundColor: '#fff' }}>
       <ScrollView>
 
-      {/* {user.userType == "VENDOR" ? */}
-         <CustomerHome />
-        {/* <VendorHome /> */}
+        {token.userType == "CUSTOMER" ?
+          <CustomerHome /> :
+          <VendorHome />}
       </ScrollView>
     </View>
   );

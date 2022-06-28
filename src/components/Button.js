@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet,  } from 'react-native';
-import shadowStyle from '../constants/style'
+import commonStyle from '../constants/commonStyle'
 export default function ({ text, onClick, style, disable, textStyle }) {
   return (
     <TouchableOpacity
@@ -9,9 +9,9 @@ export default function ({ text, onClick, style, disable, textStyle }) {
       style={[
         styles.start,
         style,
-        shadowStyle.shadow
+        commonStyle.shadow
       ]}>
-      <Text style={[{ color: 'white', fontSize: 14, textAlign: 'center', fontFamily: shadowStyle.fontFamily.medium }, textStyle]}>{ text }</Text>
+      <Text style={[{ color: 'white', fontSize: 14, textAlign: 'center', fontFamily: commonStyle.fontFamily.medium }, textStyle]}>{ text }</Text>
     </TouchableOpacity>
   );
 }
