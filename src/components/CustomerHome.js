@@ -203,6 +203,7 @@ const CustomerHome = () => {
           return (
 
             <TouchableOpacity
+              key={index}
               onPress={() => { navigation.navigate('OrderDetails') }}
               style={{
                 elevation: 8,

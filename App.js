@@ -7,6 +7,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { PersistGate } from 'redux-persist/integration/react';
 import Snackbar from 'react-native-snackbar';
 import { store, persistor } from './src/store/store';
+import SplashScreen from 'react-native-splash-screen';
 
 // onboarding 
 import Login from './src/screens/Login';
@@ -31,6 +32,18 @@ const { width } = Dimensions.get('screen');
 
 export default () => {
 
+{/* <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/white" android:orientation="vertical">
+
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="@android:dimen/app_icon_size"
+    android:layout_marginVertical="@android:dimen/app_icon_size"
+    android:src="@mipmap/splash"/>
+</LinearLayout > */}
+  // useEffect(() => {
+  //   SplashScreen.hide();
+  // }, []);
 
   function AppStack() {
     return (
@@ -43,8 +56,7 @@ export default () => {
             backgroundColor: 'white',
             width: width * 0.8,
           }}
-          drawerContentOptions={{
-            // header: null,
+          screenOptions={{
             activeTintcolor: 'white',
             inactiveTintColor: '#000',
             activeBackgroundColor: 'transparent',
@@ -82,16 +94,16 @@ export default () => {
 
   function CustomerStack() {
     return (
-      <Stack.Navigator headerMode="none">
-        <Stack.Screen name="Homes" component={AppStack} options={{manimationEnabled: false}} />
+      <Stack.Navigator>
+        <Stack.Screen name="Homes" component={AppStack} options={{headerShown: false, manimationEnabled: false}} />
       </Stack.Navigator>
     )
   }
 
   function VenderStack() {
     return (
-      <Stack.Navigator headerMode="none">
-        <Stack.Screen name="Homes" component={AppStack} options={{animationEnabled: false }} />
+      <Stack.Navigator>
+        <Stack.Screen name="Homes" component={AppStack} options={{headerShown: false, animationEnabled: false }} />
 
       </Stack.Navigator>
     )
@@ -109,12 +121,12 @@ export default () => {
 
   function OnboardingStack() {
     return (
-      <Stack.Navigator headerMode="none" initialRouteName="Welcome" >
-        <Stack.Screen name="Welcome" component={Welcome} options={{ animationEnabled: false, headerShown: false }}/>
-        <Stack.Screen name="Login" component={Login} options={{ animationEnabled: false, headerShown: false }}/>
-        <Stack.Screen name="Signup" component={Signup} options={{ animationEnabled: false, headerShown: false }}/>
-        <Stack.Screen name="CustomerSignup" component={CustomerSignup} options={{ animationEnabled: false, headerShown: false }}/>
-        <Stack.Screen name="VenderSignup" component={VenderSignup} options={{ animationEnabled: false, headerShown: false }}/>
+      <Stack.Navigator initialRouteName="Welcome" >
+        <Stack.Screen name="Welcome" component={Welcome} options={{headerShown: false, animationEnabled: false, headerShown: false }}/>
+        <Stack.Screen name="Login" component={Login} options={{headerShown: false, animationEnabled: false, headerShown: false }}/>
+        <Stack.Screen name="Signup" component={Signup} options={{headerShown: false, animationEnabled: false, headerShown: false }}/>
+        <Stack.Screen name="CustomerSignup" component={CustomerSignup} options={{headerShown: false, animationEnabled: false, headerShown: false }}/>
+        <Stack.Screen name="VenderSignup" component={VenderSignup} options={{headerShown: false, animationEnabled: false, headerShown: false }}/>
       </Stack.Navigator>
     )
   }

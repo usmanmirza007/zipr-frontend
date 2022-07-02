@@ -57,9 +57,12 @@ export default function EditProfile() {
   const handleEditProfile = async () => {
 
     if (location && vendorName && bio) {
-      setLoading(true)
-      const url = await storage().ref(imageName.current).getDownloadURL();
 
+      setLoading(true)
+      let url 
+      if (imageName.current) {
+        url = await storage().ref(imageName.current).getDownloadURL();
+      }
       const editUserData = {
         firstName: name,
         lastName: surename,

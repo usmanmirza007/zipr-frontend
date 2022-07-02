@@ -2,6 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { logout } from '../reducer/mainSlice';
 import { store } from '../store'
 import { BASE_URL } from './baseurl'
+import { isJwtExpired } from 'jwt-check-expiration';
+import Snackbar from 'react-native-snackbar';
+
 console.log('url', BASE_URL);
 
 export const emptySplitApi = createApi({
@@ -11,11 +14,16 @@ export const emptySplitApi = createApi({
     prepareHeaders : async (headers, {getState}) => {
       try{
         const token = store.getState().user.isLoggedIn
-        // console.log('token', token);
-        if (token) {
+        const isLogin = isJwtExpired(token.token)
+
+        console.log('token', token, isLogin);
+        if (!isLogin) {
           headers.set('authorization', `Bearer ${token.token}`)
         } else {
           store.dispatch(logout())
+          Snackbar.show({
+            text: 'Token has expried please login again', duration: Snackbar.LENGTH_SHORT, backgroundColor: '#24A9DF',
+          });
           headers.set('authorization', '')
         }
       } catch(err) {

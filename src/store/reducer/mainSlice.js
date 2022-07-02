@@ -7,7 +7,7 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage: AsyncStorage,
-    blacklist: ['program', 'userPrograms'],
+    blacklist: [''],
 }
 
 const initialState = {
