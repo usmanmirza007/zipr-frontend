@@ -15,7 +15,7 @@ const HomeScreenView = ({ style, appData, }) => {
           {
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginBottom: 10,
+            marginBottom: 15,
           },
         ]}>
         {appData[index] && (

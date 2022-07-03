@@ -59,6 +59,10 @@ export default function CustomerSignup() {
                 text: "Customer has been signup succssfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
               });
               navigation.navigate("Login")
+              setName('')
+              setSurename('')
+              setPassword('')
+              setEmail('')
             }
           })
           .catch((error) => {

@@ -52,19 +52,24 @@ export default function VenderSignup() {
           email: email,
           password: password,
           vendorName: vendorName,
-          type: "VENDOR"
+          type: "VENDER"
         }
         vendorSignup(signupData).unwrap()
           .then((data) => {
             if (data.success) {
               Snackbar.show({
-                text: "Vendor has been signup succssfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+                text: "Vender has been signup succssfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
               });
               navigation.navigate("Login")
+              setName('')
+              setSurename('')
+              setPassword('')
+              setEmail('')
+              setVendorName('')
             }
           })
           .catch((error) => {
-            console.log('yoyo', error);
+            console.log('err', error);
             Snackbar.show({
               text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
             });

@@ -39,6 +39,7 @@ export default function EditOrder({route}) {
   const [allTags, setAllTags] = useState([]);
   const [enable, setEnable] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
   let imageName = useRef('')
   const navigation = useNavigation();
   const [editOrder] = useEditOrderMutation();
@@ -110,6 +111,7 @@ export default function EditOrder({route}) {
   };
 
   const uploadImage = async (path) => {
+    setImageLoading(true)
     const filename = path.substring(path.lastIndexOf('/') + 1);
     const uploadUri = Platform.OS === 'ios' ? path.replace('file://', '') : path
     try {
@@ -117,7 +119,9 @@ export default function EditOrder({route}) {
       if (task.metadata) {
         imageName.current = task.metadata.fullPath
       }
+      setImageLoading(false)
     } catch (error) {
+      setImageLoading(false)
       console.log('error', error);
     }
   }
@@ -126,7 +130,21 @@ export default function EditOrder({route}) {
     setAllTags([...allTags, addTag])
     setEnable(false)
   }
-
+  // position: 'absolute',
+  // left: 0,
+  // right: 0,
+  // top: 0,
+  // bottom: 0,
+  // alignItems: 'center',
+  // justifyContent: 'center'
+  if (imageLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      {/* <ActivityIndicator style={{marginVertical: 30, marginTop: 70}} size={'large'} color={'green'} /> */}
+        <Text>Uploading...</Text>
+      </View>
+      )
+  }
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <MyStatusBar
@@ -135,7 +153,6 @@ export default function EditOrder({route}) {
         backgroundColor="#403FFC"
       />
       <ScrollView>
-
         <ImageBackground source={{uri: picture}} style={{ backgroundColor: '#403FFC', height: 300 }}>
           <TouchableOpacity onPress={() => { navigation.goBack() }}>
             <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />

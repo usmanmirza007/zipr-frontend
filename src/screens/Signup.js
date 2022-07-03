@@ -16,7 +16,7 @@ import MyStatusBar from '../components/MyStatusBar';
 import RadioButton from 'react-native-simple-radio-button';
 var radio_props = [
   { label: 'Create a customer profile', value: 0 },
-  { label: 'Create a vendor profile', value: 1 }
+  { label: 'Create a vender profile', value: 1 }
 ];
 const { width, height } = Dimensions.get('window');
 export default function Signup() {

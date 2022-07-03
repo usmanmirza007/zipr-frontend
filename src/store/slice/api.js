@@ -98,6 +98,7 @@ export const api = emptySplitApi.injectEndpoints({
           }
         }
       },
+      invalidatesTags: ['Order']
     }),
 
     getOrders: builder.query({

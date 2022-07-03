@@ -44,7 +44,7 @@ const CustomerHome = () => {
   
   return (
     <View style={{ height: '100%' }}>
-      <HomeHeader title={'Welcome, Chris.'} image={images.frame} />
+      <HomeHeader title={'Welcome, Chris.'} image={images.frame} navigateText='' />
       <View style={{ marginHorizontal: 25, marginTop: 30, flexDirection: 'row', alignItems: 'center' }}>
 
         <TextInputs style={{ marginTop: 0, width: '84%' }} labelText={'Location'} state={search} setState={setSearch} icon={images.search} />

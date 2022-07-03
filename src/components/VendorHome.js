@@ -24,10 +24,22 @@ const VendorHome = () => {
       <ScrollView overScrollMode={'never'} showsVerticalScrollIndicator={false}>
 
         <View style={{ marginVertical: 20, paddingHorizontal: 25 }}>
-          <HomeScreenView
-            style={{ marginTop: 5 }}
-            appData={orders}
-          />
+          {
+            Array.isArray(orders) && orders.length ?
+              <HomeScreenView
+                style={{ marginTop: 5 }}
+                appData={orders}
+              />
+              :
+              <View style={{ alignItems: 'center', marginTop: 250, justifyContent: 'center' }}>
+                <Text style={{
+                  fontSize: 18,
+                  color: '#000',
+                  fontFamily: commonStyle.fontFamily.bold,
+                }}
+                >No order yet!</Text>
+              </View>
+          }
         </View>
       </ScrollView>
     </View>

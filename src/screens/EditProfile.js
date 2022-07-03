@@ -35,14 +35,15 @@ export default function EditProfile() {
   const [location, setLocation] = useState('');
   const [picture, setPicture] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
 
   const navigation = useNavigation();
   const [editUser] = useEditUserMutation();
 
   useEffect(() => {
-    if (user.userType == "VENDOR") {
+    if (user.userType == "VENDER") {
       setEmail(user?.email)
-      setVendorName(user?.vendorName)
+      setVendorName(user?.venderName)
       setBio(user?.bio)
       setLocation(user?.location)
     } else {
@@ -59,7 +60,7 @@ export default function EditProfile() {
     if (location && vendorName && bio) {
 
       setLoading(true)
-      let url 
+      let url
       if (imageName.current) {
         url = await storage().ref(imageName.current).getDownloadURL();
       }
@@ -113,6 +114,7 @@ export default function EditProfile() {
   };
 
   const uploadImage = async (path) => {
+    setImageLoading(true)
     const filename = path.substring(path.lastIndexOf('/') + 1);
     const uploadUri = Platform.OS === 'ios' ? path.replace('file://', '') : path
     try {
@@ -120,11 +122,27 @@ export default function EditProfile() {
       if (task.metadata) {
         imageName.current = task.metadata.fullPath
       }
+      setImageLoading(false)
     } catch (error) {
+      setImageLoading(false)
       console.log('error', error);
     }
   }
-
+  // position: 'absolute',
+  //   left: 0,
+  //   right: 0,
+  //   top: 0,
+  //   bottom: 0,
+  //   alignItems: 'center',
+  //   justifyContent: 'center'
+  if (imageLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        {/* <ActivityIndicator style={{marginVertical: 30, marginTop: 70}} size={'large'} color={'green'} /> */}
+        <Text>Uploading...</Text>
+      </View>
+    )
+  }
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <MyStatusBar
@@ -149,9 +167,9 @@ export default function EditProfile() {
         </ImageBackground>
 
         <View style={{ marginHorizontal: 25 }}>
-          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor name</Text>
+          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vender name</Text>
           <TextInputs style={{ marginTop: 17, }} labelText={'Name'} state={vendorName} setState={setVendorName} />
-          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor Bio</Text>
+          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vender Bio</Text>
 
           <TextInputs style={{ marginTop: 17 }} multiline={true} labelText={'Bio'} state={bio} setState={setBio} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Location</Text>

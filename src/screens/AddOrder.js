@@ -60,6 +60,13 @@ export default function AddOrder() {
             text: "Order has been added successfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
           setLoading(false)
+          setName('')
+          setPrice('')
+          setDescription('')
+          setLocation('')
+          setAddTag('')
+          setPicture(null)
+          setAllTags([])
           navigation.navigate('Home')
         })
         .catch((error) => {

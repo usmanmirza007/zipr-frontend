@@ -50,7 +50,7 @@ const OrderDetails = () => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 30 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ backgroundColor: '#D9D9D9', marginRight: 8, width: 32, height: 32, borderRadius: 32, alignItems: 'center', justifyContent: 'center' }} />
-                <Text style={{ fontSize: 18, color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Vendor Name</Text>
+                <Text style={{ fontSize: 18, color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Vender Name</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
@@ -59,7 +59,7 @@ const OrderDetails = () => {
               </View>
 
             </View>
-            <Text style={{ fontSize: 14, marginTop: 7, color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Vendor Bio - Lorem impsum gug  wacin igat  amarLorem ipsum dolor sit amet,. </Text>
+            <Text style={{ fontSize: 14, marginTop: 7, color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Vender Bio - Lorem impsum gug  wacin igat  amarLorem ipsum dolor sit amet,. </Text>
             <View style={{ borderColor: '#F3F3F3', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity
