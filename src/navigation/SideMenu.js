@@ -29,7 +29,7 @@ const SideMenu = () => {
           <Text style={{ fofontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Settings</Text>
         </TouchableOpacity>
         <View style={{ borderColor: '#2D2D2D', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />
-        <TouchableOpacity onPress={() => { }} style={{ marginLeft: 15, marginTop: 20 }}>
+        <TouchableOpacity onPress={() => { navigation.navigate('PastOrders')}} style={{ marginLeft: 15, marginTop: 20 }}>
           <Text style={{ fofontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Orders</Text>
         </TouchableOpacity>
         <View style={{ borderColor: '#2D2D2D', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />

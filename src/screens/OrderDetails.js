@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import commonStyle from '../constants/commonStyle';
 import images from '../constants/images';
 import Button from '../components/Button';
+import MyStatusBar from '../components/MyStatusBar';
 
 
 const OrderDetails = () => {
@@ -19,6 +20,11 @@ const OrderDetails = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff', }}>
+      <MyStatusBar
+        translucent
+        barStyle="light-content"
+        backgroundColor="#403FFC"
+      />
       <ImageBackground source={images.bike} style={{ zIndex: 0, height: 300 }} resizeMode='stretch' >
         <TouchableOpacity onPress={() => { navigation.goBack() }}>
           <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#000', marginTop: 15, marginLeft: 20 }} />
@@ -50,7 +56,7 @@ const OrderDetails = () => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 30 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <View style={{ backgroundColor: '#D9D9D9', marginRight: 8, width: 32, height: 32, borderRadius: 32, alignItems: 'center', justifyContent: 'center' }} />
-                <Text style={{ fontSize: 18, color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Vender Name</Text>
+                <Text style={{ fontSize: 18, color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Vendor Name</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
@@ -59,7 +65,7 @@ const OrderDetails = () => {
               </View>
 
             </View>
-            <Text style={{ fontSize: 14, marginTop: 7, color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Vender Bio - Lorem impsum gug  wacin igat  amarLorem ipsum dolor sit amet,. </Text>
+            <Text style={{ fontSize: 14, marginTop: 7, color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Vendor Bio - Lorem impsum gug  wacin igat  amarLorem ipsum dolor sit amet,. </Text>
             <View style={{ borderColor: '#F3F3F3', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity

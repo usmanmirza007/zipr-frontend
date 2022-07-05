@@ -23,5 +23,12 @@ const images = {
   rating: require('../assets/images/rating.png'),
   heart: require('../assets/images/heart.png'),
   edit: require('../assets/images/edit.png'),
+  remove: require('../assets/images/remove.png'),
+  check: require('../assets/images/check.png'),
+  checkmark: require('../assets/images/checkmark.png'),
+  capture: require('../assets/images/capture.png'),
+  deliveryMan: require('../assets/images/deliveryMan.png'),
+  processing: require('../assets/images/processing.png'),
+  line: require('../assets/images/line.png'),
 };
 export default images;

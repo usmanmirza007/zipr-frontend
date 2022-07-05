@@ -25,6 +25,10 @@ import EditProfile from './src/screens/EditProfile';
 import OrderDetails from './src/screens/OrderDetails';
 import AddOrder from './src/screens/AddOrder';
 import EditOrder from './src/screens/EditOrder';
+import Checkout from './src/screens/CheckOut';
+import CompleteOrder from './src/screens/CompleteOrder';
+import DeliveryStatus from './src/screens/DeliveryStatus';
+import PastOrders from './src/screens/PastOrders';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -81,10 +85,14 @@ export default () => {
         >
           <Drawer.Screen name="Home" component={Home}  options={{ headerShown: false }} />
           <Drawer.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+          <Drawer.Screen name="PastOrders" component={PastOrders} options={{ headerShown: false }} />
+
           <Stack.Screen name="OrderDetails" component={OrderDetails} options={{manimationEnabled: false, headerShown: false}} />
           <Stack.Screen name="AddOrder" component={AddOrder} options={{manimationEnabled: false, headerShown: false}} />
           <Stack.Screen name="EditOrder" component={EditOrder} options={{manimationEnabled: false, headerShown: false}} />
-
+          <Stack.Screen name="Checkout" component={Checkout} options={{manimationEnabled: false, headerShown: false}} />
+          <Stack.Screen name="CompleteOrder" component={CompleteOrder} options={{manimationEnabled: false, headerShown: false}} />
+          <Stack.Screen name="DeliveryStatus" component={DeliveryStatus} options={{manimationEnabled: false, headerShown: false}} />
         </Drawer.Navigator>
 
       </>

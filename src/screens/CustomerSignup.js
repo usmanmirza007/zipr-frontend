@@ -102,10 +102,10 @@ export default function CustomerSignup() {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
             <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={name} setState={setName} />
-            <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surename'} state={surename} setState={setSurename} />
+            <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surname'} state={surename} setState={setSurename} />
           </View>
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university email?</Text>
-          <TextInputs style={{ marginTop: 17, }} labelText={'Surename'} state={email} setState={setEmail} keyBoardType={'email-address'} />
+          <TextInputs style={{ marginTop: 17, }} labelText={'Enter Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university password?</Text>
           <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
 

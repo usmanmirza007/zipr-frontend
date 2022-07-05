@@ -12,7 +12,7 @@ import commonStyle from '../constants/commonStyle';
 import HomeHeader from './HomeHeader';
 import images from '../constants/images';
 import TextInputs from './TextInputs';
-import { useGetAllOrderQuery } from '../store/slice/api';
+import { useGetAllOrderQuery, useGetUserQuery } from '../store/slice/api';
 
 
 const CustomerHome = () => {
@@ -23,7 +23,8 @@ const CustomerHome = () => {
 
   const { data: orderData, isLoading, isError } = useGetAllOrderQuery()
   const orders = orderData ?? []
-
+  const { data: userData, isUserLoading } = useGetUserQuery()
+  const user = userData ?? {}
   var selectedTabButtonStyle = {
     backgroundColor: '#403FFC',
     color: 'white',
@@ -44,7 +45,7 @@ const CustomerHome = () => {
   
   return (
     <View style={{ height: '100%' }}>
-      <HomeHeader title={'Welcome, Chris.'} image={images.frame} navigateText='' />
+      <HomeHeader title={`Welcome, ${user?.firstName ? user?.firstName : ''}`} image={images.frame} navigateText='Checkout' />
       <View style={{ marginHorizontal: 25, marginTop: 30, flexDirection: 'row', alignItems: 'center' }}>
 
         <TextInputs style={{ marginTop: 0, width: '84%' }} labelText={'Location'} state={search} setState={setSearch} icon={images.search} />
@@ -180,21 +181,21 @@ const CustomerHome = () => {
             setSelectTab('follow')
           }}>
           <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Following</Text>
-          {selectTab === 'follow' && <View style={{ borderColor: '#403FFC', borderWidth: 2, marginTop: 5, borderRadius: 2 }} />}
+          {selectTab === 'follow' && <View style={{ backgroundColor: '#403FFC', height: 3, marginTop: 5, borderRadius: 2  }} />}
         </TouchableOpacity>
         <TouchableOpacity style={{ marginLeft: 20 }}
           onPress={() => {
             setSelectTab('popular')
           }}>
           <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Popular</Text>
-          {selectTab === 'popular' && <View style={{ borderColor: '#403FFC', borderWidth: 2, marginTop: 5, borderRadius: 2 }} />}
+          {selectTab === 'popular' && <View style={{ backgroundColor: '#403FFC', height: 3, marginTop: 5, borderRadius: 2  }} />}
         </TouchableOpacity>
         <TouchableOpacity style={{ marginLeft: 20 }}
           onPress={() => {
             setSelectTab('favorite')
           }}>
           <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Favourites</Text>
-          {selectTab === 'favorite' && <View style={{ borderColor: '#403FFC', borderWidth: 2, marginTop: 5, borderRadius: 2 }} />}
+          {selectTab === 'favorite' && <View style={{ backgroundColor: '#403FFC', height: 3, marginTop: 5, borderRadius: 2  }} />}
         </TouchableOpacity>
       </View>
 
@@ -215,7 +216,7 @@ const CustomerHome = () => {
                 height: 250,
                 marginTop: 20,
               }}>
-              <Image resizeMode='contain' style={{ height: 150, width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={{uri: order.picture}} />
+              <Image  style={{ height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={{uri: order.picture}} />
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: '100%' }}>
                 <View style={{ marginLeft: 10 }}>
                   <Text

@@ -16,7 +16,7 @@ import MyStatusBar from '../components/MyStatusBar';
 import RadioButton from 'react-native-simple-radio-button';
 var radio_props = [
   { label: 'Create a customer profile', value: 0 },
-  { label: 'Create a vender profile', value: 1 }
+  { label: 'Create a vendor profile', value: 1 }
 ];
 const { width, height } = Dimensions.get('window');
 export default function Signup() {
@@ -46,7 +46,7 @@ export default function Signup() {
         <Text style={{ fontSize: 28, fontFamily: commonStyle.fontFamily.bold, color: '#000', marginTop: 30, marginLeft: 25 }}>Sign Up</Text>
 
         <View style={{ marginHorizontal: 25 }}>
-          <View style={{}}>
+          <View style={{alignItems: 'center'}}>
             <RadioButton
               style={{ marginVertical: 30 }}
               formHorizontal={false}

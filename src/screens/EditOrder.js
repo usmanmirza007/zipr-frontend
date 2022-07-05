@@ -174,7 +174,7 @@ export default function EditOrder({route}) {
           <TextInputs style={{ marginTop: 17 }} multiline={true} labelText={'Enter Product / service description...'} state={description} setState={setDescription} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Set Price</Text>
           <View style={{ flexDirection: 'row', marginTop: 17, alignItems: 'center' }}>
-            <Text style={{ fontSize: 15, color: '#000', fontFamily: commonStyle.fontFamily.medium, marginRight: 10 }}>Rs</Text>
+            <Text style={{ fontSize: 15, color: '#000', fontFamily: commonStyle.fontFamily.medium, marginRight: 10 }}>R</Text>
             <TextInputs style={{ width: 200 }} labelText={'0.00'} state={price} setState={setPrice} />
           </View>
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Location</Text>

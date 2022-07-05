@@ -58,7 +58,7 @@ export default function VenderSignup() {
           .then((data) => {
             if (data.success) {
               Snackbar.show({
-                text: "Vender has been signup succssfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+                text: "Vendor has been signup succssfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
               });
               navigation.navigate("Login")
               setName('')
@@ -104,12 +104,12 @@ export default function VenderSignup() {
 
         <View style={{ marginHorizontal: 25 }}>
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your vendor name?</Text>
-          <TextInputs style={{ marginTop: 17,  }} labelText={'Mary’s Textbooks'} state={vendorName} setState={setVendorName} />
+          <TextInputs style={{ marginTop: 17,  }} labelText={'Vendor Name'} state={vendorName} setState={setVendorName} />
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 
           <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={name} setState={setName}  />
-          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surename'} state={surename} setState={setSurename} />
+          <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surname'} state={surename} setState={setSurename} />
          </View>
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university email?</Text>
           <TextInputs style={{ marginTop: 17,  }} labelText={'Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />

@@ -10,16 +10,17 @@ import HomeScreenView from './HomeScreenView';
 import commonStyle from '../constants/commonStyle';
 import HomeHeader from './HomeHeader';
 import images from '../constants/images';
-import { useGetOrdersQuery } from '../store/slice/api';
+import { useGetOrdersQuery, useGetUserQuery } from '../store/slice/api';
 
 const VendorHome = () => {
   const navigation = useNavigation();
   const { data: orderData, isLoading, isError } = useGetOrdersQuery()
   const orders = orderData ?? []
-
+  const { data: userData, isUserLoading } = useGetUserQuery()
+  const user = userData ?? {}
   return (
     <View style={{ backgroundColor: '#fff', }}>
-      <HomeHeader title={'Welcome, Chris.'} image={images.plus} navigateText={'AddOrder'} />
+      <HomeHeader title={`Welcome, ${user?.firstName ? user.firstName : ''}`} image={images.plus} navigateText={'AddOrder'} />
       <Text style={{ fontSize: 16, marginLeft: 25, color: '#000', fontFamily: commonStyle.fontFamily.semibold }}>All Published Items</Text>
       <ScrollView overScrollMode={'never'} showsVerticalScrollIndicator={false}>
 

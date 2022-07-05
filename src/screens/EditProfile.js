@@ -167,9 +167,9 @@ export default function EditProfile() {
         </ImageBackground>
 
         <View style={{ marginHorizontal: 25 }}>
-          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vender name</Text>
+          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor name</Text>
           <TextInputs style={{ marginTop: 17, }} labelText={'Name'} state={vendorName} setState={setVendorName} />
-          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vender Bio</Text>
+          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor Bio</Text>
 
           <TextInputs style={{ marginTop: 17 }} multiline={true} labelText={'Bio'} state={bio} setState={setBio} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Location</Text>
