@@ -148,6 +148,19 @@ export const api = emptySplitApi.injectEndpoints({
         }
       },
     }),
+
+    changeStatus: builder.mutation({
+      query: (args) => {
+        return {
+          url: `/users/status`,
+          method: 'PATCH',
+          body: {
+            type: args.type,
+          }
+        }
+      },
+      invalidatesTags: ['User']
+    }),
     
   }),
   overrideExisting: true,
@@ -164,4 +177,5 @@ export const {
   useGetSingleOrderQuery,
   useGetAllOrderQuery,
   useEditOrderMutation,
+  useChangeStatusMutation,
 } = api

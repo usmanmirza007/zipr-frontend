@@ -103,14 +103,14 @@ export default function VenderSignup() {
         </ImageBackground>
 
         <View style={{ marginHorizontal: 25 }}>
-          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your vendor name?</Text>
-          <TextInputs style={{ marginTop: 17,  }} labelText={'Vendor Name'} state={vendorName} setState={setVendorName} />
+          {/* <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your vendor name?</Text>
+          <TextInputs style={{ marginTop: 17,  }} labelText={'Vendor Name'} state={vendorName} setState={setVendorName} /> */}
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
-         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 
           <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={name} setState={setName}  />
           <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surname'} state={surename} setState={setSurename} />
-         </View>
+          </View>
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university email?</Text>
           <TextInputs style={{ marginTop: 17,  }} labelText={'Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university password?</Text>

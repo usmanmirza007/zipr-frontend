@@ -153,7 +153,7 @@ export default function EditOrder({route}) {
         backgroundColor="#403FFC"
       />
       <ScrollView>
-        <ImageBackground source={{uri: picture}} style={{ backgroundColor: '#403FFC', height: 300 }}>
+        <ImageBackground source={{ uri: order?.picture ? order.picture :  picture}} style={{ backgroundColor: '#403FFC', height: 300 }}>
           <TouchableOpacity onPress={() => { navigation.goBack() }}>
             <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
           </TouchableOpacity>

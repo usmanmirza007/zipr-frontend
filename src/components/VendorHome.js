@@ -20,7 +20,7 @@ const VendorHome = () => {
   const user = userData ?? {}
   return (
     <View style={{ backgroundColor: '#fff', }}>
-      <HomeHeader title={`Welcome, ${user?.firstName ? user.firstName : ''}`} image={images.plus} navigateText={'AddOrder'} />
+      <HomeHeader title={`Welcome, ${user?.vender?.firstName ? user.vender.firstName : ''}`} image={images.plus} navigateText={'AddOrder'} />
       <Text style={{ fontSize: 16, marginLeft: 25, color: '#000', fontFamily: commonStyle.fontFamily.semibold }}>All Published Items</Text>
       <ScrollView overScrollMode={'never'} showsVerticalScrollIndicator={false}>
 

@@ -16,6 +16,7 @@ export default {
     medium: 'Poppins-Medium',
     semibold: 'Poppins-SemiBold',
     bold: 'Poppins-Bold',
-  }
+  },
+
 }
 

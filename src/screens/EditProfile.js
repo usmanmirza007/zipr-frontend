@@ -21,6 +21,8 @@ import MyStatusBar from '../components/MyStatusBar';
 import { useEditUserMutation, useGetUserQuery } from '../store/slice/api';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
+import { customer, vender } from '../constants/userType';
+import { store } from '../store/store';
 
 const { width, height } = Dimensions.get('window');
 
@@ -39,13 +41,14 @@ export default function EditProfile() {
 
   const navigation = useNavigation();
   const [editUser] = useEditUserMutation();
-
+  console.log('fofo', user, );
+  console.log('token', store.getState().user.isLoggedIn );
   useEffect(() => {
-    if (user.userType == "VENDER") {
+    if (user.userType == vender) {
       setEmail(user?.email)
-      setVendorName(user?.venderName)
-      setBio(user?.bio)
-      setLocation(user?.location)
+      // setVendorName(user?.venderName)
+      setBio(user?.vender?.bio)
+      setLocation(user?.vender?.location)
     } else {
       setEmail(user?.email)
       setName(user?.firstName)
@@ -53,11 +56,12 @@ export default function EditProfile() {
     }
   }, [user]);
 
+
   let imageName = useRef('')
 
   const handleEditProfile = async () => {
 
-    if (location && vendorName && bio) {
+    if (location || bio || name || surename || picture) {
 
       setLoading(true)
       let url
@@ -152,7 +156,7 @@ export default function EditProfile() {
       />
       <ScrollView>
 
-        <ImageBackground source={{ uri: picture }} style={{ backgroundColor: '#403FFC', height: 300 }} >
+        <ImageBackground source={{ uri: user?.picture ? user.picture : picture }} style={{ backgroundColor: '#403FFC', height: 300 }} >
           <TouchableOpacity onPress={() => { navigation.goBack() }}>
             <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
           </TouchableOpacity>
@@ -167,13 +171,28 @@ export default function EditProfile() {
         </ImageBackground>
 
         <View style={{ marginHorizontal: 25 }}>
-          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor name</Text>
-          <TextInputs style={{ marginTop: 17, }} labelText={'Name'} state={vendorName} setState={setVendorName} />
-          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor Bio</Text>
+          {/* <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor name</Text>
+          <TextInputs style={{ marginTop: 17, }} labelText={'Name'} state={vendorName} setState={setVendorName} /> */}
+          {user.userType == customer ?
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 40 }}>
+              <View>
+                <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>First Name</Text>
+                <TextInputs style={{ marginTop: 17, width: 160 }} labelText={'Name'} state={name} setState={setName} />
+              </View>
+              <View>
+                <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Last Name</Text>
+                <TextInputs style={{ marginTop: 17, width: 160 }} labelText={'Surname'} state={surename} setState={setSurename} />
+              </View>
+            </View>
+            :
+            <>
+              <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor Bio</Text>
+              <TextInputs style={{ marginTop: 17 }} multiline={true} labelText={'Bio'} state={bio} setState={setBio} />
+              <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Location</Text>
+              <TextInputs style={{ marginTop: 17 }} labelText={'Location'} state={location} setState={setLocation} image={images.location} />
+            </>
+          }
 
-          <TextInputs style={{ marginTop: 17 }} multiline={true} labelText={'Bio'} state={bio} setState={setBio} />
-          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Location</Text>
-          <TextInputs style={{ marginTop: 17 }} labelText={'Location'} state={location} setState={setLocation} image={images.location} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Email</Text>
           <TextInputs style={{ marginTop: 17, }} labelText={'Email'} disable={false} state={email} setState={setEmail} keyBoardType={'email-address'} />
 
