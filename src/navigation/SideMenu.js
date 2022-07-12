@@ -33,7 +33,6 @@ const SideMenu = () => {
             Snackbar.show({
               text: `User account has been switched`, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
             });
-            // dispatch(createApi.util.resetApiState())
             dispatch(loggedIn({
               token: data.token,
               type: data.type
@@ -44,7 +43,7 @@ const SideMenu = () => {
         .catch((error) => {
           console.log('err', error);
           Snackbar.show({
-            text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            text: error.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
           console.log(error, 'error');
         });
@@ -60,13 +59,13 @@ const SideMenu = () => {
       />
       <ScrollView style={{}}>
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={{ marginLeft: 15, marginTop: 20 }}>
-          <Text style={{ fofontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Edit Profile</Text>
+          <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Edit Profile</Text>
         </TouchableOpacity>
         <View style={{ borderColor: '#2D2D2D', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />
         <TouchableOpacity onPress={() => {
           
          }} style={{ marginLeft: 15, marginTop: 20 }}>
-          <Text style={{ fofontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Settings</Text>
+          <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Settings</Text>
         </TouchableOpacity>
         <View style={{ borderColor: '#2D2D2D', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />
         {isLoading ? 
@@ -78,15 +77,15 @@ const SideMenu = () => {
           handleEditProfile()
         }}
          style={{ marginLeft: 15, marginTop: 20 }}>
-          <Text style={{ fofontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>{user?.userType == 'VENDER' ? 'Switch to Customer' : 'Switch to Vender'}</Text>
+          <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>{user?.userType == 'VENDER' ? 'Switch to Customer' : 'Switch to Vender'}</Text>
         </TouchableOpacity>}
         <View style={{ borderColor: '#2D2D2D', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />
         <TouchableOpacity onPress={() => { navigation.navigate('PastOrders')}} style={{ marginLeft: 15, marginTop: 20 }}>
-          <Text style={{ fofontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Orders</Text>
+          <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Orders</Text>
         </TouchableOpacity>
         <View style={{ borderColor: '#2D2D2D', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />
         <TouchableOpacity onPress={() => { dispatch(logout(null)) }} style={{ marginLeft: 15, marginTop: 20 }}>
-          <Text style={{ fofontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Log Out</Text>
+          <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Log Out</Text>
         </TouchableOpacity>
         <View style={{ borderColor: '#2D2D2D', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />
 

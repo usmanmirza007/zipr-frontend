@@ -15,7 +15,7 @@ export const emptySplitApi = createApi({
       try{
         const token = store.getState().user.isLoggedIn
         const isLogin = isJwtExpired(token.token)
-
+        // store.dispatch(createApi.util.resetApiState())
         console.log('token', token, isLogin);
         if (!isLogin) {
           headers.set('authorization', `Bearer ${token.token}`)

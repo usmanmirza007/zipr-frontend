@@ -41,8 +41,7 @@ export default function EditProfile() {
 
   const navigation = useNavigation();
   const [editUser] = useEditUserMutation();
-  console.log('fofo', user, );
-  console.log('token', store.getState().user.isLoggedIn );
+
   useEffect(() => {
     if (user.userType == vender) {
       setEmail(user?.email)
