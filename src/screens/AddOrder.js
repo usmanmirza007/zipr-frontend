@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,17 +12,18 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import images from '../constants/images';
+import {Picker} from '@react-native-picker/picker';
+import { useSelector } from 'react-redux';
 
 import TextInputs from '../components/TextInputs';
 import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
-import { useAddOrderMutation } from '../store/slice/api';
-import ImagePicker from 'react-native-image-crop-picker';
-import storage from '@react-native-firebase/storage';
-
-const { width, height } = Dimensions.get('window');
+import { useAddOrderMutation, useGetCategoryQuery } from '../store/slice/api';
+import { store } from '../store/store';
+import { orderImageEmpty } from '../store/reducer/mainSlice';
+const windowWidth = Dimensions.get('window').width;
 
 export default function AddOrder() {
 
@@ -31,28 +32,47 @@ export default function AddOrder() {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [addTag, setAddTag] = useState('');
-  const [picture, setPicture] = useState(null);
+  const [addCategory, setAddCategory] = useState('');
   const [allTags, setAllTags] = useState([]);
   const [enable, setEnable] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('');
 
+  const { data: categoryData, isLoading: isOrderLoading, isError, isFetching } = useGetCategoryQuery()
+  
+  const imageData = useSelector((state) => state.user.orderImages)
   const navigation = useNavigation();
   const [addOrder] = useAddOrderMutation();
-  let imageName = useRef('')
+  let imageName = useRef([])
+  
+  const category = categoryData ?? {}
+  const categories = useMemo(() => {
+    let addCategory = []
+    if (Array.isArray(category) && category.length) {
+      addCategory.push(...category, { label: "Other", value: "Other"})
+    }
+    return addCategory
+  },[category])
 
   const handleAddOrder = async () => {
 
-    if (name && description && price && location && allTags) {
-      setLoading(true)
-      const url = await storage().ref(imageName.current).getDownloadURL();
+    if (!selectedCategory || selectedCategory == "Select Category") {
+      Snackbar.show({
+        text: "Please select the category", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+      });
+      return
+    }
 
+    if (name && description && price && location && allTags && imageData) {
+      setLoading(true)
       const addOrderData = {
+        category: addCategory ? addCategory : selectedCategory,
         name: name,
         description: description,
         location: location,
         price: price,
         tags: allTags,
-        picture: url
+        pictures: imageData
       }
       addOrder(addOrderData).unwrap()
         .then(() => {
@@ -65,8 +85,8 @@ export default function AddOrder() {
           setDescription('')
           setLocation('')
           setAddTag('')
-          setPicture(null)
           setAllTags([])
+          store.dispatch(orderImageEmpty())
           navigation.navigate('Home')
         })
         .catch((error) => {
@@ -85,31 +105,6 @@ export default function AddOrder() {
       });
     }
   }
-  const openCamera = () => {
-    ImagePicker.openPicker({
-      // includeExif: true,
-      width: 300,
-      height: 400,
-    })
-      .then((image) => {
-        setPicture(image.path)
-        uploadImage(image.path)
-      })
-      .catch((e) => alert(e));
-  };
-
-  const uploadImage = async (path) => {
-    const filename = path.substring(path.lastIndexOf('/') + 1);
-    const uploadUri = Platform.OS === 'ios' ? path.replace('file://', '') : path
-    try {
-      const task = await storage().ref(filename).putFile(uploadUri)
-      if (task.metadata) {
-        imageName.current = task.metadata.fullPath
-      }
-    } catch (error) {
-      console.log('error', error);
-    }
-  }
 
   const handleTag = () => {
     setAllTags([...allTags, addTag])
@@ -124,21 +119,59 @@ export default function AddOrder() {
         backgroundColor="#403FFC"
       />
       <ScrollView>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          {Array.isArray(imageData) && imageData.length ? imageData.map((image, index) => {
+            return (
+              <ImageBackground source={{ uri: image }} style={{ backgroundColor: '#403FFC', height: 300, width: windowWidth }} >
+                <View style={{ alignItems: 'center', marginTop: 80 }}>
+                  <TouchableOpacity onPress={() => {
+                    navigation.navigate('ImagesGallery', {pictures: null, isServerImage: false})
+                  }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
 
-        <ImageBackground source={{ uri: picture }} style={{ backgroundColor: '#403FFC', height: 300 }} >
-          <TouchableOpacity onPress={() => { navigation.goBack() }}>
-            <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
-          </TouchableOpacity>
-          <View style={{ alignItems: 'center', marginTop: 80 }}>
-            <TouchableOpacity onPress={() => { openCamera() }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
+                    <Image source={images.camera} style={{ width: 30, height: 30 }} />
+                  </TouchableOpacity>
+                  <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#fff', marginTop: 10 }}>Set Photo</Text>
+                </View>
+              </ImageBackground>
+            )
+          }) :
+            <View style={{ backgroundColor: '#403FFC', height: 300, width: windowWidth }} >
+              <View style={{ alignItems: 'center', marginTop: 80 }}>
+                <TouchableOpacity onPress={() => {
+                  navigation.navigate('ImagesGallery', {pictures: null, isServerImage: false})
+                }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
 
-              <Image source={images.camera} style={{ width: 30, height: 30 }} />
-            </TouchableOpacity>
-            <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#fff', marginTop: 10 }}>Set Photo</Text>
-          </View>
-        </ImageBackground>
-
+                  <Image source={images.camera} style={{ width: 30, height: 30 }} />
+                </TouchableOpacity>
+                <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#fff', marginTop: 10 }}>Set Photo</Text>
+              </View>
+            </View>
+          }
+        </ScrollView>
+        <TouchableOpacity style={{ position: 'absolute', top: 10, left: 0, }} onPress={() => { navigation.goBack() }}>
+          <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
+        </TouchableOpacity>
         <View style={{ marginHorizontal: 25 }}>
+        <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Category</Text>
+
+          <View style={{ backgroundColor: '#F7F5F5', borderRadius: 5, marginTop: 17 }}>
+            <Picker
+              selectedValue={selectedCategory}
+              mode={'dropdown'}
+              onValueChange={(itemValue, itemIndex) => {
+                setSelectedCategory(itemValue)
+                setAddCategory('')
+              }}>
+              <Picker.Item label={'Select Category'} value={'Select Category'} style={{color: '#757575', fontFamily: commonStyle.fontFamily.medium}} />
+              {categories.map((cate, index) => {
+                return (
+                  <Picker.Item key={index} label={cate.label} value={cate.value} style={{color: "#000", fontFamily: commonStyle.fontFamily.medium }} />
+                )
+              })}
+            </Picker>
+          </View>
+          {selectedCategory == "Other" && <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Add Category</Text>}
+          {selectedCategory == "Other" && <TextInputs style={{ marginTop: 17, }} labelText={'Category'} state={addCategory} setState={setAddCategory} />  }
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Name</Text>
           <TextInputs style={{ marginTop: 17, }} labelText={'Enter Product / service name...'} state={name} setState={setName} />
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Description</Text>

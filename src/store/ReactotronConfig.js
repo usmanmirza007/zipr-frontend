@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 // then add it to the plugin list
 const reactotron = Reactotron
   .setAsyncStorageHandler(AsyncStorage)  
-  .configure({host: "192.168.18.238"})
+  .configure({host: "192.168.71.54"})
 //   .use(reactotronRedux()) //  <- here i am!
   .useReactNative() // add all built-in react native plugins
   .connect() //Don't forget about me!

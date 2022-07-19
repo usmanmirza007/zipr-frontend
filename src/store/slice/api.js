@@ -90,10 +90,11 @@ export const api = emptySplitApi.injectEndpoints({
           method: 'POST',
           body: {
             name: args.name,
+            category: args.category,
             description: args.description,
             price: args.price,
             location: args.location,
-            picture: args.picture,
+            pictures: args.pictures,
             tags: args.tags
           }
         }
@@ -127,6 +128,7 @@ export const api = emptySplitApi.injectEndpoints({
           url: `/users/order`,
           method: 'PATCH',
           body: {
+            category: args.category,
             name: args.name,
             description: args.description,
             price: args.price,
@@ -162,6 +164,16 @@ export const api = emptySplitApi.injectEndpoints({
       invalidatesTags: ['User']
     }),
     
+    getCategory: builder.query({
+      query: () => {
+        return {
+          url: `/users/category`,
+          method: 'GET',
+        }
+      },
+      providesTags: ['Order']
+    }),
+
   }),
   overrideExisting: true,
 })
@@ -176,6 +188,7 @@ export const {
   useGetOrdersQuery,
   useGetSingleOrderQuery,
   useGetAllOrderQuery,
+  useGetCategoryQuery,
   useEditOrderMutation,
   useChangeStatusMutation,
 } = api

@@ -24,7 +24,7 @@ const MapImageView = ({ data }) => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Image resizeMode='contain' style={{ height: 80, width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={{uri: data.picture}} />
+      <Image  style={{ height: 80, width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={{uri: data.picture[0]}} />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: '100%' }}>
         <View style={{ marginLeft: 10, marginBottom: 20 }}>
           <Text

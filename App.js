@@ -29,6 +29,7 @@ import Checkout from './src/screens/CheckOut';
 import CompleteOrder from './src/screens/CompleteOrder';
 import DeliveryStatus from './src/screens/DeliveryStatus';
 import PastOrders from './src/screens/PastOrders';
+import ImagesGallery from './src/screens/ImagesGallery';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -112,6 +113,7 @@ export default () => {
     return (
       <Stack.Navigator>
         <Stack.Screen name="Homes" component={AppStack} options={{headerShown: false, animationEnabled: false }} />
+        <Stack.Screen name="ImagesGallery" component={ImagesGallery} options={{manimationEnabled: false, headerShown: false}} />
 
       </Stack.Navigator>
     )
