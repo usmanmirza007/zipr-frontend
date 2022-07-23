@@ -16,13 +16,13 @@ import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
-import { useEditOrderMutation, useGetSingleOrderQuery } from '../store/slice/api';
+import { useEditProductMutation, useGetSingleProductQuery } from '../store/slice/api';
 import storage from '@react-native-firebase/storage';
 import Header from '../components/Header';
 
 export default function Checkout() {
 
-  // const { data: orderData, isLoading: isOrderLoading, isError, isFetching } = useGetSingleOrderQuery()
+  // const { data: orderData, isLoading: isOrderLoading, isError, isFetching } = useGetSingleProductQuery()
   // const order = orderData ?? {}
 
   const [name, setName] = useState('');
@@ -37,7 +37,7 @@ export default function Checkout() {
   const [imageLoading, setImageLoading] = useState(false);
   let imageName = useRef('')
   const navigation = useNavigation();
-  const [editOrder] = useEditOrderMutation();
+  const [editProducct] = useEditProductMutation();
 
 
   const handleCheckoutOrder = async () => {
@@ -60,7 +60,7 @@ export default function Checkout() {
         picture: url,
         orderId: orderId
       }
-      editOrder(addOrderData).unwrap()
+      editProducct(addOrderData).unwrap()
         .then(() => {
           Snackbar.show({
             text: "Order has been updated!", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
@@ -73,7 +73,7 @@ export default function Checkout() {
           console.log('err', error);
           setLoading(false)
           Snackbar.show({
-            text: error.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
         });
 

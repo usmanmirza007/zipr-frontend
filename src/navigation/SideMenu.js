@@ -43,7 +43,7 @@ const SideMenu = () => {
         .catch((error) => {
           console.log('err', error);
           Snackbar.show({
-            text: error.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
           console.log(error, 'error');
         });

@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import ImageViewDesign from './ImageViewDesign';
 
-const MapImageView = ({ style, imageData, order, isServerImage, onPressItem = (imageUri) => null }) => {
+const MapImageView = ({ style, imageData, product, isServerImage, newProduct, onPressItem = (imageUri) => null }) => {
   var data = [];
   const ImageWrapper = ({ data }) => {
     return data;
@@ -32,7 +32,8 @@ const MapImageView = ({ style, imageData, order, isServerImage, onPressItem = (i
             imageUri={imageData[index]}
             index={index}
             isServerImage={isServerImage}
-            order={order}
+            newProduct={newProduct}
+            product={product}
             onPress={onPressItem}
           />
         )}
@@ -43,7 +44,8 @@ const MapImageView = ({ style, imageData, order, isServerImage, onPressItem = (i
             index={index + 1}
             style={itemStyle}
             isServerImage={isServerImage}
-            order={order}
+            newProduct={newProduct}
+            product={product}
             onPress={onPressItem}
           />
         )}

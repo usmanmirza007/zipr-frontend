@@ -20,9 +20,9 @@ import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
-import { useAddOrderMutation, useGetCategoryQuery } from '../store/slice/api';
+import { useAddProductMutation, useGetCategoryQuery } from '../store/slice/api';
 import { store } from '../store/store';
-import { orderImageEmpty } from '../store/reducer/mainSlice';
+import { newProductImageEmpty } from '../store/reducer/mainSlice';
 import PriceModal from '../components/PriceModal';
 const windowWidth = Dimensions.get('window').width;
 
@@ -41,12 +41,12 @@ export default function AddOrder() {
 
   const { data: categoryData, isLoading: isOrderLoading, isError, isFetching } = useGetCategoryQuery()
   const category = categoryData ?? {}
-  const [addOrder] = useAddOrderMutation();
+  const [addProduct] = useAddProductMutation();
   
-  const imageData = useSelector((state) => state.user.orderImages)
+  const imageData = useSelector((state) => state.user.newProductImages)
   const navigation = useNavigation();
   const modalRef = useRef();
-  
+
   const categories = useMemo(() => {
     let addCategory = []
     if (Array.isArray(category) && category.length) {
@@ -55,7 +55,7 @@ export default function AddOrder() {
     return addCategory
   },[category])
 
-  const handleAddOrder = async () => {
+  const handleAddProduct = async () => {
 
     if (!selectedCategory || selectedCategory == "Select Category") {
       Snackbar.show({
@@ -66,7 +66,7 @@ export default function AddOrder() {
 
     if (name && description && price && location && allTags && imageData) {
       setLoading(true)
-      const addOrderData = {
+      const addProductData = {
         category: addCategory ? addCategory : selectedCategory,
         name: name,
         description: description,
@@ -75,10 +75,10 @@ export default function AddOrder() {
         tags: allTags,
         pictures: imageData
       }
-      addOrder(addOrderData).unwrap()
+      addProduct(addProductData).unwrap()
         .then(() => {
           Snackbar.show({
-            text: "Order has been added successfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            text: "Product has been added successfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
           setLoading(false)
           setName('')
@@ -87,7 +87,7 @@ export default function AddOrder() {
           setLocation('')
           setAddTag('')
           setAllTags([])
-          store.dispatch(orderImageEmpty())
+          store.dispatch(newProductImageEmpty())
           modalRef.current.getAlert();
           // navigation.navigate('Home')
         })
@@ -127,7 +127,7 @@ export default function AddOrder() {
               <ImageBackground source={{ uri: image }} style={{ backgroundColor: '#403FFC', height: 300, width: windowWidth }} >
                 <View style={{ alignItems: 'center', marginTop: 80 }}>
                   <TouchableOpacity onPress={() => {
-                    navigation.navigate('ImagesGallery', {pictures: null, isServerImage: false})
+                    navigation.navigate('ImagesGallery', { isServerImage: false, product: null, newProduct: true})
                   }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
 
                     <Image source={images.camera} style={{ width: 30, height: 30 }} />
@@ -140,7 +140,7 @@ export default function AddOrder() {
             <View style={{ backgroundColor: '#403FFC', height: 300, width: windowWidth }} >
               <View style={{ alignItems: 'center', marginTop: 80 }}>
                 <TouchableOpacity onPress={() => {
-                  navigation.navigate('ImagesGallery', {pictures: null, isServerImage: false})
+                  navigation.navigate('ImagesGallery', { isServerImage: false, product: null, newProduct: true})
                 }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
 
                   <Image source={images.camera} style={{ width: 30, height: 30 }} />
@@ -245,7 +245,7 @@ export default function AddOrder() {
 
           {!loading ? <View style={{ marginTop: 50, marginBottom: 30 }}>
             <Button onClick={() => {
-              handleAddOrder()
+              handleAddProduct()
             }} text={`Upload`} />
           </View> : <ActivityIndicator style={{ marginVertical: 30, marginTop: 70 }} size={'large'} color={'green'} />}
           <PriceModal

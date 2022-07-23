@@ -11,12 +11,12 @@ import HomeScreenView from './HomeScreenView';
 import commonStyle from '../constants/commonStyle';
 import HomeHeader from './HomeHeader';
 import images from '../constants/images';
-import { useGetOrdersQuery, useGetUserQuery } from '../store/slice/api';
+import { useGetProductsQuery, useGetUserQuery } from '../store/slice/api';
 
 const VendorHome = () => {
   const navigation = useNavigation();
-  const { data: orderData, isLoading, isError } = useGetOrdersQuery()
-  const orders = orderData ?? []
+  const { data: productData, isLoading, isError } = useGetProductsQuery()
+  const products = productData ?? []
   const { data: userData, isUserLoading } = useGetUserQuery()
   const user = userData ?? {}
   return (
@@ -27,10 +27,10 @@ const VendorHome = () => {
 
         <View style={{ marginVertical: 20, paddingHorizontal: 25 }}>
           {
-            Array.isArray(orders) && orders.length ?
+            Array.isArray(products) && products.length ?
               <HomeScreenView
                 style={{ marginTop: 5 }}
-                appData={orders}
+                appData={products}
               />
               : isLoading ?
                 <ActivityIndicator style={{ marginVertical: 30, marginTop: 200 }} size={'large'} color={'green'} />

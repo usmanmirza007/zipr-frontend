@@ -83,10 +83,10 @@ export const api = emptySplitApi.injectEndpoints({
       invalidatesTags: ['User']
     }),
 
-    addOrder: builder.mutation({
+    addProduct: builder.mutation({
       query: (args) => {
         return {
-          url: '/users/order',
+          url: '/users/product',
           method: 'POST',
           body: {
             name: args.name,
@@ -99,33 +99,33 @@ export const api = emptySplitApi.injectEndpoints({
           }
         }
       },
-      invalidatesTags: ['Order']
+      invalidatesTags: ['Product']
     }),
 
-    getOrders: builder.query({
+    getProducts: builder.query({
       query: () => {
         return {
-          url: '/users/order',
+          url: '/users/product',
           method: 'GET',
         }
       },
-      providesTags: ['Order'],
+      providesTags: ['Product'],
     }),
 
-    getSingleOrder: builder.query({
+    getSingleProduct: builder.query({
       query: (orderId) => {
         return {
-          url: `/users/order/${orderId}`,
+          url: `/users/product/${orderId}`,
           method: 'GET',
         }
       },
-      providesTags: ['SingleOrder']
+      providesTags: ['SingleProduct']
     }),
 
-    editOrder: builder.mutation({
+    editProduct: builder.mutation({
       query: (args) => {
         return {
-          url: `/users/order`,
+          url: `/users/product`,
           method: 'PATCH',
           body: {
             category: args.category,
@@ -135,17 +135,17 @@ export const api = emptySplitApi.injectEndpoints({
             location: args.location,
             picture: args.picture,
             tags: args.tags,
-            orderId: args.orderId
+            productId: args.productId
           }
         }
       },
-      invalidatesTags: ['Order', 'SingleOrder']
+      invalidatesTags: ['Product', 'SingleProduct']
     }),
 
-    getAllOrder: builder.query({
+    getAllProduct: builder.query({
       query: () => {
         return {
-          url: `/users/allOrder`,
+          url: `/users/allProduct`,
           method: 'GET',
         }
       },
@@ -171,7 +171,7 @@ export const api = emptySplitApi.injectEndpoints({
           method: 'GET',
         }
       },
-      providesTags: ['Order']
+      providesTags: ['Product']
     }),
 
   }),
@@ -183,12 +183,12 @@ export const {
   useSignupVendorMutation,
   useLoginMutation,
   useEditUserMutation,
-  useAddOrderMutation,
+  useAddProductMutation,
   useGetUserQuery,
-  useGetOrdersQuery,
-  useGetSingleOrderQuery,
-  useGetAllOrderQuery,
+  useGetProductsQuery,
+  useGetSingleProductQuery,
+  useGetAllProductQuery,
   useGetCategoryQuery,
-  useEditOrderMutation,
+  useEditProductMutation,
   useChangeStatusMutation,
 } = api

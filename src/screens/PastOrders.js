@@ -10,7 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import commonStyle from '../constants/commonStyle';
 import images from '../constants/images';
-import { useGetAllOrderQuery } from '../store/slice/api';
+import { useGetAllProductQuery } from '../store/slice/api';
 import Header from '../components/Header';
 
 
@@ -19,7 +19,7 @@ const PastOrders = () => {
   const [selectTab, setSelectTab] = useState('follow');
   const navigation = useNavigation();
 
-  const { data: orderData, isLoading, isError } = useGetAllOrderQuery()
+  const { data: orderData, isLoading, isError } = useGetAllProductQuery()
   const orders = orderData ?? []
 
   var selectedTabButtonStyle = {

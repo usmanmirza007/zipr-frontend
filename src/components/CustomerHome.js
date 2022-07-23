@@ -13,7 +13,7 @@ import commonStyle from '../constants/commonStyle';
 import HomeHeader from './HomeHeader';
 import images from '../constants/images';
 import TextInputs from './TextInputs';
-import { useGetAllOrderQuery, useGetCategoryQuery, useGetUserQuery } from '../store/slice/api';
+import { useGetAllProductQuery, useGetCategoryQuery, useGetUserQuery } from '../store/slice/api';
 import { Picker } from '@react-native-picker/picker';
 
 
@@ -26,9 +26,8 @@ const CustomerHome = () => {
   const { data: categoryData, isLoading: isOrderLoading, } = useGetCategoryQuery()
   const category = categoryData ?? {}
 
-  const { data: orderData, isLoading, isError } = useGetAllOrderQuery()
-  const orders = orderData ?? []
-
+  const { data: productData, isLoading, isError } = useGetAllProductQuery()
+  const products = productData ?? []
   const { data: userData, isUserLoading } = useGetUserQuery()
   const user = userData ?? {}
     
@@ -40,10 +39,10 @@ const CustomerHome = () => {
     return addCategory
   }, [category])
 
-  const filterOrder = useMemo(() => {
-    if (Array.isArray(orders) && orders.length) {
+  const filterProducts = useMemo(() => {
+    if (Array.isArray(products) && products.length) {
       let orderData = []
-      orders.filter((order) => {
+      products.filter((order) => {
         if (order.category == selectedCategory) {
           orderData.push(order)
           return orderData
@@ -53,17 +52,17 @@ const CustomerHome = () => {
       if (Array.isArray(orderData) && orderData.length) {
         return orderData
       } else if(selectedCategory == "All") {
-        return orders
+        return products
       } else {
         return []
       }
     }
-  }, [orders, selectedCategory])
+  }, [products, selectedCategory])
 
-  const filterData = useMemo(() => {
+  const filterBySearchProduct = useMemo(() => {
     var searchArray = [];
-    if (Array.isArray(filterOrder) && filterOrder.length) {
-      searchArray = filterOrder.filter(txt => {
+    if (Array.isArray(filterProducts) && filterProducts.length) {
+      searchArray = filterProducts.filter(txt => {
         const text = txt?.name ? txt?.name.toUpperCase() : ''.toUpperCase();
         const textSearch = search.toUpperCase();
         return text.indexOf(textSearch) > -1;
@@ -74,7 +73,7 @@ const CustomerHome = () => {
     } else {
       return []
     }
-  }, [search, selectedCategory, filterOrder]);
+  }, [search, selectedCategory, filterProducts]);
 
   // const TabView = (style) => {
   //   // if (allTab) {
@@ -139,13 +138,17 @@ const CustomerHome = () => {
         </TouchableOpacity>
       </View>
 
-      { Array.isArray(filterData) && filterData.length ? filterData.map((order, index) => {
+      { Array.isArray(filterBySearchProduct) && filterBySearchProduct.length ? filterBySearchProduct.map((order, index) => {
+        let itemStyle = {}
+        if (index == filterBySearchProduct.length - 1) {
+          itemStyle = { marginBottom: 20 }
+        }
           return (
 
             <TouchableOpacity
               key={index}
-              onPress={() => { navigation.navigate('OrderDetails') }}
-              style={{
+              onPress={() => { navigation.navigate('OrderDetails', {order: order}) }}
+              style={[{
                 elevation: 8,
                 shadowColor: 'rgba(45, 45, 45,)',
                 shadowOpacity: 0.1,
@@ -154,7 +157,7 @@ const CustomerHome = () => {
                 backgroundColor: '#F7F5F5',
                 height: 250,
                 marginTop: 20,
-              }}>
+              },itemStyle]}>
               <Image style={{ height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={{ uri: order.picture[0] }} />
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: '100%' }}>
                 <View style={{ marginLeft: 10 }}>
@@ -163,6 +166,8 @@ const CustomerHome = () => {
                     {order.name}
                   </Text>
                   <Text
+                    ellipsizeMode='tail'
+                    numberOfLines={1}
                     style={styles.boxText}>
                     {order.description}
                   </Text>

@@ -23,32 +23,46 @@ import Header from '../components/Header';
 import images from '../constants/images';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
-import { useGetSingleOrderQuery } from '../store/slice/api';
+import { useGetSingleProductQuery } from '../store/slice/api';
 import { store } from '../store/store';
-import { addOrderImage } from '../store/reducer/mainSlice';
+import { newProductImage } from '../store/reducer/mainSlice';
 
 export default function ImagesGallery({route}) {
   
-  const pictures = route.params.pictures
   const isServerImage = route.params.isServerImage
+  const newProduct = route.params.newProduct
   const [modalVisible, setModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState(null);
-  const [picture, setPicture] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
-  
+
   const navigation = useNavigation();
   let imageName = useRef('')
-  const imageData = useSelector((state) => state.user.orderImages)
-  const { data: orderData, isLoading: isOrderLoading, isError, isFetching } = useGetSingleOrderQuery(route.params.order?.id)
-  const order = orderData ?? {}
+  const editProductImages = useSelector((state) => state.user.editProductImages)
+  const newProductImages = useSelector((state) => state.user.newProductImages)
+  const { data: productData, isLoading: isProductLoading, isError, isFetching } = useGetSingleProductQuery(route.params.product?.id)
+  const product = productData ?? {}
+
   const productImages = useMemo(() => {
-    console.log('dododo');
-    if ((Array.isArray(order.picture) && order.picture.length) || (Array.isArray(imageData) && imageData.length)) {
-      return [...order.picture, ...imageData]
+    if ((product && Array.isArray(product?.picture) && product.picture.length) && !(Array.isArray(editProductImages) && editProductImages.length) && !(Array.isArray(newProductImages) && newProductImages.length)) {
+      console.log('dododo');
+      return [...product?.picture]
+    } else if (!(product && Array.isArray(product?.picture) && product.picture.length) && !(Array.isArray(newProductImages) && newProductImages.length) && (Array.isArray(editProductImages) && editProductImages.length)) {
+      return [...editProductImages]
+    } else if (!(product && Array.isArray(product?.picture) && product.picture.length) && (Array.isArray(newProductImages) && newProductImages.length) && !(Array.isArray(editProductImages) && editProductImages.length)) {
+      return [...newProductImages]
+    } else if ((product && Array.isArray(product?.picture) && product.picture.length) && (Array.isArray(editProductImages) && editProductImages.length || (Array.isArray(newProductImages) && newProductImages.length))) {
+      if ((product && Array.isArray(product?.picture) && product.picture.length) || (Array.isArray(editProductImages) && editProductImages.length)) {
+        return [...product?.picture, ...editProductImages]
+      } else if ((product && Array.isArray(product?.picture) && product.picture.length) || (Array.isArray(newProductImages) && newProductImages.length)) {
+        return [...product?.picture, ...newProductImages]
+      } else {
+        return []
+      }
+    } else {
+      return []
     }
 
-  }, [imageData, order]);
-
+  }, [editProductImages, product]);
   const openCamera = () => {
     ImagePicker.openPicker({
       // includeExif: true,
@@ -57,7 +71,6 @@ export default function ImagesGallery({route}) {
       height: 400,
     })
       .then((image) => {
-        setPicture(image.path)
         uploadImage(image.path)
       })
       .catch((e) => alert(e));
@@ -76,7 +89,11 @@ export default function ImagesGallery({route}) {
       if (imageName.current) {
         url = await storage().ref(imageName.current).getDownloadURL();
       }
-      store.dispatch(addOrderImage(url))
+      if (newProduct) {
+        store.dispatch(newProductImage(url))
+      } else {
+        store.dispatch(editProductImages(url))
+      }
       setImageLoading(false)
       console.log('fofof1', url);
 
@@ -143,7 +160,8 @@ export default function ImagesGallery({route}) {
                 style={{ marginTop: 10 }}
                 imageData={productImages}
                 isServerImage={isServerImage}
-                order={order}
+                newProduct={newProduct}
+                product={product}
                 onPressItem={(imageUri) => {
                   setModalVisible(true)
                   setImageUri(imageUri)

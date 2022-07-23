@@ -20,18 +20,18 @@ import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
-import { useEditOrderMutation, useGetCategoryQuery, useGetSingleOrderQuery } from '../store/slice/api';
+import { useEditProductMutation, useGetCategoryQuery, useGetSingleProductQuery } from '../store/slice/api';
 import { store } from '../store/store';
-import { orderImageEmpty } from '../store/reducer/mainSlice';
+import { editProductImageEmpty } from '../store/reducer/mainSlice';
 
 const windowWidth = Dimensions.get('window').width;
 
 export default function EditOrder({ route }) {
 
-  const orderId = route.params.orderId
-  const { data: orderData, isLoading: isOrderLoading, isError, isFetching } = useGetSingleOrderQuery(orderId)
-  const order = orderData ?? {}
-  const imageData = useSelector((state) => state.user.orderImages)
+  const productId = route.params.orderId
+  const { data: productData, isLoading: isProductLoading, isError, isFetching } = useGetSingleProductQuery(productId)
+  const product = productData ?? {}
+  const editProductImages = useSelector((state) => state.user.editProductImages)
 
   const { data: categoryData, isLoading: isCategoryLoading, } = useGetCategoryQuery()
   const category = categoryData ?? {}
@@ -44,7 +44,7 @@ export default function EditOrder({ route }) {
   }, [category])
 
   const [name, setName] = useState('');
-  const [price, setPrice] = useState(order.price);
+  const [price, setPrice] = useState(product.price);
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [addTag, setAddTag] = useState('');
@@ -55,33 +55,25 @@ export default function EditOrder({ route }) {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const navigation = useNavigation();
-  const [editOrder] = useEditOrderMutation();
+  const [editProduct] = useEditProductMutation();
 
-  // if (!orderData) {
-  //   return (
-  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-  //       <ActivityIndicator style={{marginVertical: 30, marginTop: 70}} size={'large'} color={'green'} />
-  //       {/* <Text>Uploading...</Text> */}
-  //     </View>
-  //   )
-  // }
   useEffect(() => {
-    setName(order.name)
-    setPrice(parseFloat(order.price))
-    setDescription(order.description)
-    setLocation(order.location)
-    setAllTags(order.Tag)
-    setAddCategory(order.category)
-    setSelectedCategory(order.category)
-  }, [order]);
+    setName(product.name)
+    setPrice(parseFloat(product.price))
+    setDescription(product.description)
+    setLocation(product.location)
+    setAllTags(product.tag)
+    setAddCategory(product.category)
+    setSelectedCategory(product.category)
+  }, [product]);
 
-  const handleAddOrder = async () => {
-
-    if (name && description && price && location && allTags) {
+  const handleEditProduct = async () => {
+    
+    const combineImages = product.picture.concat(editProductImages)
+    if (name && description && price && location && allTags && combineImages) {
       setLoading(true)
-      // order.picture and redux picture merge then edit order
-      const combineImages = order.picture.concat(imageData)
-      const addOrderData = {
+      // product.picture and redux picture merge then edit product
+      const editProductData = {
         category: addCategory ? addCategory : selectedCategory,
         name: name,
         description: description,
@@ -89,15 +81,15 @@ export default function EditOrder({ route }) {
         price: price,
         tags: allTags,
         picture: combineImages,
-        orderId: orderId
+        productId: productId
       }
-      editOrder(addOrderData).unwrap()
+      editProduct(editProductData).unwrap()
         .then(() => {
           Snackbar.show({
-            text: "Order has been updated!", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            text: "Product has been updated!", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
           setLoading(false)
-          store.dispatch(orderImageEmpty())
+          store.dispatch(editProductImageEmpty())
           navigation.navigate('Home')
 
         })
@@ -105,7 +97,7 @@ export default function EditOrder({ route }) {
           console.log('err', error);
           setLoading(false)
           Snackbar.show({
-            text: error.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
         });
 
@@ -129,15 +121,15 @@ export default function EditOrder({ route }) {
         barStyle="light-content"
         backgroundColor="#403FFC"
       />
-      {!isOrderLoading ? <ScrollView>
+      {!isProductLoading ? <ScrollView>
 
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {Array.isArray(order.picture) && order.picture.length ? order.picture.map((image, index) => {
+          {Array.isArray(product.picture) && product.picture.length ? product.picture.map((image, index) => {
             return (
               <ImageBackground key={index} source={{ uri: image }} style={{ backgroundColor: '#403FFC', height: 300, width: windowWidth }} >
                 <View style={{ alignItems: 'center', marginTop: 80 }}>
                   <TouchableOpacity onPress={() => {
-                    navigation.navigate('ImagesGallery', { pictures: order.picture, isServerImage: true, order: order })
+                    navigation.navigate('ImagesGallery', { isServerImage: true, product: product, newProduct: false });
                   }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
 
                     <Image source={images.camera} style={{ width: 30, height: 30 }} />
@@ -150,7 +142,7 @@ export default function EditOrder({ route }) {
             <View style={{ backgroundColor: '#403FFC', height: 300, width: windowWidth }} >
               <View style={{ alignItems: 'center', marginTop: 80 }}>
                 <TouchableOpacity onPress={() => {
-                  navigation.navigate('ImagesGallery', { pictures: null, isServerImage: false, order: null })
+                  navigation.navigate('ImagesGallery', { isServerImage: false, product: null, newProduct: false})
                 }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
 
                   <Image source={images.camera} style={{ width: 30, height: 30 }} />
@@ -257,7 +249,7 @@ export default function EditOrder({ route }) {
 
           {!loading ? <View style={{ marginTop: 50, marginBottom: 30 }}>
             <Button onClick={() => {
-              handleAddOrder()
+              handleEditProduct()
             }} text={`Save`} />
           </View> : <ActivityIndicator style={{ marginVertical: 30, marginTop: 70 }} size={'large'} color={'green'} />}
         </View>

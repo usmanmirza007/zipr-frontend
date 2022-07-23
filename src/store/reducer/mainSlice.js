@@ -12,7 +12,8 @@ const persistConfig = {
 
 const initialState = {
     isLoggedIn: null,
-    orderImages: [],
+    editProductImages: [],
+    newProductImages: [],
 }
 
 
@@ -26,26 +27,45 @@ export const mainSlice = createSlice({
                 userType: data.payload.type
             }
         },
+
         logout : (state) => {
             state.isLoggedIn = null
         },
-        addOrderImage: (state, data) => {
+
+        editProductImages: (state, data) => {
             let images = []
-            images.push(...state.orderImages, data.payload)
-            state.orderImages = [...images]
-        },
-        removeOrderImage: (state, data) => {
-            var arr = state.orderImages.slice();
-            arr.splice(data.payload, 1);
-            state.orderImages = arr;
+            images.push(...state.editProductImages, data.payload)
+            state.editProductImages = [...images]
         },
 
-        orderImageEmpty: (state, data) => {
-            state.orderImages = []
+        removeEditProductImage: (state, data) => {
+            var arr = state.editProductImages.slice();
+            arr.splice(data.payload, 1);
+            state.editProductImages = arr;
+        },
+
+        newProductImage: (state, data) => {
+            let images = []
+            images.push(...state.newProductImages, data.payload)
+            state.newProductImages = [...images]
+        },
+
+        removeNewProductImage: (state, data) => {
+            var arr = state.newProductImages.slice();
+            arr.splice(data.payload, 1);
+            state.newProductImages = arr;
+        },
+
+        editProductImageEmpty: (state, data) => {
+            state.editProductImages = []
+        },
+
+        newProductImageEmpty: (state, data) => {
+            state.newProductImages = []
         },
     },
 })
 
-export const { loggedIn, logout, addOrderImage, removeOrderImage, orderImageEmpty } = mainSlice.actions
+export const { loggedIn, logout, editProductImages, removeEditProductImage, editProductImageEmpty, newProductImage, removeNewProductImage, newProductImageEmpty } = mainSlice.actions
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer)
