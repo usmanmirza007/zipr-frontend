@@ -110,7 +110,6 @@ export default function CompleteOrder() {
           modalRef.current.getAlert();
         }} text={`Track order`} />
         <AddCardModal
-          title="Are you sure you would like to delete this job?"
           ref={modalRef} />
         <Button textStyle={{ color: '#403FFC' }} style={{ marginTop: 25, width: 250, backgroundColor: '#e8e8ff' }} onClick={() => {
           // handleCheckoutOrder()

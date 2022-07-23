@@ -21,6 +21,8 @@ import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
 import { useEditOrderMutation, useGetCategoryQuery, useGetSingleOrderQuery } from '../store/slice/api';
+import { store } from '../store/store';
+import { orderImageEmpty } from '../store/reducer/mainSlice';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -95,6 +97,7 @@ export default function EditOrder({ route }) {
             text: "Order has been updated!", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
           setLoading(false)
+          store.dispatch(orderImageEmpty())
           navigation.navigate('Home')
 
         })
@@ -126,7 +129,7 @@ export default function EditOrder({ route }) {
         barStyle="light-content"
         backgroundColor="#403FFC"
       />
-      <ScrollView>
+      {!isOrderLoading ? <ScrollView>
 
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {Array.isArray(order.picture) && order.picture.length ? order.picture.map((image, index) => {
@@ -147,7 +150,7 @@ export default function EditOrder({ route }) {
             <View style={{ backgroundColor: '#403FFC', height: 300, width: windowWidth }} >
               <View style={{ alignItems: 'center', marginTop: 80 }}>
                 <TouchableOpacity onPress={() => {
-                  navigation.navigate('ImagesGallery', { pictures: null, isServerImage: true, order: null })
+                  navigation.navigate('ImagesGallery', { pictures: null, isServerImage: false, order: null })
                 }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
 
                   <Image source={images.camera} style={{ width: 30, height: 30 }} />
@@ -258,7 +261,7 @@ export default function EditOrder({ route }) {
             }} text={`Save`} />
           </View> : <ActivityIndicator style={{ marginVertical: 30, marginTop: 70 }} size={'large'} color={'green'} />}
         </View>
-      </ScrollView>
+      </ScrollView> : <ActivityIndicator style={{flex: 1, justifyContent: 'center', alignItems: 'center' }} size={'large'} color={'green'} />}
     </View>
   );
 }

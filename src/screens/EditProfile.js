@@ -106,6 +106,7 @@ export default function EditProfile() {
   const openCamera = () => {
     ImagePicker.openPicker({
       // includeExif: true,
+      mediaType: 'photo',
       width: 300,
       height: 400,
     })

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Text,
   StyleSheet,
+  ActivityIndicator,
   View,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -31,15 +32,17 @@ const VendorHome = () => {
                 style={{ marginTop: 5 }}
                 appData={orders}
               />
-              :
-              <View style={{ alignItems: 'center', marginTop: 250, justifyContent: 'center' }}>
-                <Text style={{
-                  fontSize: 18,
-                  color: '#000',
-                  fontFamily: commonStyle.fontFamily.bold,
-                }}
-                >No order yet!</Text>
-              </View>
+              : isLoading ?
+                <ActivityIndicator style={{ marginVertical: 30, marginTop: 200 }} size={'large'} color={'green'} />
+                :
+                <View style={{ alignItems: 'center', marginTop: 250, justifyContent: 'center' }}>
+                  <Text style={{
+                    fontSize: 18,
+                    color: '#000',
+                    fontFamily: commonStyle.fontFamily.bold,
+                  }}
+                  >No order yet!</Text>
+                </View>
           }
         </View>
       </ScrollView>

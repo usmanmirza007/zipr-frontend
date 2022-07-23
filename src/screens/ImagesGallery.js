@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
+  ActivityIndicator,
   StatusBar,
   Platform,
 } from 'react-native';
@@ -15,6 +16,7 @@ import {
 import MapImageView from './MapImageView';
 import Button from '../components/Button';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 import commonStyle from './../constants/commonStyle'
 import Header from '../components/Header';
@@ -26,25 +28,31 @@ import { store } from '../store/store';
 import { addOrderImage } from '../store/reducer/mainSlice';
 
 export default function ImagesGallery({route}) {
-
+  
   const pictures = route.params.pictures
   const isServerImage = route.params.isServerImage
   const [modalVisible, setModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState(null);
   const [picture, setPicture] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
-
+  
+  const navigation = useNavigation();
   let imageName = useRef('')
   const imageData = useSelector((state) => state.user.orderImages)
   const { data: orderData, isLoading: isOrderLoading, isError, isFetching } = useGetSingleOrderQuery(route.params.order?.id)
   const order = orderData ?? {}
-  useEffect(() => {
+  const productImages = useMemo(() => {
     console.log('dododo');
+    if ((Array.isArray(order.picture) && order.picture.length) || (Array.isArray(imageData) && imageData.length)) {
+      return [...order.picture, ...imageData]
+    }
+
   }, [imageData, order]);
 
   const openCamera = () => {
     ImagePicker.openPicker({
       // includeExif: true,
+      mediaType: 'photo',
       width: 300,
       height: 400,
     })
@@ -64,13 +72,13 @@ export default function ImagesGallery({route}) {
       if (task.metadata) {
         imageName.current = task.metadata.fullPath
       }
-      setImageLoading(false)
       let url 
       if (imageName.current) {
         url = await storage().ref(imageName.current).getDownloadURL();
       }
       store.dispatch(addOrderImage(url))
-        console.log('fofof1');
+      setImageLoading(false)
+      console.log('fofof1', url);
 
     } catch (error) {
       setImageLoading(false)
@@ -131,16 +139,27 @@ export default function ImagesGallery({route}) {
                 </View>
               </Modal>
 
-              <MapImageView
+              {!imageLoading && Array.isArray(productImages) && productImages.length ? <MapImageView
                 style={{ marginTop: 10 }}
-                imageData={order?.picture ? order?.picture : imageData}
+                imageData={productImages}
                 isServerImage={isServerImage}
                 order={order}
                 onPressItem={(imageUri) => {
                   setModalVisible(true)
                   setImageUri(imageUri)
                 }}
-              />
+              /> 
+              : imageLoading ? 
+              <ActivityIndicator style={{ marginTop: 250, justifyContent: 'center', alignItems: 'center' }} size={'large'} color={'green'} />
+              :
+                <View style={{ alignItems: 'center', marginTop: 250, justifyContent: 'center' }}>
+                  <Text style={{
+                    fontSize: 18,
+                    color: '#000',
+                    fontFamily: commonStyle.fontFamily.bold,
+                  }}
+                  >No product image yet!</Text>
+                </View>}
             </View>
           </View>
 
@@ -174,7 +193,7 @@ export default function ImagesGallery({route}) {
         <View
           style={{ width: 300 }}>
           <Button text='Done' onClick={() => {
-
+              navigation.goBack()
           }} style={{
             marginHorizontal: 15,
           }} />

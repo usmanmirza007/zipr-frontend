@@ -23,6 +23,7 @@ import MyStatusBar from '../components/MyStatusBar';
 import { useAddOrderMutation, useGetCategoryQuery } from '../store/slice/api';
 import { store } from '../store/store';
 import { orderImageEmpty } from '../store/reducer/mainSlice';
+import PriceModal from '../components/PriceModal';
 const windowWidth = Dimensions.get('window').width;
 
 export default function AddOrder() {
@@ -39,13 +40,13 @@ export default function AddOrder() {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const { data: categoryData, isLoading: isOrderLoading, isError, isFetching } = useGetCategoryQuery()
+  const category = categoryData ?? {}
+  const [addOrder] = useAddOrderMutation();
   
   const imageData = useSelector((state) => state.user.orderImages)
   const navigation = useNavigation();
-  const [addOrder] = useAddOrderMutation();
-  let imageName = useRef([])
+  const modalRef = useRef();
   
-  const category = categoryData ?? {}
   const categories = useMemo(() => {
     let addCategory = []
     if (Array.isArray(category) && category.length) {
@@ -87,7 +88,8 @@ export default function AddOrder() {
           setAddTag('')
           setAllTags([])
           store.dispatch(orderImageEmpty())
-          navigation.navigate('Home')
+          modalRef.current.getAlert();
+          // navigation.navigate('Home')
         })
         .catch((error) => {
           console.log('err', error);
@@ -175,7 +177,6 @@ export default function AddOrder() {
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Name</Text>
           <TextInputs style={{ marginTop: 17, }} labelText={'Enter Product / service name...'} state={name} setState={setName} />
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Description</Text>
-
           <TextInputs style={{ marginTop: 17 }} multiline={true} labelText={'Enter Product / service description...'} state={description} setState={setDescription} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Set Price</Text>
           <View style={{ flexDirection: 'row', marginTop: 17, alignItems: 'center' }}>
@@ -247,6 +248,8 @@ export default function AddOrder() {
               handleAddOrder()
             }} text={`Upload`} />
           </View> : <ActivityIndicator style={{ marginVertical: 30, marginTop: 70 }} size={'large'} color={'green'} />}
+          <PriceModal
+          ref={modalRef} />
         </View>
       </ScrollView>
     </View>

@@ -3,6 +3,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
   View,
   Image,
 } from 'react-native';
@@ -27,6 +28,7 @@ const CustomerHome = () => {
 
   const { data: orderData, isLoading, isError } = useGetAllOrderQuery()
   const orders = orderData ?? []
+
   const { data: userData, isUserLoading } = useGetUserQuery()
   const user = userData ?? {}
     
@@ -48,9 +50,9 @@ const CustomerHome = () => {
         } 
       })
 
-      if (orderData.length) {
+      if (Array.isArray(orderData) && orderData.length) {
         return orderData
-      } else if(selectedCategory === "All") {
+      } else if(selectedCategory == "All") {
         return orders
       } else {
         return []
@@ -70,10 +72,10 @@ const CustomerHome = () => {
     if (searchArray.length) {
       return searchArray
     } else {
-      return filterOrder
+      return []
     }
-  }, [search, selectedCategory]);
-  
+  }, [search, selectedCategory, filterOrder]);
+
   // const TabView = (style) => {
   //   // if (allTab) {
   //   //   return <AcceptingOrders style={style} navigation={navigation} />;
@@ -89,10 +91,10 @@ const CustomerHome = () => {
       <HomeHeader title={`Welcome, ${user?.firstName ? user.firstName : ''}`} image={images.frame} navigateText='Checkout' />
       <View style={{ marginHorizontal: 25, marginTop: 30, flexDirection: 'row', alignItems: 'center' }}>
 
-        <TextInputs style={{ marginTop: 0, width: '84%' }} labelText={'Search'} state={search} setState={setSearch} image={images.search} />
-        <TouchableOpacity style={{ backgroundColor: '#F7F5F5', height: 50, width: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginLeft: 10, }}>
+        <TextInputs style={{  }} labelText={'Search'} state={search} setState={setSearch} image={images.search} />
+        {/* <TouchableOpacity style={{ backgroundColor: '#F7F5F5', height: 50, width: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 5, marginLeft: 10, }}>
           <Image resizeMode='contain' style={{ height: 30, width: 30 }} source={images.filter} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={{ backgroundColor: '#F7F5F5', borderRadius: 5, marginTop: 17, marginHorizontal: 25 }}>
         <Picker
@@ -172,7 +174,8 @@ const CustomerHome = () => {
               </View>
             </TouchableOpacity>
           )
-        })
+        }) : isLoading ? 
+            <ActivityIndicator style={{ marginVertical: 30, marginTop: 200 }} size={'large'} color={'green'} />
           :
           <View style={{ alignItems: 'center', marginTop: 200, justifyContent: 'center' }}>
             <Text style={{
