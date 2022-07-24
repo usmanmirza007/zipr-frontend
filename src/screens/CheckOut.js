@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Image,
   ActivityIndicator,
-  ImageBackground,
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -15,75 +14,42 @@ import images from '../constants/images';
 import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
-import MyStatusBar from '../components/MyStatusBar';
-import { useEditProductMutation, useGetSingleProductQuery } from '../store/slice/api';
-import storage from '@react-native-firebase/storage';
+import { useDeleteOrderMutation, useGetOrdersQuery } from '../store/slice/api';
 import Header from '../components/Header';
 
 export default function Checkout() {
-
-  // const { data: orderData, isLoading: isOrderLoading, isError, isFetching } = useGetSingleProductQuery()
-  // const order = orderData ?? {}
-
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState();
-  const [description, setDescription] = useState('');
-  const [location, setLocation] = useState('');
-  const [addTag, setAddTag] = useState('');
-  const [picture, setPicture] = useState(null);
-  const [allTags, setAllTags] = useState([]);
-  const [enable, setEnable] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [imageLoading, setImageLoading] = useState(false);
-  let imageName = useRef('')
+  
   const navigation = useNavigation();
-  const [editProducct] = useEditProductMutation();
+  const [deleteProducct] = useDeleteOrderMutation();
+  const { data: orderData, isLoading: isOrderLoading, isError, isFetching } = useGetOrdersQuery()
+  const orders = orderData ?? {}
 
-
-  const handleCheckoutOrder = async () => {
-    navigation.navigate('CompleteOrder')
-    return
-    
-    if (name && description && price && location && allTags) {
-      setLoading(true)
-      let url
-      if (imageName.current) {
-        url = await storage().ref(imageName.current).getDownloadURL();
+  const totalPrice = useMemo(() => {
+    let price = 0
+    if (Array.isArray(orders) && orders.length) {
+      for (const order of orders) {
+        price += order.price
       }
+    }
+    return price
+  }, [orders])
 
-      const addOrderData = {
-        name: name,
-        description: description,
-        location: location,
-        price: price,
-        tags: allTags,
-        picture: url,
-        orderId: orderId
-      }
-      editProducct(addOrderData).unwrap()
+  const handleDeleteOrder = async (orderId) => {
+
+    deleteProducct(orderId).unwrap()
         .then(() => {
           Snackbar.show({
-            text: "Order has been updated!", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            text: "Order has been delete from basket", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
-          setLoading(false)
-          navigation.navigate('Home')
 
         })
         .catch((error) => {
           console.log('err', error);
-          setLoading(false)
           Snackbar.show({
             text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
         });
 
-    } else {
-      Snackbar.show({
-        text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: '#24A9DF',
-      });
-    }
   }
 
   return (
@@ -91,75 +57,53 @@ export default function Checkout() {
       <Header title={'My Basket'} image={images.back} />
       <ScrollView>
 
-
         <View style={{ marginHorizontal: 25 }}>
 
-          <View style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: 20, alignItems: 'center' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Image source={images.customer} style={{ width: 100, height: 100, borderRadius: 10 }} />
-              <View style={{ marginLeft: 16 }}>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Item</Text>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>2 packs</Text>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>R 25.6</Text>
-              </View>
-            </View>
-            <TouchableOpacity style={{}}>
-              <Image source={images.remove} style={{ width: 35, height: 35 }} />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: 20, alignItems: 'center' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Image source={images.customer} style={{ width: 100, height: 100, borderRadius: 10 }} />
-              <View style={{ marginLeft: 16 }}>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Item</Text>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>2 packs</Text>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>R 25.6</Text>
-              </View>
-            </View>
-            <TouchableOpacity style={{}}>
-              <Image source={images.remove} style={{ width: 35, height: 35 }} />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: 20, alignItems: 'center' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Image source={images.customer} style={{ width: 100, height: 100, borderRadius: 10 }} />
-              <View style={{ marginLeft: 16 }}>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Item</Text>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>2 packs</Text>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>R 25.6</Text>
-              </View>
-            </View>
-            <TouchableOpacity style={{}}>
-              <Image source={images.remove} style={{ width: 35, height: 35 }} />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: 20, alignItems: 'center' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Image source={images.customer} style={{ width: 100, height: 100, borderRadius: 10 }} />
-              <View style={{ marginLeft: 16 }}>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Item</Text>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>2 packs</Text>
-                <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>R 25.6</Text>
-              </View>
-            </View>
-            <TouchableOpacity style={{}}>
-              <Image source={images.remove} style={{ width: 35, height: 35 }} />
-            </TouchableOpacity>
-          </View>
+          {Array.isArray(orders) && orders.length ? orders.map((order, index) => {
+            let itemStyle = {}
+            if (index == orders.length - 1) {
+              itemStyle = { marginBottom: 20 }
+            }
+            return (
 
-          {/* :<ActivityIndicator style={{marginVertical: 30, marginTop: 70}} size={'large'} color={'green'} /> */}
+              <View key={index} style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: 20, alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <Image source={{ uri: order.picture[0] }} style={{ width: 100, height: 100, borderRadius: 10 }} />
+                  <View style={{ marginLeft: 16 }}>
+                    <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>{order.name}</Text>
+                    <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>{order.quantity} packs</Text>
+                    <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>R {order.price}</Text>
+                  </View>
+                </View>
+                <TouchableOpacity onPress={() => {handleDeleteOrder(order.id)}} style={{}}>
+                  <Image source={images.remove} style={{ width: 35, height: 35 }} />
+                </TouchableOpacity>
+              </View>
+            )
+          }) : isOrderLoading ?
+            <ActivityIndicator style={{ marginVertical: 30, marginTop: 200 }} size={'large'} color={'green'} />
+            :
+            <View style={{ alignItems: 'center', marginTop: 200, justifyContent: 'center' }}>
+              <Text style={{
+                fontSize: 18,
+                color: '#000',
+                fontFamily: commonStyle.fontFamily.bold,
+              }}
+              >No order yet!</Text>
+            </View>
+          }
+
           <View style={{ marginTop: 50, marginBottom: 30, flexDirection: 'row', justifyContent: 'space-between' }}>
             <View>
               <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.bold }}>Total</Text>
-              <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.bold }}>R 25.6</Text>
+              <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.bold }}>R {totalPrice}</Text>
             </View>
             <Button style={{ width: '70%' }} onClick={() => {
-              handleCheckoutOrder()
             }} text={`Checkout`} />
           </View>
-            <Button style={{ width: '40%' }} onClick={() => {
-              navigation.navigate('Delivery Status')
-            }} text={`Delivery Status`} />
+          <Button style={{ width: '40%' }} onClick={() => {
+            navigation.navigate('Delivery Status')
+          }} text={`Delivery Status`} />
         </View>
       </ScrollView>
     </View>

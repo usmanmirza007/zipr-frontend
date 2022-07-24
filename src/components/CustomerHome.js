@@ -42,9 +42,9 @@ const CustomerHome = () => {
   const filterProducts = useMemo(() => {
     if (Array.isArray(products) && products.length) {
       let orderData = []
-      products.filter((order) => {
-        if (order.category == selectedCategory) {
-          orderData.push(order)
+      products.filter((product) => {
+        if (product.category == selectedCategory) {
+          orderData.push(product)
           return orderData
         } 
       })
@@ -138,7 +138,7 @@ const CustomerHome = () => {
         </TouchableOpacity>
       </View>
 
-      { Array.isArray(filterBySearchProduct) && filterBySearchProduct.length ? filterBySearchProduct.map((order, index) => {
+      { Array.isArray(filterBySearchProduct) && filterBySearchProduct.length ? filterBySearchProduct.map((product, index) => {
         let itemStyle = {}
         if (index == filterBySearchProduct.length - 1) {
           itemStyle = { marginBottom: 20 }
@@ -147,7 +147,7 @@ const CustomerHome = () => {
 
             <TouchableOpacity
               key={index}
-              onPress={() => { navigation.navigate('OrderDetails', {order: order}) }}
+              onPress={() => { navigation.navigate('OrderDetails', {product: product}) }}
               style={[{
                 elevation: 8,
                 shadowColor: 'rgba(45, 45, 45,)',
@@ -158,22 +158,22 @@ const CustomerHome = () => {
                 height: 250,
                 marginTop: 20,
               },itemStyle]}>
-              <Image style={{ height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={{ uri: order.picture[0] }} />
+              <Image style={{ height: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10 }} source={{ uri: product.picture[0] }} />
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: '100%' }}>
                 <View style={{ marginLeft: 10 }}>
                   <Text
                     style={styles.boxText}>
-                    {order.name}
+                    {product.name}
                   </Text>
                   <Text
                     ellipsizeMode='tail'
                     numberOfLines={1}
                     style={styles.boxText}>
-                    {order.description}
+                    {product.description}
                   </Text>
                   <Text
                     style={styles.price}>
-                    {order.price}
+                    {product.price}
                   </Text>
                 </View>
               </View>
@@ -188,7 +188,7 @@ const CustomerHome = () => {
               color: '#000',
               fontFamily: commonStyle.fontFamily.bold,
             }}
-            >No order yet!</Text>
+            >No product yet!</Text>
           </View>
       }
     </View>

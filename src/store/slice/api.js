@@ -174,6 +174,44 @@ export const api = emptySplitApi.injectEndpoints({
       providesTags: ['Product']
     }),
 
+    addOrder: builder.mutation({
+      query: (args) => {
+        return {
+          url: '/users/order',
+          method: 'POST',
+          body: {
+            name: args.name,
+            description: args.description,
+            price: args.price,
+            pictures: args.pictures,
+            orderStatus: args.orderStatus,
+            quantity: args.quantity,
+          }
+        }
+      },
+      invalidatesTags: ['Order']
+    }),
+
+    getOrders: builder.query({
+      query: () => {
+        return {
+          url: `/users/order`,
+          method: 'GET',
+        }
+      },
+      providesTags: ['Order', 'OrderDelete']
+    }),
+
+    deleteOrder: builder.mutation({
+      query: (orderId) => {
+        return {
+          url: `/users/order/${orderId}`,
+          method: 'DELETE',
+        }
+      },
+      invalidatesTags: ['OrderDelete']
+    }),
+
   }),
   overrideExisting: true,
 })
@@ -189,6 +227,9 @@ export const {
   useGetSingleProductQuery,
   useGetAllProductQuery,
   useGetCategoryQuery,
+  useGetOrdersQuery,
   useEditProductMutation,
   useChangeStatusMutation,
+  useAddOrderMutation,
+  useDeleteOrderMutation,
 } = api

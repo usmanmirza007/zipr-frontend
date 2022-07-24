@@ -41,7 +41,7 @@ const VendorHome = () => {
                     color: '#000',
                     fontFamily: commonStyle.fontFamily.bold,
                   }}
-                  >No order yet!</Text>
+                  >No product yet!</Text>
                 </View>
           }
         </View>

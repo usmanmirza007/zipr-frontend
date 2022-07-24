@@ -36,6 +36,8 @@ export const emptySplitApi = createApi({
   tagTypes: [
     'Product',
     'SingleProduct',
-    'User'
+    'User',
+    'Order',
+    'OrderDelete'
   ],
 })
