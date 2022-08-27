@@ -13,6 +13,7 @@ const TextInputs = ({
   multiline,
   nbLines,
   disable,
+  maxLength,
 }) => {
 
   const [focuse, setFocuse] = useState(false);
@@ -71,6 +72,7 @@ const TextInputs = ({
           numberOfLines={nbLines}
           editable={disable}
           placeholder={labelText}
+          maxLength={maxLength}
           placeholderTextColor={'#757575'}
           style={{
             // marginTop: multiline ? -10 : -11,

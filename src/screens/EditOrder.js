@@ -185,7 +185,7 @@ export default function EditOrder({ route }) {
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Set Price</Text>
           <View style={{ flexDirection: 'row', marginTop: 17, alignItems: 'center' }}>
             <Text style={{ fontSize: 15, color: '#000', fontFamily: commonStyle.fontFamily.medium, marginRight: 10 }}>R</Text>
-            <TextInputs style={{ width: 200 }} labelText={'0.00'} state={price} setState={setPrice} />
+            <TextInputs style={{ width: 200 }} labelText={'0.00'} keyBoardType={'numeric'} state={price?.toString()} setState={setPrice} />
           </View>
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Location</Text>
           <TextInputs style={{ marginTop: 17 }} labelText={'Location'} state={location} setState={setLocation} image={images.location} />

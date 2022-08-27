@@ -173,7 +173,7 @@ const CustomerHome = () => {
                   </Text>
                   <Text
                     style={styles.price}>
-                    {product.price}
+                    {parseFloat(product.price).toFixed(2)}
                   </Text>
                 </View>
               </View>

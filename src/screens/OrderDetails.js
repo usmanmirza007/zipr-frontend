@@ -10,13 +10,16 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
+import { useSelector } from 'react-redux';
 
 import commonStyle from '../constants/commonStyle';
 import images from '../constants/images';
 import Button from '../components/Button';
 import MyStatusBar from '../components/MyStatusBar';
 import { orderPending } from '../constants/userType';
-import { useAddOrderMutation } from '../store/slice/api';
+import { useAddOrderMutation, useMakeFavoriteProductMutation } from '../store/slice/api';
+import { addOrderId } from '../store/reducer/mainSlice';
+import { store } from '../store/store';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -26,6 +29,8 @@ const OrderDetails = ({ route }) => {
 
   const [quantity, setQuantity] = useState(1)
   const [addOrder] = useAddOrderMutation();
+  const [makeFavoriteProduct] = useMakeFavoriteProductMutation();
+  const orderId = useSelector((state) => state.user.orderId)
 
   const handleAddOrder = async () => {
 
@@ -36,13 +41,19 @@ const OrderDetails = ({ route }) => {
         price: product.price * quantity,
         pictures: product.picture,
         quantity: quantity,
-        orderStatus: orderPending
+        orderStatus: orderPending,
+        orderId: orderId ? orderId : null,
+        productId: product.id
       }
       addOrder(addOrderData).unwrap()
-        .then(() => {
+        .then((data) => {
+          if (data) {
+            store.dispatch(addOrderId(data.id))
+          }
           Snackbar.show({
             text: "Product has been added in basket", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
+          setQuantity(1)
         })
         .catch((error) => {
           console.log('err', error);
@@ -57,6 +68,28 @@ const OrderDetails = ({ route }) => {
         duration: Snackbar.LENGTH_SHORT,
         backgroundColor: '#24A9DF',
       });
+    }
+  }
+  const handleFavoriteProduct = async (product) => {
+
+    if (product && product.id) {
+      const addFavoriteData = {
+        favorite: true,
+        productId: product.id
+      }
+      makeFavoriteProduct(addFavoriteData).unwrap()
+        .then((data) => {
+          Snackbar.show({
+            text: "Product has been favorite", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+          });
+        })
+        .catch((error) => {
+          console.log('err', error);
+          Snackbar.show({
+            text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+          });
+        });
+
     }
   }
 
@@ -161,7 +194,10 @@ const OrderDetails = ({ route }) => {
           </ScrollView>
 
           <View style={{ flexDirection: 'row', marginTop: 35 }}>
-            <TouchableOpacity style={{ backgroundColor: '#D9D9D9', marginRight: 15, width: 50, height: 50, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity
+              onPress={() => {
+                handleFavoriteProduct(product)
+              }} style={{ backgroundColor: '#D9D9D9', marginRight: 15, width: 50, height: 50, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
               <Image resizeMode='stretch' style={{ height: 35, width: 35, marginTop: 10 }} source={images.heart} />
             </TouchableOpacity>
             <View style={{ width: '80%' }}>

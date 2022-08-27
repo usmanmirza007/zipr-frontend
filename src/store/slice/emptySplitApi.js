@@ -38,6 +38,7 @@ export const emptySplitApi = createApi({
     'SingleProduct',
     'User',
     'Order',
-    'OrderDelete'
+    'OrderDelete',
+    'Payment'
   ],
 })

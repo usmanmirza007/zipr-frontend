@@ -31,7 +31,6 @@ export const api = emptySplitApi.injectEndpoints({
           body: {
             firstName: args.firstName,
             lastName: args.lastName,
-            vendorName: args.vendorName,
             email: args.email,
             password: args.password,
             type: args.type,
@@ -186,6 +185,8 @@ export const api = emptySplitApi.injectEndpoints({
             pictures: args.pictures,
             orderStatus: args.orderStatus,
             quantity: args.quantity,
+            orderId: args.orderId,
+            productId: args.productId,
           }
         }
       },
@@ -199,7 +200,17 @@ export const api = emptySplitApi.injectEndpoints({
           method: 'GET',
         }
       },
-      providesTags: ['Order', 'OrderDelete']
+      providesTags: ['Order', 'OrderDelete', 'Payment']
+    }),
+
+    getAllOrders: builder.query({
+      query: () => {
+        return {
+          url: `/users/orders`,
+          method: 'GET',
+        }
+      },
+      providesTags: ['Order', 'OrderDelete', 'Payment']
     }),
 
     deleteOrder: builder.mutation({
@@ -212,6 +223,46 @@ export const api = emptySplitApi.injectEndpoints({
       invalidatesTags: ['OrderDelete']
     }),
 
+    addPayment: builder.mutation({
+      query: (args) => {
+        return {
+          url: '/payments/add',
+          method: 'POST',
+          body: {
+            cardNumber: args.cardNumber,
+            cvv: args.cvv,
+            name: args.name,
+            expireDate: args.expireDate,
+            price: args.price,
+          }
+        }
+      },
+      invalidatesTags: ['Payment']
+    }),
+ 
+    makeFavoriteProduct: builder.mutation({
+      query: (args) => {
+        return {
+          url: '/users/favorite',
+          method: 'POST',
+          body: {
+            favorite: args.favorite,
+            productId: args.productId,
+          }
+        }
+      },
+    }),
+
+    getFavoriteProduct: builder.query({
+      query: () => {
+        return {
+          url: `/users/favorite`,
+          method: 'GET',
+        }
+      },
+    }),
+
+    
   }),
   overrideExisting: true,
 })
@@ -228,8 +279,12 @@ export const {
   useGetAllProductQuery,
   useGetCategoryQuery,
   useGetOrdersQuery,
+  useGetAllOrdersQuery,
+  useGetFavoriteProductQuery,
   useEditProductMutation,
   useChangeStatusMutation,
+  useAddPaymentMutation,
   useAddOrderMutation,
   useDeleteOrderMutation,
+  useMakeFavoriteProductMutation,
 } = api

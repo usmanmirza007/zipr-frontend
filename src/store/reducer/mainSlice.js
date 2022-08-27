@@ -14,6 +14,7 @@ const initialState = {
     isLoggedIn: null,
     editProductImages: [],
     newProductImages: [],
+    orderId: null
 }
 
 
@@ -63,9 +64,17 @@ export const mainSlice = createSlice({
         newProductImageEmpty: (state, data) => {
             state.newProductImages = []
         },
+
+        addOrderId: (state, data) => {
+            state.orderId =  data.payload
+        },
+
+        removeOrderId : (state) => {
+            state.orderId = null
+        },
     },
 })
 
-export const { loggedIn, logout, editProductImages, removeEditProductImage, editProductImageEmpty, newProductImage, removeNewProductImage, newProductImageEmpty } = mainSlice.actions
+export const { loggedIn, logout, editProductImages, removeEditProductImage, editProductImageEmpty, newProductImage, removeNewProductImage, newProductImageEmpty, addOrderId, removeOrderId } = mainSlice.actions
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer)

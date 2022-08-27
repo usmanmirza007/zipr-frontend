@@ -12,6 +12,7 @@ import {
   View,
   Image,
   Text,
+  ActivityIndicator,
 } from 'react-native';
 
 import images from '../constants/images';
@@ -19,41 +20,95 @@ import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 import TextInputs from './TextInputs';
 import commonStyle from '../constants/commonStyle';
+import DateTimesPicker from './DatePicker';
+import { useAddPaymentMutation } from '../store/slice/api';
+import Snackbar from 'react-native-snackbar';
+import { removeOrderId } from '../store/reducer/mainSlice';
+import { store } from '../store/store';
 
 const AddCardModal = forwardRef((props, ref) => {
-  const [deleteModalShow, setDeleteModalShow] = useState(false);
-  const [jobRemoveModalShow, setJobRemoveModalShow] = useState(false);
+  const [addressModalShow, setAddressModalShow] = useState(false);
+  const [paymentModalShow, setPaymentModalShow] = useState(false);
 
   const [name, setName] = useState('');
   const [cvv, setCvv] = useState('');
   const [cardNumber, setCardNumber] = useState('');
-  const [date, setDate] = useState('');
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [date, setDate] = useState('');
+  const [addPayment, { isLoading }] = useAddPaymentMutation();
 
   const navigation = useNavigation();
+  const setDateTime = (dateTime) => { setDate(dateTime) };
 
   useImperativeHandle(ref, () => ({
     getAlert() {
-      setDeleteModalShow(true);
+      setAddressModalShow(true);
     },
     jobDelete() {
-      setJobRemoveModalShow(true);
-      setDeleteModalShow(false);
+      setPaymentModalShow(true);
+      setAddressModalShow(false);
     },
-    // passData(user_id, request_id){
-    //   setUserId(user_id)
-    //   setRequestId(request_id)
-    // }
   }));
 
+  const handleCheckoutOrder = async () => {
+
+    if (name && cardNumber && date && cvv && props?.totalPrice) {
+     
+      const checkCvv = cvv % 1
+      if (checkCvv) {
+        Snackbar.show({
+          text: "Please enter a valid cvv", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+        });
+        return
+      }
+
+      const checkCard = cardNumber % 1
+
+      if (checkCard) {
+        Snackbar.show({
+          text: "Please enter a valid card", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+        });
+        return
+      }
+
+      const addPaymentData = {
+        name: name,
+        price: props.totalPrice,
+        cardNumber: cardNumber,
+        cvv: cvv,
+        expireDate: date
+      }
+      addPayment(addPaymentData).unwrap()
+        .then(() => {
+          store.dispatch(removeOrderId(null))
+          Snackbar.show({
+            text: "Payment added successfully.", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+          });
+          navigation.navigate('CompleteOrder')
+
+        })
+        .catch((error) => {
+          console.log('err', error);
+          Snackbar.show({
+            text: error.data.raw.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+          });
+        });
+
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#24A9DF',
+      });
+    }
+  }
   return (
     <>
       <Modal
         animationType="fade"
         transparent={true}
-        onRequestClose={() => setDeleteModalShow(false)}
-        visible={deleteModalShow}>
+        visible={paymentModalShow}>
         <StatusBar
           backgroundColor="rgba(4, 45, 84, 0.8)"
           barStyle="dark-content"
@@ -65,7 +120,7 @@ const AddCardModal = forwardRef((props, ref) => {
             zIndex: 1,
             backgroundColor: 'rgba(4, 45, 84, 0.8)',
           }}
-          onPress={() => setDeleteModalShow(false)}
+          onPress={() => setPaymentModalShow(false)}
         />
         <View
           style={{
@@ -87,7 +142,7 @@ const AddCardModal = forwardRef((props, ref) => {
               width: 45,
               height: 45
             }}>
-            <TouchableOpacity onPress={() => setDeleteModalShow(false)}>
+            <TouchableOpacity onPress={() => setPaymentModalShow(false)}>
               <Image source={images.cross} style={{ width: 25, height: 25 }} />
             </TouchableOpacity>
           </View>
@@ -109,15 +164,24 @@ const AddCardModal = forwardRef((props, ref) => {
                 <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Card holder’s name</Text>
                 <TextInputs style={{ marginTop: 17, }} labelText={'Name'} state={name} setState={setName} />
                 <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Card number</Text>
-                <TextInputs style={{ marginTop: 17 }} labelText={'2325 2365 2124 3265'} state={cardNumber} setState={setCardNumber} />
+                <TextInputs style={{ marginTop: 17 }} keyBoardType={'numeric'} maxLength={16} labelText={'2325 2365 2124 3265'} state={cardNumber} setState={setCardNumber} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 40 }}>
                   <View>
                     <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Date</Text>
-                    <TextInputs style={{ marginTop: 17, width: 130 }} labelText={'Date'} state={date} setState={setDate} />
+                    <View style={{
+                      marginTop: 17,
+                      width: 130,
+                      backgroundColor: '#F7F5F5',
+                      borderRadius: 5,
+                      height: 50,
+                      justifyContent: 'center',
+                    }}>
+                      <DateTimesPicker updateDate={setDateTime} />
+                    </View>
                   </View>
                   <View>
                     <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>CVV</Text>
-                    <TextInputs style={{ marginTop: 17, width: 130 }} labelText={'232'} state={cvv} setState={setCvv} />
+                    <TextInputs style={{ marginTop: 17, width: 130 }} maxLength={3} keyBoardType={'numeric'} labelText={'232'} state={cvv} setState={setCvv} />
                   </View>
                 </View>
               </View>
@@ -129,17 +193,17 @@ const AddCardModal = forwardRef((props, ref) => {
                   marginTop: 30
                 }}>
 
-                <Button
+                {!isLoading ? <Button
                   text="Complete order"
                   style={{
                   }}
                   onClick={() => {
                     //api call to delete the modal
-                    // dispatch(hideJob(userId, requestId))
-                    setJobRemoveModalShow(true);
-                    setDeleteModalShow(false);
+                    handleCheckoutOrder()
+                    // setPaymentModalShow(true);
+                    // setAddressModalShow(false);
                   }}
-                />
+                /> : <ActivityIndicator style={{ marginVertical: 20 }} size={'large'} color={'green'} />}
               </View>
             </View>
           </View>
@@ -150,7 +214,8 @@ const AddCardModal = forwardRef((props, ref) => {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={jobRemoveModalShow}>
+        onRequestClose={() => setAddressModalShow(false)}
+        visible={addressModalShow}>
         <StatusBar backgroundColor="#E9F6FC" barStyle="dark-content" />
         <TouchableOpacity
           style={{
@@ -159,7 +224,7 @@ const AddCardModal = forwardRef((props, ref) => {
             zIndex: 1,
             backgroundColor: 'rgba(4, 45, 84, 0.8)',
           }}
-          onPress={() => setJobRemoveModalShow(false)}
+          onPress={() => setAddressModalShow(false)}
         />
         <View
           style={{
@@ -181,7 +246,7 @@ const AddCardModal = forwardRef((props, ref) => {
               width: 45,
               height: 45
             }}>
-            <TouchableOpacity onPress={() => setJobRemoveModalShow(false)}>
+            <TouchableOpacity onPress={() => setAddressModalShow(false)}>
               <Image source={images.cross} style={{ width: 25, height: 25 }} />
             </TouchableOpacity>
           </View>
@@ -222,10 +287,10 @@ const AddCardModal = forwardRef((props, ref) => {
                     width: '45%',
                     backgroundColor: '#e8e8ff'
                   }}
-                  textStyle={{color: "#403FFC"}}
+                  textStyle={{ color: "#403FFC" }}
                   onClick={() => {
                     //api call to delete the modal
-                    setJobRemoveModalShow(false);
+                    setAddressModalShow(false);
                   }}
                 />
 
@@ -235,10 +300,11 @@ const AddCardModal = forwardRef((props, ref) => {
                     width: '45%',
                     backgroundColor: '#e8e8ff'
                   }}
-                  textStyle={{color: "#403FFC"}}
+                  textStyle={{ color: "#403FFC" }}
                   onClick={() => {
                     //api call to delete the modal
-                    setJobRemoveModalShow(false);
+                    setAddressModalShow(false);
+                    setPaymentModalShow(true)
                   }}
                 />
               </View>

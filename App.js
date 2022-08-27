@@ -37,19 +37,10 @@ const { width } = Dimensions.get('screen');
 
 export default () => {
 
-{/* <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/white" android:orientation="vertical">
-
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_marginHorizontal="@android:dimen/app_icon_size"
-    android:layout_marginVertical="@android:dimen/app_icon_size"
-    android:src="@mipmap/splash"/>
-</LinearLayout > */}
-  // useEffect(() => {
-  //   SplashScreen.hide();
-  // }, []);
-
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+  
   function AppStack() {
     return (
       <>

@@ -33,7 +33,7 @@ const MapImageView = ({ data }) => {
           </Text>
           <Text
             style={lightStyle.price}>
-            {data.price}
+            {parseFloat(data.price).toFixed(2)}
           </Text>
         </View>
         <Image resizeMode='contain' style={{ marginRight: 10, width: 30, height: 30 }} source={images.option} />
