@@ -33,15 +33,15 @@ export default function Checkout() {
       return orders.filter((order) => order.status == orderPending)
     }
   }, [orders])
-  // const totalPrice = useMemo(() => {
-  //   let price = 0
-  //   if (Array.isArray(pendingOrders) && pendingOrders.length) {
-  //     for (const order of pendingOrders) {
-  //       price += order.price
-  //     }
-  //   }
-  //   return price
-  // }, [orders])
+  const totalPrice = useMemo(() => {
+    let price = 0
+    if (Array.isArray(pendingOrders) && pendingOrders.length) {
+      for (const order of pendingOrders) {
+        price += order.price * order.quantity
+      }
+    }
+    return price
+  }, [orders])
 
   const handleDeleteOrder = async (orderId) => {
 
@@ -105,7 +105,7 @@ export default function Checkout() {
           <View style={{ marginTop: 50, marginBottom: 30, flexDirection: 'row', justifyContent: 'space-between' }}>
             <View>
               <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.bold }}>Total</Text>
-              <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.bold }}>R {pendingOrders && pendingOrders[0]?.totalPrice?.toFixed(2)}</Text>
+              <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.bold }}>R {totalPrice.toFixed(2)}</Text>
             </View>
             <Button style={{ width: '70%' }} onClick={() => {
               modalRef.current.getAlert();
@@ -113,7 +113,7 @@ export default function Checkout() {
             }} text={`Checkout`} />
           </View>
           <AddCardModal
-            ref={modalRef} totalPrice={pendingOrders && pendingOrders[0]?.totalPrice} />
+            ref={modalRef} totalPrice={totalPrice} />
         </View>
       </ScrollView>
     </View>

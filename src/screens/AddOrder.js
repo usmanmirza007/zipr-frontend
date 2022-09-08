@@ -12,7 +12,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import images from '../constants/images';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import { useSelector } from 'react-redux';
 
 import TextInputs from '../components/TextInputs';
@@ -50,10 +50,10 @@ export default function AddOrder() {
   const categories = useMemo(() => {
     let addCategory = []
     if (Array.isArray(category) && category.length) {
-      addCategory.push(...category, { label: "Other", value: "Other"})
+      addCategory.push(...category, { label: "Other", value: "Other" })
     }
     return addCategory
-  },[category])
+  }, [category])
 
   const handleAddProduct = async () => {
 
@@ -63,8 +63,14 @@ export default function AddOrder() {
       });
       return
     }
+    if ((Array.isArray(imageData) && !imageData.length)) {
+      Snackbar.show({
+        text: "Please select the product images", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+      });
+      return
+    }
 
-    if (name && description && price && location && allTags && imageData) {
+    if (name && description && price && location && allTags) {
       setLoading(true)
       const addProductData = {
         category: addCategory ? addCategory : selectedCategory,
@@ -127,7 +133,7 @@ export default function AddOrder() {
               <ImageBackground source={{ uri: image }} style={{ backgroundColor: '#403FFC', height: 300, width: windowWidth }} >
                 <View style={{ alignItems: 'center', marginTop: 80 }}>
                   <TouchableOpacity onPress={() => {
-                    navigation.navigate('ImagesGallery', { isServerImage: false, product: null, newProduct: true})
+                    navigation.navigate('ImagesGallery', { isServerImage: false, product: null, newProduct: true })
                   }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
 
                     <Image source={images.camera} style={{ width: 30, height: 30 }} />
@@ -140,7 +146,7 @@ export default function AddOrder() {
             <View style={{ backgroundColor: '#403FFC', height: 300, width: windowWidth }} >
               <View style={{ alignItems: 'center', marginTop: 80 }}>
                 <TouchableOpacity onPress={() => {
-                  navigation.navigate('ImagesGallery', { isServerImage: false, product: null, newProduct: true})
+                  navigation.navigate('ImagesGallery', { isServerImage: false, product: null, newProduct: true })
                 }} style={{ backgroundColor: '#D9D9D9', width: 50, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }}>
 
                   <Image source={images.camera} style={{ width: 30, height: 30 }} />
@@ -154,7 +160,7 @@ export default function AddOrder() {
           <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
         </TouchableOpacity>
         <View style={{ marginHorizontal: 25 }}>
-        <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Category</Text>
+          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Category</Text>
 
           <View style={{ backgroundColor: '#F7F5F5', borderRadius: 5, marginTop: 17 }}>
             <Picker
@@ -164,16 +170,16 @@ export default function AddOrder() {
                 setSelectedCategory(itemValue)
                 setAddCategory('')
               }}>
-              <Picker.Item label={'Select Category'} value={'Select Category'} style={{color: '#757575', fontFamily: commonStyle.fontFamily.medium}} />
+              <Picker.Item label={'Select Category'} value={'Select Category'} style={{ color: '#757575', fontFamily: commonStyle.fontFamily.medium }} />
               {categories.map((cate, index) => {
                 return (
-                  <Picker.Item key={index} label={cate.label} value={cate.value} style={{color: "#000", fontFamily: commonStyle.fontFamily.medium }} />
+                  <Picker.Item key={index} label={cate.label} value={cate.value} style={{ color: "#000", fontFamily: commonStyle.fontFamily.medium }} />
                 )
               })}
             </Picker>
           </View>
           {selectedCategory == "Other" && <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Add Category</Text>}
-          {selectedCategory == "Other" && <TextInputs style={{ marginTop: 17, }} labelText={'Category'} state={addCategory} setState={setAddCategory} />  }
+          {selectedCategory == "Other" && <TextInputs style={{ marginTop: 17, }} labelText={'Category'} state={addCategory} setState={setAddCategory} />}
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Name</Text>
           <TextInputs style={{ marginTop: 17, }} labelText={'Enter Product / service name...'} state={name} setState={setName} />
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Description</Text>
@@ -249,7 +255,7 @@ export default function AddOrder() {
             }} text={`Upload`} />
           </View> : <ActivityIndicator style={{ marginVertical: 30, marginTop: 70 }} size={'large'} color={'green'} />}
           <PriceModal
-          ref={modalRef} />
+            ref={modalRef} />
         </View>
       </ScrollView>
     </View>

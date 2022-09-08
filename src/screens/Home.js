@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
 } from 'react-native';
@@ -12,11 +12,14 @@ import { store } from '../store/store';
 
 const Home = () => {
   const navigation = useNavigation();
-  const { data: userData, isLoading, isError } = useGetUserQuery()
+  const { data: userData, isLoading, isError, refetch } = useGetUserQuery()
   const user = userData ?? {}
+  useEffect(() => {
+    refetch()
+  }, [user]);
   const token = store.getState().user.isLoggedIn
   return (
-    <View style={{flex: 1,  backgroundColor: '#fff' }}>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <ScrollView>
 
         {token.userType == "CUSTOMER" ?

@@ -14,6 +14,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import images from '../constants/images';
+import { useDispatch } from 'react-redux';
 
 import TextInputs from '../components/TextInputs';
 import commonStyle from '../constants/commonStyle';
@@ -21,6 +22,7 @@ import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
 import { useSignupCustomerMutation } from '../store/slice/api';
+import { loggedIn } from '../store/reducer/mainSlice';
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,6 +33,7 @@ export default function CustomerSignup() {
   const [email, setEmail] = useState('');
   const navigation = useNavigation();
   const [customerSignup, { isLoading }] = useSignupCustomerMutation();
+  const dispatch = useDispatch()
 
   function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -54,11 +57,14 @@ export default function CustomerSignup() {
         }
         customerSignup(signupData).unwrap()
           .then((data) => {
-            if (data.success) {
+            if (data && data.token) {
               Snackbar.show({
                 text: "Customer has been signup succssfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
               });
-              navigation.navigate("Login")
+              dispatch(loggedIn({
+                token: data.token,
+                type: data.type
+              }))
               setName('')
               setSurename('')
               setPassword('')

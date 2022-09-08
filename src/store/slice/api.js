@@ -21,6 +21,7 @@ export const api = emptySplitApi.injectEndpoints({
           }
         }
       },
+      providesTags: ['GetUser']
     }),
 
     signupVendor: builder.mutation({
@@ -37,6 +38,7 @@ export const api = emptySplitApi.injectEndpoints({
           }
         }
       },
+      providesTags: ['GetUser']
     }),
 
     login: builder.mutation({
@@ -60,7 +62,7 @@ export const api = emptySplitApi.injectEndpoints({
           method: 'GET',
         }
       },
-      providesTags: ['User'],
+      providesTags: ['User', 'GetUser'],
     }),
 
     editUser: builder.mutation({
@@ -75,7 +77,8 @@ export const api = emptySplitApi.injectEndpoints({
             bio: args.bio,
             location: args.location,
             type: args.type,
-            picture: args.picture
+            picture: args.picture,
+            password: args.password,
           }
         }
       },
@@ -262,6 +265,15 @@ export const api = emptySplitApi.injectEndpoints({
       },
     }),
 
+    getOrdersPending: builder.query({
+      query: () => {
+        return {
+          url: `/users/orderPending`,
+          method: 'GET',
+        }
+      },
+      providesTags: ['Order', 'OrderDelete', 'Payment']
+    }),
     
   }),
   overrideExisting: true,
@@ -281,6 +293,7 @@ export const {
   useGetOrdersQuery,
   useGetAllOrdersQuery,
   useGetFavoriteProductQuery,
+  useGetOrdersPendingQuery,
   useEditProductMutation,
   useChangeStatusMutation,
   useAddPaymentMutation,

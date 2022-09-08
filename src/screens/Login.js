@@ -52,7 +52,7 @@ export default function Login() {
         }
         login(loginData).unwrap()
           .then((data) => {
-            if (data) {
+            if (data && data.token) {
               Snackbar.show({
                 text: `${data.type.toLowerCase()} has been login succssfuly`, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
               });
@@ -63,6 +63,7 @@ export default function Login() {
             }
           })
           .catch((error) => {
+            console.log('err', error);
             Snackbar.show({
               text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
             });

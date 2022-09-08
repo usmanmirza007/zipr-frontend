@@ -23,8 +23,6 @@ import commonStyle from '../constants/commonStyle';
 import DateTimesPicker from './DatePicker';
 import { useAddPaymentMutation } from '../store/slice/api';
 import Snackbar from 'react-native-snackbar';
-import { removeOrderId } from '../store/reducer/mainSlice';
-import { store } from '../store/store';
 
 const AddCardModal = forwardRef((props, ref) => {
   const [addressModalShow, setAddressModalShow] = useState(false);
@@ -81,7 +79,6 @@ const AddCardModal = forwardRef((props, ref) => {
       }
       addPayment(addPaymentData).unwrap()
         .then(() => {
-          store.dispatch(removeOrderId(null))
           Snackbar.show({
             text: "Payment added successfully.", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });

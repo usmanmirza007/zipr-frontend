@@ -35,6 +35,8 @@ export default function EditProfile() {
   const [vendorName, setVendorName] = useState('');
   const [bio, setBio] = useState('');
   const [location, setLocation] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [picture, setPicture] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
@@ -44,10 +46,11 @@ export default function EditProfile() {
 
   useEffect(() => {
     if (user.userType == vender) {
-      setEmail(user?.email)
-      // setVendorName(user?.venderName)
       setBio(user?.vender?.bio)
       setLocation(user?.vender?.location)
+      setEmail(user?.email)
+      setName(user?.firstName)
+      setSurename(user?.lastName)
     } else {
       setEmail(user?.email)
       setName(user?.firstName)
@@ -62,6 +65,11 @@ export default function EditProfile() {
 
     if (location || bio || name || surename || picture) {
 
+      if (password !== confirmPassword) {
+        return Snackbar.show({
+          text: "Password does not match", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+        });
+      }
       setLoading(true)
       let url
       if (imageName.current) {
@@ -73,7 +81,8 @@ export default function EditProfile() {
         vendorName: vendorName,
         bio: bio,
         location: location,
-        picture: url
+        picture: url,
+        password: password,
       }
       editUser(editUserData).unwrap()
         .then((data) => {
@@ -154,7 +163,7 @@ export default function EditProfile() {
         barStyle="light-content"
         backgroundColor="#403FFC"
       />
-      <ScrollView>
+      {!isUserLoading ? <ScrollView>
 
         <ImageBackground source={{ uri: user?.picture ? user.picture : picture }} style={{ backgroundColor: '#403FFC', height: 300 }} >
           <TouchableOpacity onPress={() => { navigation.goBack() }}>
@@ -171,40 +180,43 @@ export default function EditProfile() {
         </ImageBackground>
 
         <View style={{ marginHorizontal: 25 }}>
-          {/* <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor name</Text>
-          <TextInputs style={{ marginTop: 17, }} labelText={'Name'} state={vendorName} setState={setVendorName} /> */}
-          {user.userType == customer ?
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 40 }}>
-              <View>
-                <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>First Name</Text>
-                <TextInputs style={{ marginTop: 17, width: 160 }} labelText={'Name'} state={name} setState={setName} />
-              </View>
-              <View>
-                <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Last Name</Text>
-                <TextInputs style={{ marginTop: 17, width: 160 }} labelText={'Surname'} state={surename} setState={setSurename} />
-              </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 40 }}>
+            <View style={{ width: '45%' }}>
+              <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>First Name</Text>
+              <TextInputs style={{ marginTop: 17 }} labelText={'Name'} state={name} setState={setName} />
             </View>
-            :
+            <View style={{ width: '45%' }}>
+              <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Last Name</Text>
+              <TextInputs style={{ marginTop: 17 }} labelText={'Surname'} state={surename} setState={setSurename} />
+            </View>
+          </View>
+          {user.userType == vender ?
             <>
               <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Vendor Bio</Text>
               <TextInputs style={{ marginTop: 17 }} multiline={true} labelText={'Bio'} state={bio} setState={setBio} />
               <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Location</Text>
               <TextInputs style={{ marginTop: 17 }} labelText={'Location'} state={location} setState={setLocation} image={images.location} />
             </>
+            : null
           }
 
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Email</Text>
           <TextInputs style={{ marginTop: 17, }} labelText={'Email'} disable={false} state={email} setState={setEmail} keyBoardType={'email-address'} />
+          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Password</Text>
+          <TextInputs style={{ marginTop: 17, }} labelText={'Password'} state={password} setState={setPassword} secure={true} />
+          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Confirm Password</Text>
+          <TextInputs style={{ marginTop: 17, }} labelText={'Confirm Password'} state={confirmPassword} setState={setConfirmPassword} secure={true} />
 
           {!loading ? <View style={{ marginTop: 70, marginBottom: 30 }}>
             <Button onClick={() => {
               handleEditProfile()
-            }} text={`Continue`} />
+            }} text={`Update`} />
           </View> : <ActivityIndicator style={{ marginVertical: 30, marginTop: 70 }} size={'large'} color={'green'} />}
 
 
         </View>
-      </ScrollView>
+
+      </ScrollView> : <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} size={'large'} color={'green'} />}
     </View>
   );
 }

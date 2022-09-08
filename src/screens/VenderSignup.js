@@ -12,6 +12,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import images from '../constants/images';
+import { useDispatch } from 'react-redux';
 
 import TextInputs from '../components/TextInputs';
 import commonStyle from '../constants/commonStyle';
@@ -19,6 +20,7 @@ import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
 import { useSignupVendorMutation } from '../store/slice/api';
+import { loggedIn } from '../store/reducer/mainSlice';
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,8 +29,8 @@ export default function VenderSignup() {
   const [surename, setSurename] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [vendorName, setVendorName] = useState('');
   const navigation = useNavigation();
+  const dispatch = useDispatch()
 
   function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -38,7 +40,7 @@ export default function VenderSignup() {
 
   const handleSignup = () => {
     
-    if (email && password && name && surename && vendorName) {
+    if (email && password && name && surename ) {
       if (!validateEmail(email)) {
         Snackbar.show({
           text: 'Please enter valid email',
@@ -51,21 +53,22 @@ export default function VenderSignup() {
           lastName: surename,
           email: email,
           password: password,
-          vendorName: vendorName,
           type: "VENDER"
         }
         vendorSignup(signupData).unwrap()
           .then((data) => {
-            if (data.success) {
+            if (data && data.token) {
               Snackbar.show({
                 text: "Vendor has been signup succssfuly", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
               });
-              navigation.navigate("Login")
+              dispatch(loggedIn({
+                token: data.token,
+                type: data.type
+              }))
               setName('')
               setSurename('')
               setPassword('')
               setEmail('')
-              setVendorName('')
             }
           })
           .catch((error) => {
@@ -115,7 +118,6 @@ export default function VenderSignup() {
           <TextInputs style={{ marginTop: 17,  }} labelText={'Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university password?</Text>
           <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
-
           {!isLoading ? <View style={{ marginTop: 50, marginBottom: 30 }}>
             <Button onClick={() => {
               handleSignup()

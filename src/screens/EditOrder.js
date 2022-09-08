@@ -70,7 +70,13 @@ export default function EditOrder({ route }) {
   const handleEditProduct = async () => {
     
     const combineImages = product.picture.concat(editProductImages)
-    if (name && description && price && location && allTags && combineImages) {
+    if ((Array.isArray(combineImages) && !combineImages.length)) {
+      Snackbar.show({
+        text: "Please select the product images", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+      });
+      return
+    }
+    if (name && description && price && location && allTags) {
       setLoading(true)
       // product.picture and redux picture merge then edit product
       const editProductData = {
