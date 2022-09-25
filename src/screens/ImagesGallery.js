@@ -44,7 +44,6 @@ export default function ImagesGallery({route}) {
 
   const productImages = useMemo(() => {
     if ((product && Array.isArray(product?.picture) && product.picture.length) && !(Array.isArray(editProductImages) && editProductImages.length) && !(Array.isArray(newProductImages) && newProductImages.length)) {
-      console.log('dododo');
       return [...product?.picture]
     } else if (!(product && Array.isArray(product?.picture) && product.picture.length) && !(Array.isArray(newProductImages) && newProductImages.length) && (Array.isArray(editProductImages) && editProductImages.length)) {
       return [...editProductImages]

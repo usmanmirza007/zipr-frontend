@@ -30,5 +30,6 @@ const images = {
   deliveryMan: require('../assets/images/deliveryMan.png'),
   processing: require('../assets/images/processing.png'),
   line: require('../assets/images/line.png'),
+  heartFill: require('../assets/images/heartFill.png'),
 };
 export default images;

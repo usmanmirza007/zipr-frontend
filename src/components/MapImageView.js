@@ -36,7 +36,7 @@ const MapImageView = ({ data }) => {
             {parseFloat(data.price).toFixed(2)}
           </Text>
         </View>
-        <Image resizeMode='contain' style={{ marginRight: 10, width: 30, height: 30 }} source={images.option} />
+        {/* <Image resizeMode='contain' style={{ marginRight: 10, width: 30, height: 30 }} source={images.option} /> */}
       </View>
     </TouchableOpacity>
 

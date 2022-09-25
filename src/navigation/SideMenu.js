@@ -12,6 +12,7 @@ import { customer, vender, } from '../constants/userType';
 import { loggedIn, logout } from '../store/reducer/mainSlice';
 import { useChangeStatusMutation, useGetUserQuery } from '../store/slice/api';
 import Snackbar from 'react-native-snackbar';
+import { emptySplitApi } from '../store/slice/emptySplitApi';
 
 const SideMenu = () => {
   const navigation = useNavigation()
@@ -83,7 +84,12 @@ const SideMenu = () => {
           <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Orders</Text>
         </TouchableOpacity>
         <View style={{ borderColor: '#2D2D2D', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />
-        <TouchableOpacity onPress={() => { dispatch(logout(null)) }} style={{ marginLeft: 15, marginTop: 20 }}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(emptySplitApi.util.resetApiState())
+            dispatch(logout(null))
+          }}
+          style={{ marginLeft: 15, marginTop: 20 }}>
           <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium, }}>Log Out</Text>
         </TouchableOpacity>
         <View style={{ borderColor: '#2D2D2D', opacity: 0.2, borderWidth: .5, marginTop: 20, }} />

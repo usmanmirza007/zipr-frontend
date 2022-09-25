@@ -16,7 +16,7 @@ export const emptySplitApi = createApi({
         const token = store.getState().user.isLoggedIn
         const isLogin = isJwtExpired(token.token)
         // store.dispatch(createApi.util.resetApiState())
-        console.log('token', token, isLogin);
+        // console.log('token', token, isLogin);
         if (!isLogin) {
           headers.set('authorization', `Bearer ${token.token}`)
         } else {
@@ -40,6 +40,8 @@ export const emptySplitApi = createApi({
     'Order',
     'OrderDelete',
     'Payment',
-    'GetUser'
+    'GetUser',
+    'Favorite',
+    'FavoriteOfUser'
   ],
 })

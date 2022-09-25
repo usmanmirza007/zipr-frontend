@@ -71,6 +71,19 @@ export default function AddOrder() {
     }
 
     if (name && description && price && location && allTags) {
+
+      if (price.split(".").length - 1 > 1 ) {
+        Snackbar.show({
+          text: "Please enter a valid dicimal price.", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+        });
+        return
+      }
+      if (!/^[0-9]/.test(price)) {
+        Snackbar.show({
+          text: "Price should be positive value.", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+        });
+        return
+      }
       setLoading(true)
       const addProductData = {
         category: addCategory ? addCategory : selectedCategory,

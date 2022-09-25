@@ -85,11 +85,11 @@ export default function Login() {
         barStyle="light-content"
         backgroundColor="#403FFC"
       />
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flex: 1}}>
 
-        <ImageBackground source={images.vender} style={{ height: 200 }} resizeMode='stretch' >
+        <View style={{ height: 200, backgroundColor: '#403FFC',  }} >
           <Text style={{ fontSize: 28, fontFamily: commonStyle.fontFamily.bold, color: '#fff', marginTop: 140, marginLeft: 25 }}>Login</Text>
-        </ImageBackground>
+        </View>
 
         <View style={{ marginHorizontal: 25 }}>
           <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Email</Text>
@@ -98,12 +98,12 @@ export default function Login() {
           <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
           <Text style={{ fontSize: 13, marginTop: 50, textAlign: 'center', color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Don’t have a profile?  <Text onPress={() => navigation.navigate('Signup')} style={{ fontSize: 13, textDecorationLine: 'underline', color: '#403FFC', fontFamily: commonStyle.fontFamily.regular }}>Sign Up</Text></Text>
 
-          {!isLoading ? <View style={{ marginTop: 250, marginBottom: 30 }}>
+        </View>
+          {!isLoading ? <View style={{ flexGrow: 1, justifyContent: 'flex-end', marginHorizontal: 25, marginBottom: 30 }}>
             <Button onClick={() => {
               handleLogin()
             }} text={`Login`} />
-          </View> : <ActivityIndicator style={{ marginVertical: 30, marginTop: 260 }} size={'large'} color={'green'} />}
-        </View>
+          </View> : <ActivityIndicator style={{ flexGrow: 1, justifyContent: 'flex-end', marginBottom: 30 }} size={'large'} color={'green'} />}
       </ScrollView>
 
     </View>

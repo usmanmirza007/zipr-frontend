@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -11,14 +11,13 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
-import { useSelector } from 'react-redux';
 
 import commonStyle from '../constants/commonStyle';
 import images from '../constants/images';
 import Button from '../components/Button';
 import MyStatusBar from '../components/MyStatusBar';
 import { orderPending } from '../constants/userType';
-import { useAddOrderMutation, useGetOrdersPendingQuery, useMakeFavoriteProductMutation } from '../store/slice/api';
+import { useAddOrderMutation, useGetFavoriteProductOfUserQuery, useGetFavoriteProductQuery, useGetOrdersPendingQuery, useGetUserQuery, useMakeFavoriteProductMutation } from '../store/slice/api';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -31,7 +30,19 @@ const OrderDetails = ({ route }) => {
   const [makeFavoriteProduct] = useMakeFavoriteProductMutation();
   const { data: orderData, isLoading: isOrderLoading, } = useGetOrdersPendingQuery()
   const singlePendingOrder = orderData ?? {}
-  const orderId = useSelector((state) => state.user.orderId)
+  const { data: favoriteProductData, isLoading, isError } = useGetFavoriteProductQuery()
+  const favoriteProducts = favoriteProductData ?? []
+  const { data: favoriteProductUserData } = useGetFavoriteProductOfUserQuery()
+  const favoriteProductsOfUser = favoriteProductUserData ?? []
+  const { data: userData, isUserLoading } = useGetUserQuery()
+  const user = userData ?? {}
+  const isFavourite = useMemo(() => {
+    if (Array.isArray(favoriteProductsOfUser) && favoriteProductsOfUser.length) {
+      return favoriteProductsOfUser.filter((item) => item.productId == product.id && item.userId == user.id)
+    } else {
+      return []
+    }
+  }, [product, favoriteProductsOfUser])
 
   const handleAddOrder = async () => {
 
@@ -72,13 +83,13 @@ const OrderDetails = ({ route }) => {
 
     if (product && product.id) {
       const addFavoriteData = {
-        favorite: true,
+        favorite: Array.isArray(isFavourite) && isFavourite?.length ? false : true,
         productId: product.id
       }
       makeFavoriteProduct(addFavoriteData).unwrap()
         .then((data) => {
           Snackbar.show({
-            text: "Product has been favorite", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+            text: data.success ? "Product has been added to favorites list" : "Product has been remove to favorites list", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
           });
         })
         .catch((error) => {
@@ -202,7 +213,8 @@ const OrderDetails = ({ route }) => {
                   onPress={() => {
                     handleFavoriteProduct(product)
                   }} style={{ backgroundColor: '#D9D9D9', marginRight: 15, width: 50, height: 50, borderRadius: 50, alignItems: 'center', justifyContent: 'center' }}>
-                  <Image resizeMode='stretch' style={{ height: 35, width: 35, marginTop: 10 }} source={images.heart} />
+                  {Array.isArray(isFavourite) && isFavourite.length ? <Image resizeMode='stretch' style={{ height: 30, width: 30, marginTop: 4 }} source={images.heartFill} />
+                    : <Image resizeMode='stretch' style={{ height: 35, width: 35, marginTop: 10 }} source={images.heart} />}
                 </TouchableOpacity>
                 <View style={{ width: '80%' }}>
                   <Button onClick={() => {

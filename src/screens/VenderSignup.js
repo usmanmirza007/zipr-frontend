@@ -96,7 +96,7 @@ export default function VenderSignup() {
         barStyle="light-content"
         backgroundColor="#403FFC"
       />
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flex: 1}}>
 
         <ImageBackground source={images.vender} style={{ height: 200 }} resizeMode='stretch' >
           <TouchableOpacity onPress={() => {navigation.goBack()}}>
@@ -106,8 +106,6 @@ export default function VenderSignup() {
         </ImageBackground>
 
         <View style={{ marginHorizontal: 25 }}>
-          {/* <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your vendor name?</Text>
-          <TextInputs style={{ marginTop: 17,  }} labelText={'Vendor Name'} state={vendorName} setState={setVendorName} /> */}
           <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 
@@ -118,12 +116,12 @@ export default function VenderSignup() {
           <TextInputs style={{ marginTop: 17,  }} labelText={'Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university password?</Text>
           <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
-          {!isLoading ? <View style={{ marginTop: 50, marginBottom: 30 }}>
+        </View>
+        {!isLoading ? <View style={{ flexGrow: 1, justifyContent: 'flex-end', marginHorizontal: 25, marginBottom: 30 }}>
             <Button onClick={() => {
               handleSignup()
             }} text={`Create Account`} />
-          </View> :<ActivityIndicator style={{marginVertical: 30, marginTop: 70}} size={'large'} color={'green'} />}
-        </View>
+          </View> : <ActivityIndicator style={{ flexGrow: 1, justifyContent: 'flex-end', marginBottom: 30 }} size={'large'} color={'green'} />}
       </ScrollView>
     </View>
   );

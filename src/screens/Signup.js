@@ -25,7 +25,7 @@ export default function Signup() {
 
   const navigation = useNavigation();
 
-  const handleSingup = () => {
+  const handleSignup = () => {
     if (first) {
       navigation.navigate("CustomerSignup")
     } else if (second) {
@@ -39,14 +39,15 @@ export default function Signup() {
         barStyle="light-content"
         backgroundColor="#403FFC"
       />
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flex: 1 }}>
 
-        <ImageBackground source={images.vender} style={{ height: 200 }} resizeMode='stretch' >
-        </ImageBackground>
+      <View style={{ height: 200, backgroundColor: '#403FFC',  }} >
+
+        </View>
         <Text style={{ fontSize: 28, fontFamily: commonStyle.fontFamily.bold, color: '#000', marginTop: 30, marginLeft: 25 }}>Sign Up</Text>
 
         <View style={{ marginHorizontal: 25 }}>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <RadioButton
               style={{ marginVertical: 30 }}
               formHorizontal={false}
@@ -71,11 +72,11 @@ export default function Signup() {
           </View>
           <Text style={{ fontSize: 13, marginTop: 0, textAlign: 'center', color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Already have a profile? <Text onPress={() => navigation.navigate('Login')} style={{ fontSize: 13, textDecorationLine: 'underline', color: '#403FFC', fontFamily: commonStyle.fontFamily.regular }}>Login</Text></Text>
 
-          <View style={{ marginTop: 310 }}>
-            <Button onClick={() => {
-              handleSingup()
-            }} text={`Let's Continue`} />
-          </View>
+        </View>
+        <View style={{ flexGrow: 1, justifyContent: 'flex-end', marginHorizontal: 25, marginBottom: 30 }}>
+          <Button onClick={() => {
+            handleSignup()
+          }} text={`Let's Continue`} />
         </View>
       </ScrollView>
     </View>

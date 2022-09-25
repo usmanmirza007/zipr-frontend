@@ -94,7 +94,7 @@ export default function CustomerSignup() {
         barStyle="light-content"
         backgroundColor="#403FFC"
       />
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flex: 1}}>
 
         <ImageBackground source={images.customer} style={{ height: 200 }} resizeMode='stretch' >
           <TouchableOpacity onPress={() => { navigation.goBack() }}>
@@ -115,12 +115,12 @@ export default function CustomerSignup() {
           <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university password?</Text>
           <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
 
-          {!isLoading ? <View style={{ marginTop: 170, marginBottom: 30 }}>
+        </View>
+        {!isLoading ? <View style={{ flexGrow: 1, justifyContent: 'flex-end', marginHorizontal: 25, marginBottom: 30 }}>
             <Button onClick={() => {
               handleSignup()
             }} text={`Create Account`} />
-          </View> :<ActivityIndicator style={{marginVertical: 30, marginTop: 170}} size={'large'} color={'green'} />}
-        </View>
+          </View> : <ActivityIndicator style={{ flexGrow: 1, justifyContent: 'flex-end', marginBottom: 30 }} size={'large'} color={'green'} />}
       </ScrollView>
     </View>
   );

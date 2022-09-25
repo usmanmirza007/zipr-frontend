@@ -254,6 +254,7 @@ export const api = emptySplitApi.injectEndpoints({
           }
         }
       },
+      invalidatesTags: ['Favorite', 'FavoriteOfUser']
     }),
 
     getFavoriteProduct: builder.query({
@@ -263,6 +264,17 @@ export const api = emptySplitApi.injectEndpoints({
           method: 'GET',
         }
       },
+      providesTags: ['Favorite', 'FavoriteOfUser']
+    }),
+
+    getFavoriteProductOfUser: builder.query({
+      query: () => {
+        return {
+          url: `/users/userFavorite`,
+          method: 'GET',
+        }
+      },
+      providesTags: ['FavoriteOfUser', 'Favorite']
     }),
 
     getOrdersPending: builder.query({
@@ -294,6 +306,7 @@ export const {
   useGetAllOrdersQuery,
   useGetFavoriteProductQuery,
   useGetOrdersPendingQuery,
+  useGetFavoriteProductOfUserQuery,
   useEditProductMutation,
   useChangeStatusMutation,
   useAddPaymentMutation,
