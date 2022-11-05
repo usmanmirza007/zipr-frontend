@@ -17,7 +17,7 @@ import images from '../constants/images';
 import Button from '../components/Button';
 import MyStatusBar from '../components/MyStatusBar';
 import { orderPending } from '../constants/userType';
-import { useAddOrderMutation, useGetFavoriteProductOfUserQuery, useGetFavoriteProductQuery, useGetOrdersPendingQuery, useGetUserQuery, useMakeFavoriteProductMutation } from '../store/slice/api';
+import { useAddOrderMutation, useGetFavoriteProductQuery, useGetOrdersPendingQuery, useGetUserQuery, useMakeFavoriteProductMutation } from '../store/slice/api';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -32,17 +32,15 @@ const OrderDetails = ({ route }) => {
   const singlePendingOrder = orderData ?? {}
   const { data: favoriteProductData, isLoading, isError } = useGetFavoriteProductQuery()
   const favoriteProducts = favoriteProductData ?? []
-  const { data: favoriteProductUserData } = useGetFavoriteProductOfUserQuery()
-  const favoriteProductsOfUser = favoriteProductUserData ?? []
-  const { data: userData, isUserLoading } = useGetUserQuery()
-  const user = userData ?? {}
+  // const { data: favoriteProductUserData } = useGetFavoriteProductOfUserQuery()
+  // const favoriteProductsOfUser = favoriteProductUserData ?? []
+  // const { data: userData, isUserLoading } = useGetUserQuery()
+  // const user = userData ?? {}
   const isFavourite = useMemo(() => {
-    if (Array.isArray(favoriteProductsOfUser) && favoriteProductsOfUser.length) {
-      return favoriteProductsOfUser.filter((item) => item.productId == product.id && item.userId == user.id)
-    } else {
-      return []
+    if (Array.isArray(favoriteProducts) && favoriteProducts.length) {
+      return favoriteProducts.filter((item) => item.productId == product.id)
     }
-  }, [product, favoriteProductsOfUser])
+  }, [product, favoriteProducts])
 
   const handleAddOrder = async () => {
 

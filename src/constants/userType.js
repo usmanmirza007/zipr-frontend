@@ -7,4 +7,5 @@
   export const orderCaptured = "CAPTUREED"
   export const orderProcessing = "PROOCESSING"
   export const orderDispatched = "DISPATCHED"
-  export const orderCompleted = "DELIVERED"
+  export const orderDeliered = "DELIVERED"
+  export const orderCompleted = "COMPLETED"

@@ -42,6 +42,7 @@ export const emptySplitApi = createApi({
     'Payment',
     'GetUser',
     'Favorite',
-    'FavoriteOfUser'
+    'FavoriteOfUser',
+    'UpdateOrder'
   ],
 })

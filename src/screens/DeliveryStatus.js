@@ -12,7 +12,7 @@ import images from '../constants/images';
 
 import commonStyle from '../constants/commonStyle';
 import Header from '../components/Header';
-import { orderCaptured, orderCompleted, orderDispatched, orderProcessing } from '../constants/userType';
+import { orderCaptured, orderCompleted, orderDeliered, orderDispatched, orderProcessing } from '../constants/userType';
 
 export default function DeliveryStatus({route}) {
 
@@ -43,7 +43,7 @@ export default function DeliveryStatus({route}) {
               </View>
               <Text style={{ marginLeft: 15, fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Order is being processed</Text>
             </View>
-            <TouchableOpacity style={{ backgroundColor: status == orderProcessing ?  '#4CD964' : 'grey', width: 35, height: 35, borderRadius: 35, alignItems: 'center', justifyContent: 'center', }}>
+            <TouchableOpacity style={{ backgroundColor: status == orderDispatched ?  '#4CD964' : 'grey', width: 35, height: 35, borderRadius: 35, alignItems: 'center', justifyContent: 'center', }}>
               <Image source={images.checkmark} style={{ width: 25, height: 25 }} />
             </TouchableOpacity>
           </View>
@@ -56,7 +56,7 @@ export default function DeliveryStatus({route}) {
               </View>
               <Text style={{ marginLeft: 15, fontSize: 16, width: 200, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Order is being delivered Your package is on it’s way!</Text>
             </View>
-            <TouchableOpacity style={{ backgroundColor: status == orderDispatched ?  '#4CD964' : 'grey' , width: 35, height: 35, borderRadius: 35, alignItems: 'center', justifyContent: 'center', }}>
+            <TouchableOpacity style={{ backgroundColor: status == orderDeliered ?  '#4CD964' : 'grey' , width: 35, height: 35, borderRadius: 35, alignItems: 'center', justifyContent: 'center', }}>
               <Image source={images.checkmark} style={{ width: 25, height: 25 }} />
             </TouchableOpacity>
           </View>

@@ -31,5 +31,6 @@ const images = {
   processing: require('../assets/images/processing.png'),
   line: require('../assets/images/line.png'),
   heartFill: require('../assets/images/heartFill.png'),
+  circular: require('../assets/images/circular.png'),
 };
 export default images;

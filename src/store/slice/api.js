@@ -213,7 +213,7 @@ export const api = emptySplitApi.injectEndpoints({
           method: 'GET',
         }
       },
-      providesTags: ['Order', 'OrderDelete', 'Payment']
+      providesTags: ['Order', 'OrderDelete', 'Payment', 'UpdateOrder']
     }),
 
     deleteOrder: builder.mutation({
@@ -267,15 +267,15 @@ export const api = emptySplitApi.injectEndpoints({
       providesTags: ['Favorite', 'FavoriteOfUser']
     }),
 
-    getFavoriteProductOfUser: builder.query({
-      query: () => {
-        return {
-          url: `/users/userFavorite`,
-          method: 'GET',
-        }
-      },
-      providesTags: ['FavoriteOfUser', 'Favorite']
-    }),
+    // getFavoriteProductOfUser: builder.query({
+    //   query: () => {
+    //     return {
+    //       url: `/users/userFavorite`,
+    //       method: 'GET',
+    //     }
+    //   },
+    //   providesTags: ['FavoriteOfUser', 'Favorite']
+    // }),
 
     getOrdersPending: builder.query({
       query: () => {
@@ -286,6 +286,40 @@ export const api = emptySplitApi.injectEndpoints({
       },
       providesTags: ['Order', 'OrderDelete', 'Payment']
     }),
+
+    getAllTags: builder.query({
+      query: () => {
+        return {
+          url: `/users/tags`,
+          method: 'GET',
+        }
+      },
+    }),
+
+    getSearchProduct: builder.query({
+      query: (tag) => {
+        return {
+          url: `/users/search/${tag}`,
+          method: 'GET',
+        }
+      },
+      
+    }),
+    
+    updateOrderStatus: builder.mutation({
+      query: (args) => {
+        return {
+          url: '/users/orderStatus',
+          method: 'PATCH',
+          body: {
+            orderStatus: args.orderStatus,
+            orderId: args.orderId,
+          }
+        }
+      },
+      invalidatesTags: ['UpdateOrder']
+    }),
+
     
   }),
   overrideExisting: true,
@@ -305,12 +339,15 @@ export const {
   useGetOrdersQuery,
   useGetAllOrdersQuery,
   useGetFavoriteProductQuery,
+  useGetAllTagsQuery,
+  useGetSearchProductQuery,
   useGetOrdersPendingQuery,
-  useGetFavoriteProductOfUserQuery,
+  // useGetFavoriteProductOfUserQuery,
   useEditProductMutation,
   useChangeStatusMutation,
   useAddPaymentMutation,
   useAddOrderMutation,
   useDeleteOrderMutation,
+  useUpdateOrderStatusMutation,
   useMakeFavoriteProductMutation,
 } = api
