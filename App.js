@@ -30,6 +30,8 @@ import CompleteOrder from './src/screens/CompleteOrder';
 import DeliveryStatus from './src/screens/DeliveryStatus';
 import PastOrders from './src/screens/PastOrders';
 import ImagesGallery from './src/screens/ImagesGallery';
+import Message from './src/screens/Message';
+import MessagesList from './src/screens/MessageList';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -45,12 +47,13 @@ export default () => {
     return (
       <>
         <Drawer.Navigator
-        
+          
           style={{ flex: 1 }}
           drawerContent={(props) => <CustomDrawerContent {...props} />}
           drawerStyle={{
             backgroundColor: 'white',
             width: width * 0.8,
+            
           }}
           screenOptions={{
             activeTintcolor: 'white',
@@ -84,13 +87,14 @@ export default () => {
           <Stack.Screen name="EditOrder" component={EditOrder} options={{manimationEnabled: false, headerShown: false}} />
           <Stack.Screen name="Checkout" component={Checkout} options={{manimationEnabled: false, headerShown: false}} />
           <Stack.Screen name="CompleteOrder" component={CompleteOrder} options={{manimationEnabled: false, headerShown: false}} />
-          <Stack.Screen name="DeliveryStatus" component={DeliveryStatus} options={{manimationEnabled: false, headerShown: false}} />
+          <Drawer.Screen name="DeliveryStatus" component={DeliveryStatus} options={{manimationEnabled: false, headerShown: false}} />
+          <Stack.Screen name="Message" component={Message} options={{manimationEnabled: false, headerShown: false}} />
+          <Stack.Screen name="MessageList" component={MessagesList} options={{manimationEnabled: false, headerShown: false}} />
         </Drawer.Navigator>
 
       </>
     );
   }
-
 
   function CustomerStack() {
     return (
@@ -105,7 +109,6 @@ export default () => {
       <Stack.Navigator>
         <Stack.Screen name="Homes" component={AppStack} options={{headerShown: false, animationEnabled: false }} />
         <Stack.Screen name="ImagesGallery" component={ImagesGallery} options={{manimationEnabled: false, headerShown: false}} />
-
       </Stack.Navigator>
     )
   }

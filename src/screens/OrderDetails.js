@@ -34,14 +34,14 @@ const OrderDetails = ({ route }) => {
   const favoriteProducts = favoriteProductData ?? []
   // const { data: favoriteProductUserData } = useGetFavoriteProductOfUserQuery()
   // const favoriteProductsOfUser = favoriteProductUserData ?? []
-  // const { data: userData, isUserLoading } = useGetUserQuery()
-  // const user = userData ?? {}
+  const { data: userData, isUserLoading } = useGetUserQuery()
+  const user = userData ?? {}
   const isFavourite = useMemo(() => {
     if (Array.isArray(favoriteProducts) && favoriteProducts.length) {
       return favoriteProducts.filter((item) => item.productId == product.id)
     }
   }, [product, favoriteProducts])
-
+  
   const handleAddOrder = async () => {
 
     if (product.name && product.description && product.price && product.picture && quantity) {
@@ -117,6 +117,20 @@ const OrderDetails = ({ route }) => {
             })
             }
           </ScrollView>
+          {user.id == product.venderId ? null : <TouchableOpacity style={[{ backgroundColor: '#fff', zIndex: 111, position: 'absolute', top: 300, right: 20, width: 50, elevation: 3, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }, commonStyle.shadow]}
+            onPress={() => { navigation.navigate('Message', {venderId: product.venderId, roomId: null, receiverId: null}) }}>
+            <Image
+              source={images.chat}
+              resizeMode={'contain'}
+              style={{
+                width: 25,
+                height: 25,
+                tintColor: '#403FFC',
+                alignSelf: 'center',
+              }}
+            />
+          </TouchableOpacity>}
+
           <TouchableOpacity onPress={() => { navigation.goBack() }} style={[{ position: 'absolute', top: 50, left: 20, backgroundColor: '#fff', width: 50, elevation: 3, height: 50, borderRadius: 50 / 2 }, commonStyle.shadow]} >
 
             <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#000', alignSelf: 'center', marginLeft: -4, marginTop: 10 }} />

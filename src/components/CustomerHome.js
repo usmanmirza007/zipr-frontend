@@ -4,6 +4,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
+  Image,
+  Dimensions
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +16,7 @@ import { useGetUserQuery } from '../store/slice/api';
 import FollowingTab from './FollowingTab';
 import PopularTab from './PopularTab';
 import FavouriteTab from './FavouriteTab';
+const { width, height } = Dimensions.get('window');
 
 
 const CustomerHome = () => {
@@ -34,10 +37,23 @@ const CustomerHome = () => {
   };
 
   return (
-    <View style={{ height: '100%' }}>
+    <View style={{ height: height }}>
       <HomeHeader title={`Welcome, ${user?.firstName ? user.firstName : ''}`} image={images.frame} navigateText='Checkout' />
+      
+      <TouchableOpacity style={[{  backgroundColor: '#fff',  position: 'absolute', zIndex: 111, bottom: 5, right: 25 ,width: 50, elevation: 3, height: 50, borderRadius: 50 / 2, alignItems: 'center', justifyContent: 'center' }, commonStyle.shadow]} 
+        onPress={() => { navigation.navigate('MessageList') }}>
 
-
+          <Image
+            source={images.chat}
+            resizeMode={'contain'}
+            style={{
+              width: 25,
+              height: 25,
+              tintColor: '#403FFC',
+              alignSelf: 'center',
+            }}
+          />
+        </TouchableOpacity>
       <View style={{ flexDirection: 'row', marginHorizontal: 25, marginTop: 17 }}>
         <TouchableOpacity style={{}}
           onPress={() => {
@@ -62,6 +78,7 @@ const CustomerHome = () => {
         </TouchableOpacity>
       </View>
       {TabView()}
+
     </View>
   )
 };

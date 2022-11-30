@@ -320,6 +320,33 @@ export const api = emptySplitApi.injectEndpoints({
       invalidatesTags: ['UpdateOrder']
     }),
 
+    getChatList: builder.query({
+      query: () => {
+        return {
+          url: `/chat/list`,
+          method: 'GET',
+        }
+      },
+    }),
+
+    getSingleUserChat: builder.query({
+      query: (roomId) => {
+        return {
+          url: `/chat/signleUserChat/${roomId}`,
+          method: 'GET',
+        }
+      },
+    }),
+
+    getSingleUser: builder.query({
+      query: (userId) => {
+        return {
+          url: `/chat/single/${userId}`,
+          method: 'GET',
+        }
+      },
+    }),
+
     
   }),
   overrideExisting: true,
@@ -343,6 +370,9 @@ export const {
   useGetSearchProductQuery,
   useGetOrdersPendingQuery,
   // useGetFavoriteProductOfUserQuery,
+  useGetSingleUserQuery,
+  useGetChatListQuery,
+  useGetSingleUserChatQuery,
   useEditProductMutation,
   useChangeStatusMutation,
   useAddPaymentMutation,

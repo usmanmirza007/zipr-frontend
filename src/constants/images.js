@@ -32,5 +32,6 @@ const images = {
   line: require('../assets/images/line.png'),
   heartFill: require('../assets/images/heartFill.png'),
   circular: require('../assets/images/circular.png'),
+  send: require('../assets/images/send.png'),
 };
 export default images;

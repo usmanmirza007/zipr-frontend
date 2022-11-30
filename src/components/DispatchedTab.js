@@ -65,7 +65,7 @@ const DispatchedTab = () => {
             <View key={index} style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: 20, alignItems: 'center' }}>
               <TouchableOpacity onPress={() => {
                 navigation.navigate('DeliveryStatus', { status: order.status })
-              }} style={{ flexDirection: 'row' }}>
+              }} style={{ flexDirection: 'row', flex: 1 }}>
                 {/* reduce the picture code */}
                 <Image source={{ uri: order?.OrderItem[0]?.product?.picture[0] }} style={{ width: 100, height: 100, borderRadius: 10 }} />
                 <View style={{ marginLeft: 16 }}>

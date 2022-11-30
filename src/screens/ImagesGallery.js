@@ -94,7 +94,6 @@ export default function ImagesGallery({route}) {
         store.dispatch(editProductImages(url))
       }
       setImageLoading(false)
-      console.log('fofof1', url);
 
     } catch (error) {
       setImageLoading(false)

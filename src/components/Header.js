@@ -10,12 +10,12 @@ const Header = ({ title, image }) => {
   return (
     <View
     style={{
-      // marginTop: StatusBar.currentHeight + getStatusBarHeight(true),
+      marginTop: StatusBar.currentHeight + getStatusBarHeight(true),
       flexDirection: 'row',
       justifyContent: 'center',
       backgroundColor: '#403FFC',
       alignItems: 'center',
-      height: 100,
+      height: 70,
     }}>
       <StatusBar translucent barStyle={"light-content"} backgroundColor={ '#403FFC'} />
 

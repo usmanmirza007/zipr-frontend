@@ -9,3 +9,4 @@
   export const orderDispatched = "DISPATCHED"
   export const orderDeliered = "DELIVERED"
   export const orderCompleted = "COMPLETED"
+  export const orderDeliveryAcceptByCustomer = "COMPLETED_ORDER"

@@ -61,7 +61,7 @@ const PastOrders = () => {
             <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', }}>Dispatched</Text>
             {selectTab === 'dispatched' && <View style={{ backgroundColor: '#403FFC', height: 3, marginTop: 5, borderRadius: 2 }} />}
           </TouchableOpacity>}
-          {user.userType === vender && <TouchableOpacity style={{ marginLeft: 20 }}
+          {<TouchableOpacity style={{ marginLeft: 20 }}
             onPress={() => {
               setSelectTab('delivered')
             }}>
