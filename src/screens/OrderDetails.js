@@ -53,7 +53,9 @@ const OrderDetails = ({ route }) => {
         quantity: quantity,
         orderStatus: orderPending,
         orderId: singlePendingOrder && singlePendingOrder.OrderItem ? singlePendingOrder.OrderItem[0].orderId : null,
-        productId: product.id
+        productId: product.id,
+        venderId: product.venderId,
+
       }
       addOrder(addOrderData).unwrap()
         .then((data) => {

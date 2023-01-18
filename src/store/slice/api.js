@@ -190,6 +190,7 @@ export const api = emptySplitApi.injectEndpoints({
             quantity: args.quantity,
             orderId: args.orderId,
             productId: args.productId,
+            venderId: args.venderId,
           }
         }
       },
@@ -206,10 +207,20 @@ export const api = emptySplitApi.injectEndpoints({
       providesTags: ['Order', 'OrderDelete', 'Payment']
     }),
 
-    getAllOrders: builder.query({
+    getAllCustomerOrders: builder.query({
       query: () => {
         return {
-          url: `/users/orders`,
+          url: `/users/customerOrders`,
+          method: 'GET',
+        }
+      },
+      providesTags: ['Order', 'OrderDelete', 'Payment', 'UpdateOrder']
+    }),
+
+    getAllVendorOrders: builder.query({
+      query: () => {
+        return {
+          url: `/users/vendorOrders`,
           method: 'GET',
         }
       },
@@ -237,6 +248,7 @@ export const api = emptySplitApi.injectEndpoints({
             name: args.name,
             expireDate: args.expireDate,
             price: args.price,
+            payment: args.payment
           }
         }
       },
@@ -364,7 +376,8 @@ export const {
   useGetAllProductQuery,
   useGetCategoryQuery,
   useGetOrdersQuery,
-  useGetAllOrdersQuery,
+  useGetAllCustomerOrdersQuery,
+  useGetAllVendorOrdersQuery,
   useGetFavoriteProductQuery,
   useGetAllTagsQuery,
   useGetSearchProductQuery,
