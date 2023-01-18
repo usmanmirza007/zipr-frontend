@@ -52,6 +52,7 @@ export default function AddOrder() {
     if (Array.isArray(category) && category.length) {
       addCategory.push(...category, { label: "Other", value: "Other" })
     }
+    addCategory.shift()
     return addCategory
   }, [category])
 

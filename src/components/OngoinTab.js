@@ -10,27 +10,36 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import commonStyle from '../constants/commonStyle';
-import { useGetAllOrdersQuery, useGetUserQuery, useUpdateOrderStatusMutation } from '../store/slice/api';
-import { orderCaptured, orderDispatched, vender } from '../constants/userType';
+import { useGetAllCustomerOrdersQuery, useGetAllVendorOrdersQuery, useGetUserQuery, useUpdateOrderStatusMutation } from '../store/slice/api';
+import { customer, orderCaptured, orderDispatched, vender } from '../constants/userType';
 import Snackbar from 'react-native-snackbar';
 
 
 const OngoingTab = () => {
   const navigation = useNavigation();
 
-  const { data: orderData, isLoading: isOrderLoading, isError, isFetching } = useGetAllOrdersQuery()
-  const order = orderData ?? {}
+  const { data: customerOrderData, isLoading: isOrderLoading, isError, isFetching } = useGetAllCustomerOrdersQuery()
+  const customerOrder = customerOrderData ?? {}
+  const { data: vendorOrderData, isLoading: isVendorOrderLoading, } = useGetAllVendorOrdersQuery()
+  const vendorOrder = vendorOrderData ?? {}
   const { data: userData, isLoading: isUserLoading, } = useGetUserQuery()
   const user = userData ?? {}
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
 
   const captureOrders = useMemo(() => {
-    if (Array.isArray(order.orders) && order.orders.length) {
-
-      return order.orders.filter((order) => order.status === orderCaptured)
+    if (user) {
+      if (user.userType == customer) {
+        if (Array.isArray(customerOrder.orders) && customerOrder.orders.length) {
+          return customerOrder.orders.filter((order) => order.status === orderCaptured)
+        }
+      } else {
+        if (Array.isArray(vendorOrder.orders) && vendorOrder.orders.length) {
+          return vendorOrder.orders.filter((order) => order.status === orderCaptured)
+        }
+      } 
     }
-  }, [order])
-
+  }, [customerOrder, vendorOrder, user])
+  
   const handleUpdateOrderStatus = async (orderId) => {
 
     const updateOrderStatusData = {
@@ -48,6 +57,7 @@ const OngoingTab = () => {
         console.log('err', error);
       });
   }
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -69,7 +79,7 @@ const OngoingTab = () => {
                 <Image source={{ uri: order?.OrderItem[0]?.product?.picture[0] }} style={{ width: 100, height: 100, borderRadius: 10 }} />
                 <View style={{ marginLeft: 16 }}>
                   <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Item</Text>
-                  <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>{order.OrderItem && order.OrderItem.length} packs</Text>
+                  <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>{order?.OrderItem[0].quantity} packs</Text>
                   <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>R {parseFloat(order.price).toFixed(2)}</Text>
                 </View>
               </TouchableOpacity>

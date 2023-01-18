@@ -22,7 +22,7 @@ import MyStatusBar from '../components/MyStatusBar';
 import { useLoginMutation } from '../store/slice/api';
 import { loggedIn } from '../store/reducer/mainSlice';
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 
 export default function Login() {
   const [password, setPassword] = useState('');
@@ -79,34 +79,35 @@ export default function Login() {
 
   }
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <ScrollView contentContainerStyle={{ height: height }} style={{ flex: 1, backgroundColor: '#fff' }}>
+
       <MyStatusBar
         translucent
         barStyle="light-content"
         backgroundColor="#403FFC"
       />
-      <ScrollView contentContainerStyle={{ flex: 1}}>
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        <View>
+          <View style={{ height: 200, backgroundColor: '#403FFC', }} >
+            <Text style={{ fontSize: 28, fontFamily: commonStyle.fontFamily.bold, color: '#fff', marginTop: 140, marginLeft: 25 }}>Login</Text>
+          </View>
 
-        <View style={{ height: 200, backgroundColor: '#403FFC',  }} >
-          <Text style={{ fontSize: 28, fontFamily: commonStyle.fontFamily.bold, color: '#fff', marginTop: 140, marginLeft: 25 }}>Login</Text>
+          <View style={{ marginHorizontal: 25 }}>
+            <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Email</Text>
+            <TextInputs style={{ marginTop: 17 }} labelText={'Enter Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
+            <Text style={{ fontSize: 16, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Password</Text>
+            <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
+            <Text style={{ fontSize: 13, marginTop: 50, textAlign: 'center', color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Don’t have a profile?  <Text onPress={() => navigation.navigate('Signup')} style={{ fontSize: 13, textDecorationLine: 'underline', color: '#403FFC', fontFamily: commonStyle.fontFamily.regular }}>Sign Up</Text></Text>
+
+          </View>
         </View>
-
-        <View style={{ marginHorizontal: 25 }}>
-          <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>Email</Text>
-          <TextInputs style={{ marginTop: 17 }} labelText={'Enter Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
-          <Text style={{ fontSize: 16, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Password</Text>
-          <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
-          <Text style={{ fontSize: 13, marginTop: 50, textAlign: 'center', color: '#000', fontFamily: commonStyle.fontFamily.regular }}>Don’t have a profile?  <Text onPress={() => navigation.navigate('Signup')} style={{ fontSize: 13, textDecorationLine: 'underline', color: '#403FFC', fontFamily: commonStyle.fontFamily.regular }}>Sign Up</Text></Text>
-
-        </View>
-          {!isLoading ? <View style={{ flexGrow: 1, justifyContent: 'flex-end', marginHorizontal: 25, marginBottom: 30 }}>
-            <Button onClick={() => {
-              handleLogin()
-            }} text={`Login`} />
-          </View> : <ActivityIndicator style={{ flexGrow: 1, justifyContent: 'flex-end', marginBottom: 30 }} size={'large'} color={'green'} />}
-      </ScrollView>
-
-    </View>
+        {!isLoading ? <View style={{ flexGrow: 1, justifyContent: 'flex-end', marginHorizontal: 25, marginBottom: 30 }}>
+          <Button onClick={() => {
+            handleLogin()
+          }} text={`Login`} />
+        </View> : <ActivityIndicator style={{ flexGrow: 1, justifyContent: 'flex-end', marginBottom: 30 }} size={'large'} color={'green'} />}
+      </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
