@@ -24,7 +24,7 @@ import MyStatusBar from '../components/MyStatusBar';
 import { useSignupCustomerMutation } from '../store/slice/api';
 import { loggedIn } from '../store/reducer/mainSlice';
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('screen');
 
 export default function CustomerSignup() {
   const [name, setName] = useState('');
@@ -88,41 +88,42 @@ export default function CustomerSignup() {
 
   }
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <ScrollView contentContainerStyle={{ height: height }} style={{ flex: 1, backgroundColor: '#fff' }}>
       <MyStatusBar
         translucent
         barStyle="light-content"
         backgroundColor="#403FFC"
       />
-      <ScrollView contentContainerStyle={{ flex: 1}}>
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        <View>
+          <ImageBackground source={images.customer} style={{ height: 200 }} resizeMode='stretch' >
+            <TouchableOpacity onPress={() => { navigation.goBack() }}>
+              <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
+            </TouchableOpacity>
+            <Text style={{ fontSize: 28, fontFamily: commonStyle.fontFamily.bold, color: '#fff', marginTop: 100, marginLeft: 25 }}>Sign Up</Text>
+          </ImageBackground>
 
-        <ImageBackground source={images.customer} style={{ height: 200 }} resizeMode='stretch' >
-          <TouchableOpacity onPress={() => { navigation.goBack() }}>
-            <Image source={images.back} style={{ width: 30, height: 30, tintColor: '#fff', marginTop: 15, marginLeft: 20 }} />
-          </TouchableOpacity>
-          <Text style={{ fontSize: 28, fontFamily: commonStyle.fontFamily.bold, color: '#fff', marginTop: 100, marginLeft: 25 }}>Sign Up</Text>
-        </ImageBackground>
+          <View style={{ marginHorizontal: 25 }}>
+            <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-        <View style={{ marginHorizontal: 25 }}>
-          <Text style={{ fontSize: 15, fontFamily: commonStyle.fontFamily.medium, color: '#000', marginTop: 40 }}>What is your full name?</Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={name} setState={setName} />
+              <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surname'} state={surename} setState={setSurename} />
+            </View>
+            <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university email?</Text>
+            <TextInputs style={{ marginTop: 17, }} labelText={'Enter Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
+            <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university password?</Text>
+            <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
 
-            <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Name'} state={name} setState={setName} />
-            <TextInputs style={{ marginTop: 17, width: '45%' }} labelText={'Surname'} state={surename} setState={setSurename} />
           </View>
-          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university email?</Text>
-          <TextInputs style={{ marginTop: 17, }} labelText={'Enter Email'} state={email} setState={setEmail} keyBoardType={'email-address'} />
-          <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>What is your registered university password?</Text>
-          <TextInputs style={{ marginTop: 17 }} labelText={'Enter Password'} state={password} setState={setPassword} secure={true} />
-
         </View>
-        {!isLoading ? <View style={{ flexGrow: 1, justifyContent: 'flex-end', marginHorizontal: 25, marginBottom: 30 }}>
-            <Button onClick={() => {
-              handleSignup()
-            }} text={`Create Account`} />
-          </View> : <ActivityIndicator style={{ flexGrow: 1, justifyContent: 'flex-end', marginBottom: 30 }} size={'large'} color={'green'} />}
-      </ScrollView>
-    </View>
+        {!isLoading ? <View style={{ marginHorizontal: 25, marginBottom: 30 }}>
+          <Button onClick={() => {
+            handleSignup()
+          }} text={`Create Account`} />
+        </View> : <ActivityIndicator style={{ marginBottom: 30 }} size={'large'} color={'green'} />}
+      </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({

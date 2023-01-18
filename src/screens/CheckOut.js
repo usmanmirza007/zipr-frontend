@@ -74,20 +74,22 @@ export default function Checkout() {
               itemStyle = { marginBottom: 20 }
             }
             return (
-
-              <View key={index} style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: 20, alignItems: 'center' }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Image source={{ uri: order?.picture[0] }} style={{ width: 100, height: 100, borderRadius: 10 }} />
-                  <View style={{ marginLeft: 16 }}>
-                    <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>{order.name}</Text>
-                    <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>{order.quantity} packs</Text>
-                    <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>R {parseFloat(order.price).toFixed(2)}</Text>
+              <>
+                <View key={index} style={{ flexDirection: "row", justifyContent: 'space-between', marginTop: 20, alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image source={{ uri: order?.picture[0] }} style={{ width: 100, height: 100, borderRadius: 10 }} />
+                    <View style={{ marginLeft: 16 }}>
+                      <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>{order.name}</Text>
+                      <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>{order.quantity} packs</Text>
+                      <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>R {parseFloat(order.price).toFixed(2)}</Text>
+                    </View>
                   </View>
+                  <TouchableOpacity onPress={() => { handleDeleteOrder(order.orderItemId) }} style={{}}>
+                    <Image source={images.remove} style={{ width: 35, height: 35 }} />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => { handleDeleteOrder(order.orderItemId) }} style={{}}>
-                  <Image source={images.remove} style={{ width: 35, height: 35 }} />
-                </TouchableOpacity>
-              </View>
+
+              </>
             )
           }) : isOrderLoading ?
             <ActivityIndicator style={{ marginVertical: 30, marginTop: 200 }} size={'large'} color={'green'} />
@@ -101,17 +103,18 @@ export default function Checkout() {
               >No order yet!</Text>
             </View>
           }
-
-          <View style={{ marginTop: 50, marginBottom: 30, flexDirection: 'row', justifyContent: 'space-between' }}>
+          {Array.isArray(pendingOrders) && pendingOrders.length ? <View style={{ marginTop: 50, marginBottom: 30, flexDirection: 'row', justifyContent: 'space-between' }}>
             <View>
               <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.bold }}>Total</Text>
               <Text style={{ fontSize: 16, color: '#000', fontFamily: commonStyle.fontFamily.bold }}>R {totalPrice.toFixed(2)}</Text>
             </View>
-            <Button style={{ width: '70%' }} onClick={() => {
-              modalRef.current.getAlert();
+            <Button style={{ width: '70%' }}
+              onClick={() => {
+                modalRef.current.getAlert();
 
-            }} text={`Checkout`} />
-          </View>
+              }} text={`Checkout`} />
+          </View> : null}
+
           <AddCardModal
             ref={modalRef} totalPrice={totalPrice} />
         </View>

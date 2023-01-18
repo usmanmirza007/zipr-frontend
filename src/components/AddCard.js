@@ -52,7 +52,7 @@ const AddCardModal = forwardRef((props, ref) => {
   const handleCheckoutOrder = async () => {
 
     if (name && cardNumber && date && cvv && props?.totalPrice) {
-     
+
       const checkCvv = cvv % 1
       if (checkCvv) {
         Snackbar.show({
@@ -75,7 +75,8 @@ const AddCardModal = forwardRef((props, ref) => {
         price: props.totalPrice,
         cardNumber: cardNumber,
         cvv: cvv,
-        expireDate: date
+        expireDate: date,
+        payment: true
       }
       addPayment(addPaymentData).unwrap()
         .then(() => {
@@ -100,8 +101,43 @@ const AddCardModal = forwardRef((props, ref) => {
       });
     }
   }
+
+  const handleCheckoutOrderPayOnDelivery = async () => {
+
+    if (phoneNumber && address) {
+
+      const addPaymentData = {
+        name: 'name',
+        price: 'price',
+        cardNumber: 'cardNumber',
+        cvv: 'cvv',
+        expireDate: 'date',
+        payment: false
+      }
+      addPayment(addPaymentData).unwrap()
+        .then(() => {
+          setAddressModalShow(false);
+          navigation.navigate('CompleteOrder')
+        })
+        .catch((error) => {
+          console.log('err', error);
+          Snackbar.show({
+            text: error.data.raw.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#24A9DF',
+          });
+        });
+
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#24A9DF',
+      });
+    }
+  }
+
   return (
     <>
+      {/* Cash on delivery */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -207,7 +243,7 @@ const AddCardModal = forwardRef((props, ref) => {
         </View>
       </Modal>
 
-      {/* JobRemoveModal */}
+      {/* Card modal */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -265,7 +301,7 @@ const AddCardModal = forwardRef((props, ref) => {
                 <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Your delivery address</Text>
                 <TextInputs style={{ marginTop: 17, }} labelText={'10th avenue, Rosebank, 7700'} state={address} setState={setAddress} />
                 <Text style={{ fontSize: 15, marginTop: 30, color: '#000', fontFamily: commonStyle.fontFamily.medium }}>Number we can call</Text>
-                <TextInputs style={{ marginTop: 17 }} labelText={'09090909090'} state={phoneNumber} setState={setPhoneNumber} />
+                <TextInputs style={{ marginTop: 17 }} labelText={'09090909090'} keyBoardType={'decimal-pad'} state={phoneNumber} setState={setPhoneNumber} />
 
               </View>
 
@@ -278,18 +314,20 @@ const AddCardModal = forwardRef((props, ref) => {
                   justifyContent: 'space-between'
                 }}>
 
-                <Button
+
+                {!isLoading ? <Button
                   text="Pay on delivery"
                   style={{
                     width: '45%',
                     backgroundColor: '#e8e8ff'
                   }}
-                  textStyle={{ color: "#403FFC" }}
+                  textStyle={{ color: "#403FFC", }}
                   onClick={() => {
                     //api call to delete the modal
-                    setAddressModalShow(false);
+                    handleCheckoutOrderPayOnDelivery()
+
                   }}
-                />
+                /> : <ActivityIndicator style={{ marginVertical: 0, flex: 1, alignSelf: 'center', }} size={'large'} color={'green'} />}
 
                 <Button
                   text="Pay with card"

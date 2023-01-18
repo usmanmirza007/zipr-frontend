@@ -28,6 +28,7 @@ import { socket } from './Home';
 import { useGetChatListQuery, useGetSingleUserChatQuery, useGetSingleUserQuery, useGetUserQuery } from '../store/slice/api';
 import Snackbar from 'react-native-snackbar';
 import { useMemo } from 'react';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 const { width, height } = Dimensions.get('screen');
 
 const Message = ({ route }) => {
@@ -300,8 +301,9 @@ const Message = ({ route }) => {
             flexDirection: 'row',
             justifyContent: 'center',
             backgroundColor: '#403FFC',
+            marginTop: StatusBar.currentHeight + getStatusBarHeight(true),
             alignItems: 'center',
-            height: 100,
+            height: 70,
           }}>
           <StatusBar translucent barStyle={"light-content"} backgroundColor={'#403FFC'} />
 
